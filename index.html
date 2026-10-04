@@ -104,11 +104,27 @@
       text-align: center;
       padding: 20px;
     }
-  </style>
-</head>
-
+ 
 <body>
+<div id="authBox" style="padding:20px; text-align:center;">
+  <h3>🔐 Login / Sign Up</h3>
 
+  <input id="email" type="email" placeholder="Email"
+    style="padding:10px; width:90%; margin:5px;">
+
+  <input id="password" type="password" placeholder="Password"
+    style="padding:10px; width:90%; margin:5px;">
+
+  <button onclick="signUp()" style="padding:10px; margin:5px;">
+    Sign Up
+  </button>
+
+  <button onclick="login()" style="padding:10px; margin:5px;">
+    Login
+  </button>
+
+  <p id="authMessage"></p>
+</div>
 <header>
   🔥 VIRAL VIDEO HUB
 </header>
@@ -318,17 +334,41 @@
       await loadVideos();
     }
   }
-
     function escapeHtml(text) {
     const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
   }
+    async function signUp() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const { error } = await supabaseClient.auth.signUp({
+    email: email,
+    password: password
+  });
+
+  document.getElementById("authMessage").innerText =
+    error ? error.message : "✅ Sign Up successful!";
+}
+
+async function login() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  const { error } = await supabaseClient.auth.signInWithPassword({
+    email: email,
+    password: password
+  });
+
+  document.getElementById("authMessage").innerText =
+    error ? error.message : "✅ Login successful!";
+}
 
   loadReferral();
   loadPoints();
   loadVideos();
-</script>
+</script> 
 
 </body>
 </html>
