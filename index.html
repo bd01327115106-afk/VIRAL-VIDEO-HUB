@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VIRAL VIDEO HUB</title>
+  <title>🔥 VIRAL VIDEO HUB</title>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -11,133 +11,127 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #0f0f0f;
-      color: white;
+      background: #f5f5f5;
     }
 
     header {
-      padding: 20px;
+      background: #111;
+      color: white;
+      padding: 18px;
       text-align: center;
-      background: #171717;
       font-size: 24px;
       font-weight: bold;
     }
 
-    .container {
-      padding: 15px;
-      max-width: 800px;
-      margin: auto;
+    .points-box {
+      margin: 15px;
+      padding: 18px;
+      background: white;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    .points {
+      font-size: 30px;
+      font-weight: bold;
+      color: #ff4b00;
     }
 
     .categories {
       display: flex;
       gap: 8px;
+      padding: 10px;
       overflow-x: auto;
-      margin-bottom: 20px;
     }
 
-    .category {
-      background: #252525;
+    .categories button {
       border: none;
-      color: white;
-      padding: 10px 15px;
+      padding: 10px 16px;
       border-radius: 20px;
-      white-space: nowrap;
+      background: #ddd;
       cursor: pointer;
     }
 
-    .category.active {
-      background: #ff1744;
+    .categories button.active {
+      background: #111;
+      color: white;
     }
 
-    h2 {
-      margin-top: 20px;
+    #videos {
+      padding: 10px;
     }
 
     .video-card {
-      background: #191919;
+      background: white;
+      margin-bottom: 15px;
       border-radius: 12px;
       overflow: hidden;
-      margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
 
-    .video-card img {
+    .video-card video {
       width: 100%;
       display: block;
-      aspect-ratio: 16 / 9;
-      object-fit: cover;
-      background: #222;
     }
 
     .video-info {
-      padding: 14px;
+      padding: 12px;
     }
 
     .video-title {
       font-size: 18px;
       font-weight: bold;
-      margin-bottom: 10px;
     }
 
-    .video-category {
-      color: #aaa;
-      font-size: 13px;
-      margin-bottom: 12px;
-    }
-
-    .buttons {
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn {
-      flex: 1;
-      text-align: center;
-      padding: 11px;
+    .unlock-btn {
+      margin-top: 10px;
+      padding: 10px 15px;
+      border: none;
       border-radius: 8px;
-      text-decoration: none;
+      background: #ff4b00;
       color: white;
-      background: #ff1744;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    .download {
-      background: #333;
+    .free {
+      color: green;
+      font-weight: bold;
     }
 
-    .empty {
+    .message {
       text-align: center;
-      color: #aaa;
-      padding: 40px 10px;
+      padding: 20px;
     }
   </style>
 </head>
 
 <body>
 
-<header>🔥 VIRAL VIDEO HUB</header>
+<header>
+  🔥 VIRAL VIDEO HUB
+</header>
 
-<div class="container">
+<div class="points-box">
+  <div>💰 My Points</div>
+  <div class="points" id="points">0</div>
+</div>
 
-  <div class="categories">
-    <button class="category active" onclick="loadVideos('All')">All</button>
-    <button class="category" onclick="loadVideos('Trending')">Trending</button>
-    <button class="category" onclick="loadVideos('Funny')">Funny</button>
-    <button class="category" onclick="loadVideos('Music')">Music</button>
-    <button class="category" onclick="loadVideos('Shorts')">Shorts</button>
-  </div>
+<div class="categories">
+  <button class="active" onclick="loadVideos('All', this)">All</button>
+  <button onclick="loadVideos('Trending', this)">Trending</button>
+  <button onclick="loadVideos('Funny', this)">Funny</button>
+  <button onclick="loadVideos('Music', this)">Music</button>
+  <button onclick="loadVideos('Shorts', this)">Shorts</button>
+</div>
 
-  <h2>Trending Videos</h2>
-
-  <div id="videoList">
-    <div class="empty">Loading videos...</div>
-  </div>
-
+<div id="videos">
+  <div class="message">Loading videos...</div>
 </div>
 
 <script>
   const SUPABASE_URL = "https://pjpblyjejypzwwpxxgpf.supabase.co";
-
-  // এখানে আপনার Supabase Publishable key বসাবেন
   const SUPABASE_KEY = "sb_publishable_g1ziyyzBg57Z7WFowQnRQw_TRno8Xgn";
 
   const supabaseClient = supabase.createClient(
@@ -145,10 +139,40 @@
     SUPABASE_KEY
   );
 
-  async function loadVideos(category = "All") {
-    const videoList = document.getElementById("videoList");
+  async function loadPoints() {
+    const {
+      data: { user }
+    } = await supabaseClient.auth.getUser();
 
-    videoList.innerHTML = '<div class="empty">Loading videos...</div>';
+    if (!user) {
+      document.getElementById("points").innerText = "0";
+      return;
+    }
+
+    const { data, error } = await supabaseClient
+      .from("profiles")
+      .select("points")
+      .eq("id", user.id)
+      .single();
+
+    if (!error && data) {
+      document.getElementById("points").innerText = data.points;
+    }
+  }
+
+  async function loadVideos(category = "All", button = null) {
+
+    if (button) {
+      document.querySelectorAll(".categories button")
+        .forEach(btn => btn.classList.remove("active"));
+
+      button.classList.add("active");
+    }
+
+    const videosDiv = document.getElementById("videos");
+
+    videosDiv.innerHTML =
+      '<div class="message">Loading videos...</div>';
 
     let query = supabaseClient
       .from("videos")
@@ -164,57 +188,100 @@
     const { data, error } = await query;
 
     if (error) {
-      console.error(error);
-      videoList.innerHTML =
-        '<div class="empty">Could not load videos.</div>';
+      videosDiv.innerHTML =
+        '<div class="message">❌ Failed to load videos.</div>';
       return;
     }
 
     if (!data || data.length === 0) {
-      videoList.innerHTML =
-        '<div class="empty">No videos found.</div>';
+      videosDiv.innerHTML =
+        '<div class="message">No videos found.</div>';
       return;
     }
 
-    videoList.innerHTML = data.map(video => `
-      <div class="video-card">
+    videosDiv.innerHTML = "";
 
-        <img
-          src="${video.thumbnail_url || 'https://via.placeholder.com/800x450?text=Viral+Video'}"
-          alt="${escapeHtml(video.title || 'Video')}"
-        >
+    data.forEach(video => {
+
+      const card = document.createElement("div");
+      card.className = "video-card";
+
+      const unlockPoints =
+        Number(video.unlock_points || 0);
+
+      let buttonHTML = "";
+
+      if (unlockPoints > 0) {
+        buttonHTML = `
+          <button class="unlock-btn"
+            onclick="unlockVideo(${video.id}, ${unlockPoints})">
+            🔓 Unlock — ${unlockPoints} Points
+          </button>
+        `;
+      } else {
+        buttonHTML =
+          '<div class="free">🆓 Free Video</div>';
+      }
+
+      card.innerHTML = `
+        <video controls preload="metadata"
+          src="${video.video_url}">
+        </video>
 
         <div class="video-info">
-
           <div class="video-title">
-            ${escapeHtml(video.title || "Untitled Video")}
+            ${escapeHtml(video.title || "Untitled")}
           </div>
 
-          <div class="video-category">
-            ${escapeHtml(video.category || "General")}
+          <div>
+            Category: ${escapeHtml(video.category || "Other")}
           </div>
 
-          <div class="buttons">
-            <a
-              class="btn"
-              href="${video.video_url}"
-              target="_blank"
-            >
-              ▶ Watch
-            </a>
-
-            <a
-              class="btn download"
-              href="${video.video_url}"
-              download
-            >
-              ⬇ Download
-            </a>
-          </div>
-
+          ${buttonHTML}
         </div>
-      </div>
-    `).join("");
+      `;
+
+      videosDiv.appendChild(card);
+    });
+  }
+
+  async function unlockVideo(videoId, cost) {
+
+    const {
+      data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+      alert("Please login first.");
+      return;
+    }
+
+    const confirmUnlock =
+      confirm(
+        `Unlock this video for ${cost} points?`
+      );
+
+    if (!confirmUnlock) return;
+
+    const { data, error } =
+      await supabaseClient.rpc(
+        "unlock_video",
+        {
+          p_video_id: videoId
+        }
+      );
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    if (data && data.success) {
+      alert("✅ Video unlocked!");
+
+      await loadPoints();
+      await loadVideos();
+    }
   }
 
   function escapeHtml(text) {
@@ -223,6 +290,7 @@
     return div.innerHTML;
   }
 
+  loadPoints();
   loadVideos();
 </script>
 
