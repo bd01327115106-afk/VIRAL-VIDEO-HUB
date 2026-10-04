@@ -1,319 +1,383 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VIRAL VIDEO HUB - Admin</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIRAL VIDEO HUB - Admin</title>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #111;
-      color: #fff;
-      padding: 20px;
-    }
-
-    .box {
-      max-width: 500px;
-      margin: auto;
-      background: #1c1c1c;
-      padding: 25px;
-      border-radius: 15px;
-    }
-
-    h1 {
-      text-align: center;
-    }
-
-    input, textarea, select, button {
-      width: 100%;
-      box-sizing: border-box;
-      margin-top: 12px;
-      padding: 12px;
-      border-radius: 8px;
-      border: none;
-      font-size: 15px;
-    }
-
-    button {
-      background: #00c853;
-      color: white;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .logout {
-      background: #d50000;
-    }
-
-    #uploadBox {
-      display: none;
-    }
-
-    #status {
-      margin-top: 15px;
-      text-align: center;
-      line-height: 1.5;
-    }
-  </style>
+<style>
+body{
+  font-family:Arial,sans-serif;
+  background:#111;
+  color:#fff;
+  padding:20px;
+}
+.box{
+  max-width:600px;
+  margin:auto;
+  background:#1c1c1c;
+  padding:25px;
+  border-radius:15px;
+}
+h1{text-align:center}
+input,textarea,select,button{
+  width:100%;
+  box-sizing:border-box;
+  margin-top:12px;
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  font-size:15px;
+}
+button{
+  background:#00c853;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+.logout{background:#d50000}
+.delete{
+  background:#d50000;
+  margin-top:8px;
+}
+#uploadBox{display:none}
+#status{
+  margin-top:15px;
+  text-align:center;
+  line-height:1.5;
+}
+.video-item{
+  background:#292929;
+  padding:15px;
+  margin-top:12px;
+  border-radius:10px;
+}
+</style>
 </head>
 
 <body>
 
 <div class="box">
 
-  <h1>🔥 Admin Upload</h1>
+<h1>🔥 Admin Panel</h1>
 
-  <div id="loginBox">
+<div id="loginBox">
 
-    <input
-      type="email"
-      id="email"
-      placeholder="Admin Email"
-    >
+<input type="email" id="email" placeholder="Admin Email">
+<input type="password" id="password" placeholder="Admin Password">
 
-    <input
-      type="password"
-      id="password"
-      placeholder="Admin Password"
-    >
+<button onclick="login()">Login</button>
 
-    <button onclick="login()">Login</button>
+</div>
 
-  </div>
+<div id="uploadBox">
 
-  <div id="uploadBox">
+<input type="text" id="title" placeholder="Video Title">
 
-    <input
-      type="text"
-      id="title"
-      placeholder="Video Title"
-    >
+<textarea id="description" placeholder="Video Description"></textarea>
 
-    <textarea
-      id="description"
-      placeholder="Video Description"
-    ></textarea>
+<select id="category">
+<option value="Funny">Funny</option>
+<option value="Music">Music</option>
+<option value="Shorts">Shorts</option>
+<option value="Trending">Trending</option>
+</select>
 
-    <select id="category">
-      <option value="Funny">Funny</option>
-      <option value="Music">Music</option>
-      <option value="Shorts">Shorts</option>
-      <option value="Trending">Trending</option>
-    </select>
+<input type="file" id="videoFile"
+accept="video/mp4,video/webm,video/quicktime">
 
-    <input
-      type="file"
-      id="videoFile"
-      accept="video/mp4,video/webm,video/quicktime"
-    >
+<input type="file" id="thumbnailFile"
+accept="image/*">
 
-    <input
-      type="file"
-      id="thumbnailFile"
-      accept="image/*"
-    >
+<button onclick="uploadVideo()">⬆ Upload Video</button>
 
-    <button onclick="uploadVideo()">⬆ Upload Video</button>
+<button class="logout" onclick="logout()">Logout</button>
 
-    <button class="logout" onclick="logout()">Logout</button>
+<h2>📁 Uploaded Videos</h2>
 
-  </div>
+<div id="videoList"></div>
 
-  <div id="status"></div>
+</div>
+
+<div id="status"></div>
 
 </div>
 
 <script>
 
 const SUPABASE_URL =
-  "https://pjpblyjejypzwwpxxgpf.supabase.co";
+"https://pjpblyjejypzwwpxxgpf.supabase.co";
 
 const SUPABASE_KEY =
-  "sb_publishable_g1ziyyzBg57Z7WFowQnRQw_TRno8Xgn";
+"sb_publishable_g1ziyyzBg57Z7WFowQnRQw_TRno8Xgn";
 
 const supabaseClient =
-  supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_KEY
-  );
+supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 
-async function login() {
 
-  const email =
-    document.getElementById("email").value;
+async function login(){
 
-  const password =
-    document.getElementById("password").value;
+const email=document.getElementById("email").value;
+const password=document.getElementById("password").value;
+const status=document.getElementById("status");
 
-  const status =
-    document.getElementById("status");
+status.innerText="Logging in...";
 
-  status.innerText = "Logging in...";
+const {error}=await supabaseClient.auth.signInWithPassword({
+email,
+password
+});
 
-  const { error } =
-    await supabaseClient.auth.signInWithPassword({
-      email,
-      password
-    });
-
-  if (error) {
-
-    status.innerText =
-      "❌ Login failed: " + error.message;
-
-    return;
-  }
-
-  document.getElementById("loginBox").style.display =
-    "none";
-
-  document.getElementById("uploadBox").style.display =
-    "block";
-
-  status.innerText =
-    "✅ Login successful!";
+if(error){
+status.innerText="❌ Login failed: "+error.message;
+return;
 }
 
-async function uploadVideo() {
+document.getElementById("loginBox").style.display="none";
+document.getElementById("uploadBox").style.display="block";
 
-  const title =
-    document.getElementById("title").value.trim();
+status.innerText="✅ Login successful!";
 
-  const description =
-    document.getElementById("description").value.trim();
-
-  const category =
-    document.getElementById("category").value;
-
-  const videoFile =
-    document.getElementById("videoFile").files[0];
-
-  const thumbnailFile =
-    document.getElementById("thumbnailFile").files[0];
-
-  const status =
-    document.getElementById("status");
-
-  if (!title || !videoFile) {
-
-    status.innerText =
-      "❌ Title এবং Video অবশ্যই দিতে হবে।";
-
-    return;
-  }
-
-  if (videoFile.size > 50 * 1024 * 1024) {
-
-    status.innerText =
-      "❌ Video 50 MB-এর বেশি হতে পারবে না।";
-
-    return;
-  }
-
-  status.innerText =
-    "⏳ Video uploading...";
-
-  const fileName =
-    Date.now() + "_" +
-    videoFile.name.replace(/\s+/g, "_");
-
-  const videoPath =
-    "videos/" + fileName;
-
-  const { error: videoError } =
-    await supabaseClient.storage
-      .from("videos")
-      .upload(videoPath, videoFile);
-
-  if (videoError) {
-
-    status.innerText =
-      "❌ Video upload failed: " +
-      videoError.message;
-
-    return;
-  }
-
-  const videoUrl =
-    supabaseClient.storage
-      .from("videos")
-      .getPublicUrl(videoPath)
-      .data.publicUrl;
-
-  let thumbnailUrl = "";
-
-  if (thumbnailFile) {
-
-    const thumbName =
-      Date.now() + "_" +
-      thumbnailFile.name.replace(/\s+/g, "_");
-
-    const thumbPath =
-      "thumbnails/" + thumbName;
-
-    const { error: thumbError } =
-      await supabaseClient.storage
-        .from("videos")
-        .upload(thumbPath, thumbnailFile);
-
-    if (!thumbError) {
-
-      thumbnailUrl =
-        supabaseClient.storage
-          .from("videos")
-          .getPublicUrl(thumbPath)
-          .data.publicUrl;
-    }
-  }
-
-  status.innerText =
-    "⏳ Saving video information...";
-
-  const { error: dbError } =
-    await supabaseClient
-      .from("videos")
-      .insert([{
-        title: title,
-        description: description,
-        video_url: videoUrl,
-        thumbnail_url: thumbnailUrl,
-        category: category,
-        is_trending: category === "Trending"
-      }]);
-
-  if (dbError) {
-
-    status.innerText =
-      "❌ Database error: " +
-      dbError.message;
-
-    return;
-  }
-
-  status.innerText =
-    "✅ Video uploaded successfully!";
-
-  document.getElementById("title").value = "";
-  document.getElementById("description").value = "";
-  document.getElementById("videoFile").value = "";
-  document.getElementById("thumbnailFile").value = "";
+loadVideos();
 }
 
-async function logout() {
 
-  await supabaseClient.auth.signOut();
+async function uploadVideo(){
 
-  document.getElementById("loginBox").style.display =
-    "block";
+const title=document.getElementById("title").value.trim();
+const description=document.getElementById("description").value.trim();
+const category=document.getElementById("category").value;
 
-  document.getElementById("uploadBox").style.display =
-    "none";
+const videoFile=document.getElementById("videoFile").files[0];
+const thumbnailFile=document.getElementById("thumbnailFile").files[0];
 
-  document.getElementById("status").innerText =
-    "Logged out.";
+const status=document.getElementById("status");
+
+if(!title || !videoFile){
+status.innerText="❌ Title এবং Video অবশ্যই দিতে হবে।";
+return;
+}
+
+if(videoFile.size>50*1024*1024){
+status.innerText="❌ Video 50 MB-এর বেশি হতে পারবে না।";
+return;
+}
+
+status.innerText="⏳ Video uploading...";
+
+const fileName=
+Date.now()+"_"+videoFile.name.replace(/\s+/g,"_");
+
+const videoPath="videos/"+fileName;
+
+const {error:videoError}=await supabaseClient.storage
+.from("videos")
+.upload(videoPath,videoFile);
+
+if(videoError){
+status.innerText="❌ Video upload failed: "+videoError.message;
+return;
+}
+
+const videoUrl=
+supabaseClient.storage
+.from("videos")
+.getPublicUrl(videoPath)
+.data.publicUrl;
+
+let thumbnailUrl="";
+
+if(thumbnailFile){
+
+const thumbName=
+Date.now()+"_"+thumbnailFile.name.replace(/\s+/g,"_");
+
+const thumbPath="thumbnails/"+thumbName;
+
+const {error:thumbError}=await supabaseClient.storage
+.from("videos")
+.upload(thumbPath,thumbnailFile);
+
+if(!thumbError){
+
+thumbnailUrl=
+supabaseClient.storage
+.from("videos")
+.getPublicUrl(thumbPath)
+.data.publicUrl;
+
+}
+}
+
+status.innerText="⏳ Saving video information...";
+
+const {error:dbError}=await supabaseClient
+.from("videos")
+.insert([{
+title:title,
+description:description,
+video_url:videoUrl,
+thumbnail_url:thumbnailUrl,
+category:category,
+is_trending:category==="Trending"
+}]);
+
+if(dbError){
+status.innerText="❌ Database error: "+dbError.message;
+return;
+}
+
+status.innerText="✅ Video uploaded successfully!";
+
+document.getElementById("title").value="";
+document.getElementById("description").value="";
+document.getElementById("videoFile").value="";
+document.getElementById("thumbnailFile").value="";
+
+loadVideos();
+}
+
+
+async function loadVideos(){
+
+const list=document.getElementById("videoList");
+
+list.innerHTML="⏳ Loading videos...";
+
+const {data,error}=await supabaseClient
+.from("videos")
+.select("id,title,category,video_url,thumbnail_url")
+.order("created_at",{ascending:false});
+
+if(error){
+list.innerHTML="❌ "+error.message;
+return;
+}
+
+if(!data || data.length===0){
+list.innerHTML="No videos found.";
+return;
+}
+
+list.innerHTML="";
+
+data.forEach(video=>{
+
+const item=document.createElement("div");
+
+item.className="video-item";
+
+item.innerHTML=`
+<strong>${escapeHtml(video.title)}</strong>
+<br>
+Category: ${escapeHtml(video.category)}
+<button class="delete" onclick="deleteVideo(${video.id})">
+🗑 Delete Video
+</button>
+`;
+
+list.appendChild(item);
+
+});
+
+}
+
+
+async function deleteVideo(id){
+
+if(!confirm("এই ভিডিওটি কি Delete করতে চান?")){
+return;
+}
+
+const status=document.getElementById("status");
+
+status.innerText="⏳ Deleting video...";
+
+const {data,error:fetchError}=await supabaseClient
+.from("videos")
+.select("video_url,thumbnail_url")
+.eq("id",id)
+.single();
+
+if(fetchError){
+status.innerText="❌ "+fetchError.message;
+return;
+}
+
+const files=[];
+
+function getStoragePath(url){
+
+if(!url) return null;
+
+const marker="/storage/v1/object/public/videos/";
+
+const index=url.indexOf(marker);
+
+if(index===-1) return null;
+
+return url.substring(index+marker.length);
+}
+
+const videoPath=getStoragePath(data.video_url);
+const thumbnailPath=getStoragePath(data.thumbnail_url);
+
+if(videoPath) files.push(videoPath);
+if(thumbnailPath) files.push(thumbnailPath);
+
+if(files.length>0){
+
+const {error:storageError}=await supabaseClient.storage
+.from("videos")
+.remove(files);
+
+if(storageError){
+status.innerText="❌ Storage delete failed: "+storageError.message;
+return;
+}
+
+}
+
+const {error:deleteError}=await supabaseClient
+.from("videos")
+.delete()
+.eq("id",id);
+
+if(deleteError){
+status.innerText="❌ Database delete failed: "+deleteError.message;
+return;
+}
+
+status.innerText="✅ Video deleted successfully!";
+
+loadVideos();
+
+}
+
+
+function escapeHtml(text){
+
+return String(text||"")
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+
+async function logout(){
+
+await supabaseClient.auth.signOut();
+
+document.getElementById("loginBox").style.display="block";
+document.getElementById("uploadBox").style.display="none";
+
+document.getElementById("status").innerText="Logged out.";
+
 }
 
 </script>
