@@ -37,10 +37,8 @@ button{
   font-weight:bold;
   cursor:pointer;
 }
-.logout{background:#d50000}
-.delete{
+.logout,.delete{
   background:#d50000;
-  margin-top:8px;
 }
 #uploadBox{display:none}
 #status{
@@ -85,11 +83,25 @@ button{
 <option value="Trending">Trending</option>
 </select>
 
-<input type="file" id="videoFile"
-accept="video/mp4,video/webm,video/quicktime">
+<input
+type="number"
+id="unlockPoints"
+placeholder="Unlock Points (0 = Free)"
+min="0"
+value="0"
+>
 
-<input type="file" id="thumbnailFile"
-accept="image/*">
+<input
+type="file"
+id="videoFile"
+accept="video/mp4,video/webm,video/quicktime"
+>
+
+<input
+type="file"
+id="thumbnailFile"
+accept="image/*"
+>
 
 <button onclick="uploadVideo()">⬆ Upload Video</button>
 
@@ -150,6 +162,9 @@ const title=document.getElementById("title").value.trim();
 const description=document.getElementById("description").value.trim();
 const category=document.getElementById("category").value;
 
+const unlockPoints =
+parseInt(document.getElementById("unlockPoints").value) || 0;
+
 const videoFile=document.getElementById("videoFile").files[0];
 const thumbnailFile=document.getElementById("thumbnailFile").files[0];
 
@@ -160,6 +175,11 @@ status.innerText="❌ Title এবং Video অবশ্যই দিতে হ�
 return;
 }
 
+if(unlockPoints < 0){
+status.innerText="❌ Unlock Points ভুল।";
+return;
+}
+
 if(videoFile.size>50*1024*1024){
 status.innerText="❌ Video 50 MB-এর বেশি হতে পারবে না।";
 return;
@@ -167,7 +187,7 @@ return;
 
 status.innerText="⏳ Video uploading...";
 
-const fileName=
+const fileName =
 Date.now()+"_"+videoFile.name.replace(/\s+/g,"_");
 
 const videoPath="videos/"+fileName;
@@ -181,7 +201,7 @@ status.innerText="❌ Video upload failed: "+videoError.message;
 return;
 }
 
-const videoUrl=
+const videoUrl =
 supabaseClient.storage
 .from("videos")
 .getPublicUrl(videoPath)
@@ -191,7 +211,7 @@ let thumbnailUrl="";
 
 if(thumbnailFile){
 
-const thumbName=
+const thumbName =
 Date.now()+"_"+thumbnailFile.name.replace(/\s+/g,"_");
 
 const thumbPath="thumbnails/"+thumbName;
@@ -202,7 +222,7 @@ const {error:thumbError}=await supabaseClient.storage
 
 if(!thumbError){
 
-thumbnailUrl=
+thumbnailUrl =
 supabaseClient.storage
 .from("videos")
 .getPublicUrl(thumbPath)
@@ -221,7 +241,8 @@ description:description,
 video_url:videoUrl,
 thumbnail_url:thumbnailUrl,
 category:category,
-is_trending:category==="Trending"
+is_trending:category==="Trending",
+unlock_points:unlockPoints
 }]);
 
 if(dbError){
@@ -233,6 +254,7 @@ status.innerText="✅ Video uploaded successfully!";
 
 document.getElementById("title").value="";
 document.getElementById("description").value="";
+document.getElementById("unlockPoints").value="0";
 document.getElementById("videoFile").value="";
 document.getElementById("thumbnailFile").value="";
 
@@ -248,7 +270,7 @@ list.innerHTML="⏳ Loading videos...";
 
 const {data,error}=await supabaseClient
 .from("videos")
-.select("id,title,category,video_url,thumbnail_url")
+.select("id,title,category,unlock_points,video_url,thumbnail_url")
 .order("created_at",{ascending:false});
 
 if(error){
@@ -273,6 +295,8 @@ item.innerHTML=`
 <strong>${escapeHtml(video.title)}</strong>
 <br>
 Category: ${escapeHtml(video.category)}
+<br>
+Unlock Points: ${video.unlock_points || 0}
 <button class="delete" onclick="deleteVideo(${video.id})">
 🗑 Delete Video
 </button>
