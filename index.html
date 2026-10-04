@@ -117,7 +117,14 @@
   <div>💰 My Points</div>
   <div class="points" id="points">0</div>
 </div>
-
+<div class="points-box">
+  <div>👥 Referral System</div>
+  <div>Referral Code: <b id="referralCode">Loading...</b></div>
+  <div style="margin-top:8px;">
+    Referral Link:
+    <input id="referralLink" readonly style="width:90%;padding:8px;">
+  </div>
+</div>
 <div class="categories">
   <button class="active" onclick="loadVideos('All', this)">All</button>
   <button onclick="loadVideos('Trending', this)">Trending</button>
@@ -126,7 +133,14 @@
   <button onclick="loadVideos('Shorts', this)">Shorts</button>
 </div>
 
-<div id="videos">
+<div id="videos"><div class="points-box">
+  <div>👥 Referral System</div>
+  <div>Referral Code: <b id="referralCode">Loading...</b></div>
+  <div style="margin-top:8px;">
+    Referral Link:
+    <input id="referralLink" readonly style="width:90%;padding:8px;">
+  </div>
+</div>
   <div class="message">Loading videos...</div>
 </div>
 
@@ -138,7 +152,28 @@
     SUPABASE_URL,
     SUPABASE_KEY
   );
+  async function loadReferral() {
+    const {
+      data: { user }
+    } = await supabaseClient.auth.getUser();
 
+    if (!user) return;
+
+    const { data, error } = await supabaseClient
+      .from("profiles")
+      .select("referral_code")
+      .eq("id", user.id)
+      .single();
+
+    if (error || !data) return;
+
+    document.getElementById("referralCode").innerText =
+      data.referral_code || "Not available";
+
+    document.getElementById("referralLink").value =
+      "https://t.me/viral_video_linkk_bot/app?startapp=ref_" +
+      data.referral_code;
+  }
   async function loadPoints() {
     const {
       data: { user }
@@ -274,7 +309,7 @@
     if (error) {
       alert(error.message);
       return;
-    }
+    }loadPoints();
 
     if (data && data.success) {
       alert("✅ Video unlocked!");
@@ -284,12 +319,13 @@
     }
   }
 
-  function escapeHtml(text) {
+    function escapeHtml(text) {
     const div = document.createElement("div");
     div.textContent = text;
     return div.innerHTML;
   }
 
+  loadReferral();
   loadPoints();
   loadVideos();
 </script>
