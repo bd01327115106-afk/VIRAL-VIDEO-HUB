@@ -349,7 +349,12 @@ const AdController = window.Adsgram.init({
 });
 
 async function watchAd() {
+  const btn = document.getElementById("watchAdBtn");
+
   try {
+    btn.disabled = true;
+    btn.innerText = "🎬 Loading Ad...";
+
     await AdController.show();
 
     const {
@@ -357,7 +362,9 @@ async function watchAd() {
     } = await supabaseClient.auth.getUser();
 
     if (!user) {
-      alert("Please login first.");
+      alert("❌ Please login first.");
+      btn.disabled = false;
+      btn.innerText = "🎬 Watch Ad & Earn 5 Points";
       return;
     }
 
@@ -365,14 +372,34 @@ async function watchAd() {
       await supabaseClient.rpc("claim_ad_reward");
 
     if (error) {
-      alert("❌ Reward error: " + error.message);
+      alert("❌ " + error.message);
+      btn.disabled = false;
+      btn.innerText = "🎬 Watch Ad & Earn 5 Points";
       return;
     }
 
     document.getElementById("points").innerText = data;
     alert("✅ Ad completed! +5 Points");
+
+    let seconds = 60;
+    btn.innerText = `⏳ Next Ad in ${seconds}s`;
+
+    const timer = setInterval(() => {
+      seconds--;
+
+      if (seconds <= 0) {
+        clearInterval(timer);
+        btn.disabled = false;
+        btn.innerText = "🎬 Watch Ad & Earn 5 Points";
+      } else {
+        btn.innerText = `⏳ Next Ad in ${seconds}s`;
+      }
+    }, 1000);
+
   } catch (error) {
-    alert("❌ Ad could not be completed.");
+    alert("❌ " + (error.message || "Ad could not be completed."));
+    btn.disabled = false;
+    btn.innerText = "🎬 Watch Ad & Earn 5 Points";
   }
 }
   async function loadVideos(category = "All", button = null) {
