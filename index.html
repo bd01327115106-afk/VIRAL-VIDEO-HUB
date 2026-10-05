@@ -350,13 +350,29 @@ const AdController = window.Adsgram.init({
 
 async function watchAd() {
   try {
-    const result = await AdController.show();
+    await AdController.show();
 
-    if (result.done) {
-      alert("✅ Ad completed!");
+    const {
+      data: { user }
+    } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+      alert("Please login first.");
+      return;
     }
+
+    const { data, error } =
+      await supabaseClient.rpc("claim_ad_reward");
+
+    if (error) {
+      alert("❌ Reward error: " + error.message);
+      return;
+    }
+
+    document.getElementById("points").innerText = data;
+    alert("✅ Ad completed! +5 Points");
   } catch (error) {
-    alert("❌ Ad error: " + (error.description || "Unknown error"));
+    alert("❌ Ad could not be completed.");
   }
 }
   async function loadVideos(category = "All", button = null) {
