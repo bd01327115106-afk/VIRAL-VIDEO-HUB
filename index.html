@@ -104,7 +104,95 @@
   text-align: center;
   padding: 20px;
 }
+/* 18+ Confirmation */
+.age-gate {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.88);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+}
 
+.age-box {
+  width: 100%;
+  max-width: 330px;
+  background: #171717;
+  border: 1px solid #8a5a00;
+  border-radius: 24px;
+  padding: 24px 18px 20px;
+  box-sizing: border-box;
+  color: white;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(255, 166, 0, 0.12);
+}
+
+.age-icon {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 18px;
+  border-radius: 22px;
+  background: #242424;
+  border: 1px solid #8a6a25;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 38px;
+}
+
+.age-box h2 {
+  margin: 0 0 12px;
+  font-size: 25px;
+}
+
+.age-box p {
+  margin: 0 0 18px;
+  color: #ddd;
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.age-info {
+  text-align: left;
+}
+
+.age-info div {
+  padding: 13px;
+  margin: 8px 0;
+  border: 1px solid #292929;
+  border-radius: 12px;
+  color: #ddd;
+  font-size: 13px;
+}
+
+.age-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.age-yes,
+.age-no {
+  flex: 1;
+  padding: 13px 8px;
+  border-radius: 14px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+
+.age-yes {
+  background: #ffa500;
+  color: #111;
+}
+
+.age-no {
+  background: #171717;
+  color: white;
+  border: 1px solid #333;
+}
 </style>
 
 <body>
