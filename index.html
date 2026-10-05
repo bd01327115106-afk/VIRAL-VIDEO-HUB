@@ -340,8 +340,7 @@ if (localStorage.getItem("ageConfirmed") === "true") {
     if (!error && data) {
       document.getElementById("points").innerText = data.points;
     }
-  }
-const AdController = window.Adsgram.init({
+  }const AdController = window.Adsgram.init({
   blockId: "52110",
   debug: true,
   debugConsole: true,
@@ -362,9 +361,9 @@ async function watchAd() {
     } = await supabaseClient.auth.getUser();
 
     if (!user) {
-      alert("❌ Please login first.");
       btn.disabled = false;
       btn.innerText = "🎬 Watch Ad & Earn 5 Points";
+      alert("❌ Please login first.");
       return;
     }
 
@@ -372,14 +371,13 @@ async function watchAd() {
       await supabaseClient.rpc("claim_ad_reward");
 
     if (error) {
-      alert("❌ " + error.message);
       btn.disabled = false;
       btn.innerText = "🎬 Watch Ad & Earn 5 Points";
+      alert("❌ " + error.message);
       return;
     }
 
     document.getElementById("points").innerText = data;
-    alert("✅ Ad completed! +5 Points");
 
     let seconds = 60;
     btn.innerText = `⏳ Next Ad in ${seconds}s`;
@@ -397,12 +395,13 @@ async function watchAd() {
     }, 1000);
 
   } catch (error) {
-    alert("❌ " + (error.message || "Ad could not be completed."));
     btn.disabled = false;
     btn.innerText = "🎬 Watch Ad & Earn 5 Points";
+    alert("❌ " + (error.message || "Ad could not be completed."));
   }
 }
-  async function loadVideos(category = "All", button = null) {
+
+async function loadVideos(category = "All", button = null) {
 
     if (button) {
       document.querySelectorAll(".categories button")
