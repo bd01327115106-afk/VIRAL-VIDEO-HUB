@@ -341,7 +341,18 @@ if (localStorage.getItem("ageConfirmed") === "true") {
       document.getElementById("points").innerText = data.points;
     }
   }
+const AdController = window.Adsgram.init({
+  blockId: "52110"
+});
 
+async function watchAd() {
+  try {
+    await AdController.show();
+    alert("✅ Ad completed! Reward earned.");
+  } catch (error) {
+    alert("❌ Ad could not be completed.");
+  }
+}
   async function loadVideos(category = "All", button = null) {
 
     if (button) {
