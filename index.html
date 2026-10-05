@@ -489,8 +489,12 @@ async function login() {
 
   document.getElementById("authMessage").innerText =
     error ? error.message : "✅ Login successful!";
-}
 
+  if (!error) {
+    await loadReferral();
+    await loadPoints();
+  }
+}
   loadReferral();
   loadPoints();
   loadVideos();
