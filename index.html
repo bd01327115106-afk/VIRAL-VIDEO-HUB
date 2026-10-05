@@ -342,15 +342,21 @@ if (localStorage.getItem("ageConfirmed") === "true") {
     }
   }
 const AdController = window.Adsgram.init({
-  blockId: "52110"
+  blockId: "52110",
+  debug: true,
+  debugConsole: true,
+  debugBannerType: "RewardedVideo"
 });
 
 async function watchAd() {
   try {
-    await AdController.show();
-    alert("✅ Ad completed! Reward earned.");
+    const result = await AdController.show();
+
+    if (result.done) {
+      alert("✅ Ad completed!");
+    }
   } catch (error) {
-    alert("❌ Ad could not be completed.");
+    alert("❌ Ad error: " + (error.description || "Unknown error"));
   }
 }
   async function loadVideos(category = "All", button = null) {
