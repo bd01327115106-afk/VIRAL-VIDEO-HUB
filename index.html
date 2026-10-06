@@ -509,9 +509,14 @@ if (localStorage.getItem("ageConfirmed") === "true") {
       .single();
 
     if (!error && data) {
-      document.getElementById("points").innerText = data.points;
-    }
- const AdController = window.Adsgram.init({
+
+  document.getElementById("points").innerText = data.points;
+
+}
+
+}
+
+const AdController = window.Adsgram.init({
   blockId: "52134"
 });
 
