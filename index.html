@@ -375,6 +375,34 @@ input {
     font-size: 13px;
     padding: 10px 14px;
   }
+}.top-header {
+  height: 58px;
+  padding: 0 18px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #111014;
+  border-bottom: 2px solid #c92cff;
+  color: #fff;
+}
+
+.menu-icon,
+.search-icon {
+  font-size: 27px;
+  width: 35px;
+  text-align: center;
+}
+
+.site-title {
+  font-size: 22px;
+  font-weight: 900;
+}
+
+.site-title span {
+  background: linear-gradient(90deg, #8b2cff, #ff2d91);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 </style>
 <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
@@ -423,8 +451,14 @@ input {
 
   <p id="authMessage"></p>
 </div>
-<header>
-  🔥 VIRAL VIDEO HUB
+<header class="top-header">
+  <div class="menu-icon">☰</div>
+
+  <div class="site-title">
+    VIRAL <span>VIDEO LINK</span>
+  </div>
+
+  <div class="search-icon">⌕</div>
 </header>
 <div style="max-width:560px;margin:20px auto;display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 15px;">
 
