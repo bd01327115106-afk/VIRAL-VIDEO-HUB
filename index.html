@@ -413,18 +413,35 @@ input {
 <header>
   🔥 VIRAL VIDEO HUB
 </header>
+<div style="margin:20px 15px;display:grid;grid-template-columns:1fr 1fr;gap:12px;">
 
-<div class="points-box">
-  <div>💰 My Points</div>
-  <div class="points" id="points">0</div>
-</div>
-<div class="points-box">
-  <div>👥 Referral System</div>
-  <div>Referral Code: <b id="referralCode">Loading...</b></div>
-  <div style="margin-top:8px;">
-    Referral Link:
-    <input id="referralLink" readonly style="width:90%;padding:8px;">
+  <div style="background:#15101c;border:1px solid #54206f;border-radius:20px;padding:20px 10px;text-align:center;">
+    <div style="color:#ccc;">💰 My Points</div>
+    <div id="points" style="font-size:32px;font-weight:bold;color:white;margin-top:8px;">0</div>
   </div>
+
+  <div style="background:#15101c;border:1px solid #54206f;border-radius:20px;padding:20px 10px;text-align:center;">
+    <div style="color:#ccc;">👥 Referral</div>
+    <div style="font-size:20px;font-weight:bold;color:white;margin-top:8px;">System</div>
+  </div>
+
+</div>
+
+<div style="margin:0 15px 20px;padding:18px;background:#100d14;border:1px solid #54206f;border-radius:20px;">
+  <div style="color:white;font-weight:bold;margin-bottom:12px;">
+    🎁 Referral System
+  </div>
+
+  <div style="color:#ccc;">
+    Referral Code:
+    <b id="referralCode" style="color:#ff4fa3;">Loading...</b>
+  </div>
+
+  <input
+    id="referralLink"
+    readonly
+    style="width:100%;box-sizing:border-box;margin-top:10px;padding:12px;background:#0b0910;color:white;border:1px solid #54206f;border-radius:10px;"
+  >
 </div>
   <br><br>
 <button id="watchAdBtn" onclick="watchAd()">
