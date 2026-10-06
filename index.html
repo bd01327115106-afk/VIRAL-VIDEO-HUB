@@ -192,8 +192,17 @@
   background: #171717;
   color: white;
   border: 1px solid #333;
-}/* ===== VIRAL VIDEO LINK DESIGN ===== */
+}.age-buttons {
+  position: relative;
+  z-index: 99999;
+}
 
+.age-yes,
+.age-no {
+  position: relative;
+  z-index: 100000;
+  pointer-events: auto !important;
+}
 body {
   margin: 0;
   background: #050507;
@@ -439,8 +448,14 @@ input {
 </div>
 
 <script>
-  function confirmAge() {
-  document.getElementById("ageGate").style.display = "none";
+function confirmAge() {
+  const gate = document.getElementById("ageGate");
+
+  if (gate) {
+    gate.style.display = "none";
+    gate.style.pointerEvents = "none";
+  }
+
   localStorage.setItem("ageConfirmed", "true");
 }
 
