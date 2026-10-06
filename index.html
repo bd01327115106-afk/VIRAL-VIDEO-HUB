@@ -428,6 +428,7 @@ input {
 <button id="watchAdBtn" onclick="watchAd()">
   🎬 Watch Ad & Earn 5 Points
 </button>
+</button>
 <div class="categories">
   <button class="active" onclick="loadVideos('All', this)">All</button>
   <button onclick="loadVideos('Trending', this)">Trending</button>
@@ -436,13 +437,9 @@ input {
   <button onclick="loadVideos('Shorts', this)">Shorts</button>
 </div>
 
-<div id="videos"><div class="points-box">
-  <div>👥 Referral System</div>
-  <div>Referral Code: <b id="referralCode">Loading...</b></div>
-  <div style="margin-top:8px;">
-    Referral Link:
-    <input id="referralLink" readonly style="width:90%;padding:8px;">
-  </div>
+<div id="videos">
+</div>
+  
 </div>
   <div class="message">Loading videos...</div>
 </div>
