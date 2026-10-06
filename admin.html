@@ -137,23 +137,37 @@ const status=document.getElementById("status");
 
 status.innerText="Logging in...";
 
-const {error}=await supabaseClient.auth.signInWithPassword({
-email,
-password
+const { data, error } = await supabaseClient.auth.signInWithPassword({
+  email,
+  password
 });
 
-if(error){
-status.innerText="❌ Login failed: "+error.message;
-return;
+if (error) {
+  status.innerText = "❌ Login failed: " + error.message;
+  return;
 }
 
-document.getElementById("loginBox").style.display="none";
-document.getElementById("uploadBox").style.display="block";
+const user = data.user;
 
-status.innerText="✅ Login successful!";
+const { data: profile, error: profileError } =
+  await supabaseClient
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
+
+if (profileError || !profile || profile.role !== "admin") {
+  await supabaseClient.auth.signOut();
+  status.innerText = "❌ Admin access denied";
+  return;
+}
+
+document.getElementById("loginBox").style.display = "none";
+document.getElementById("uploadBox").style.display = "block";
+
+status.innerText = "✅ Admin login successful!";
 
 loadVideos();
-}
 
 
 async function uploadVideo(){
