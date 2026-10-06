@@ -118,6 +118,17 @@
   margin-bottom: 8px;
 }
 
+.video-category {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 5px 10px;
+  border-radius: 12px;
+  background: #251532;
+  color: #d9a8ff;
+  font-size: 13px;
+  font-weight: 700;
+}
+
     .unlock-btn {
       margin-top: 10px;
       padding: 10px 15px;
@@ -763,9 +774,9 @@ async function loadVideos(category = "All", button = null) {
             ${escapeHtml(video.title || "Untitled")}
           </div>
 
-          <div>
-            Category: ${escapeHtml(video.category || "Other")}
-          </div>
+          <div class="video-category">
+  🎬 ${escapeHtml(video.category || "Other")}
+</div>
 
           ${buttonHTML}
         </div>
