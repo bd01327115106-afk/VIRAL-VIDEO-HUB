@@ -279,21 +279,22 @@ function leaveSite() {
     if(pl) pl.innerText=referralUrl;
     window.currentReferralUrl = referralUrl;
   }
-  async function loadPoints() {
-    const {
-      data: { user }
-    } = await supabaseClient.auth.getUser();
+ async function loadPoints() {
+  const {
+    data: { user }
+  } = await supabaseClient.auth.getUser();
 
-    if (!user) {
-      document.getElementById("points").innerText = "0";
-      return;
-    }
+  if (!user) {
+    const pp = document.getElementById("profilePoints");
+    if (pp) pp.innerText = "0";
+    return;
+  }
 
-    const { data, error } = await supabaseClient
-      .from("profiles")
-      .select("points")
-      .eq("id", user.id)
-      .single();
+  const { data, error } = await supabaseClient
+    .from("profiles")
+    .select("points")
+    .eq("id", user.id)
+    .single();
 
     if (!error && data) {
 
@@ -345,7 +346,10 @@ async function watchAd() {
       return;
     }
 
-    document.getElementById("points").innerText = data;
+   const pp = document.getElementById("profilePoints");
+if (pp) {
+  pp.innerText = data;
+}
 
     let seconds = 60;
     btn.innerText = `⏳ Next Ad in ${seconds}s`;
