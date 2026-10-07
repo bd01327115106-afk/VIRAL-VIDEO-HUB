@@ -71,7 +71,7 @@ button,input{font:inherit}
 .details-player video{width:100%;display:block;max-height:68vh;background:#000}
 .details-content h2{font-size:20px;margin:14px 0 10px}
 .details-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 18px}
-.details-meta span{padding:14px 8px;text-align:center;border:1px solid #4a214f;border-radius:13px;background:#111}
+.details-meta button{padding:14px 8px;text-align:center;border:1px solid #4a214f;border-radius:13px;background:#111;color:#fff;font-weight:800;cursor:pointer;transition:.18s}.details-meta button:hover{transform:translateY(-1px);border-color:#8b2cff}.details-meta button:disabled{opacity:.6;cursor:wait}.details-meta button[aria-pressed="true"]{border-color:#8b2cff;background:#1a1022}
 .details-content .unlock-panel{padding:14px;border-radius:20px}
 .unlock-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .unlock-summary>div{text-align:center;border:1px solid #6b2a88;border-radius:12px;padding:9px}
@@ -85,9 +85,113 @@ button,input{font:inherit}
 
 
 .usdt-box{margin-top:12px;border:1px solid #315b55;border-radius:20px;background:linear-gradient(145deg,#0d1717,#0b0d10);padding:14px}.usdt-box h3{margin:0 0 7px}.usdt-box p{margin:6px 0;color:#bbb;font-size:13px;line-height:1.5}.usdt-address{display:flex;gap:7px;margin-top:10px}.usdt-address input{flex:1;height:42px;background:#07090c;color:#fff;border:1px solid #2b4547;border-radius:10px;padding:0 10px;font-size:12px}.usdt-address button,.usdt-buy{border:0;border-radius:10px;background:linear-gradient(90deg,#20c997,#1e88ff);color:#fff;font-weight:900;padding:0 12px}.usdt-buy{width:100%;height:44px;margin-top:10px}.usdt-note{font-size:11px;color:#9ec7bd;margin-top:8px}.usdt-modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:500;display:none;align-items:center;justify-content:center;padding:18px}.usdt-modal.open{display:flex}.usdt-card{width:min(100%,430px);background:#111318;border:1px solid #315b55;border-radius:22px;padding:18px}.usdt-card h3{margin:0 0 8px}.usdt-card .amount{font-size:22px;font-weight:900;margin:8px 0}.usdt-card code{display:block;background:#07090c;padding:12px;border-radius:10px;word-break:break-all;color:#8ef0d4;font-size:12px}.usdt-card input{width:100%;height:44px;margin-top:10px;background:#080a0d;color:#fff;border:1px solid #2b4547;border-radius:10px;padding:0 10px}.usdt-card .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.usdt-card button{height:42px;border:0;border-radius:10px;font-weight:900}.usdt-card .close{background:#222;color:#fff}.usdt-card .submit{background:linear-gradient(90deg,#20c997,#1e88ff);color:#fff}
+/* ===== Startup Splash + 18+ Gate ===== */
+body.intro-lock{overflow:hidden}
+.startup-splash{
+  position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
+  background:
+    radial-gradient(circle at 50% 35%,rgba(255,180,0,.12),transparent 36%),
+    radial-gradient(circle at 50% 70%,rgba(120,20,255,.08),transparent 42%),
+    #030303;
+  opacity:1;visibility:visible;transition:opacity .45s ease,visibility .45s ease;
+}
+.startup-splash.hide{opacity:0;visibility:hidden;pointer-events:none}
+.splash-inner{width:min(92vw,420px);display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px}
+.splash-orbit{position:relative;width:150px;height:150px;margin-bottom:20px;display:flex;align-items:center;justify-content:center}
+.splash-orbit::before,.splash-orbit::after{
+  content:"";position:absolute;inset:14px;border-radius:50%;border:4px solid transparent;
+  border-top-color:#b52cff;border-right-color:#9d00ff;transform:rotate(-35deg)
+}
+.splash-orbit::after{inset:30px;border-top-color:#fff;border-right-color:#d7d7d7;transform:rotate(42deg)}
+.splash-play{
+  width:66px;height:66px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:radial-gradient(circle,#3a2200,#221500 65%,#100b00);border:1px solid #8b6200;
+  box-shadow:0 0 28px rgba(255,174,0,.18);font-size:30px;color:#d14cff
+}
+.splash-brand{font-size:24px;font-weight:900;letter-spacing:.3px;margin-bottom:8px}
+.splash-brand .purple{color:#b53cff}
+.splash-sub{font-size:16px;color:#d7d7d7;margin-bottom:22px}
+.splash-progress{
+  width:100%;height:14px;border:1px solid #3b2a06;border-radius:20px;background:#101010;
+  overflow:hidden;box-shadow:inset 0 0 8px #000
+}
+.splash-progress span{
+  display:block;height:100%;width:46%;border-radius:20px;
+  background:linear-gradient(90deg,#734500,#ffb82e,#ffce78);animation:splashLoad 1.55s ease forwards
+}
+.splash-dots{display:flex;gap:10px;margin-top:12px}
+.splash-dots i{width:8px;height:8px;border-radius:50%;background:#2d2d2d}
+.splash-dots i:nth-child(1){animation:dot 1.2s infinite 0s}
+.splash-dots i:nth-child(2){animation:dot 1.2s infinite .2s}
+.splash-dots i:nth-child(3){animation:dot 1.2s infinite .4s}
+@keyframes splashLoad{from{width:8%}to{width:100%}}
+@keyframes dot{0%,100%{opacity:.35;transform:scale(.9)}50%{opacity:1;transform:scale(1.15)}}
+.age-gate{
+  position:fixed;inset:0;z-index:9998;display:none;align-items:center;justify-content:center;
+  padding:22px;background:rgba(0,0,0,.96)
+}
+.age-gate.show{display:flex}
+.age-card{
+  width:min(100%,380px);border:1px solid #8c5f13;border-radius:26px;
+  background:linear-gradient(145deg,#1a1a1a,#101010);box-shadow:0 18px 55px rgba(0,0,0,.65);overflow:hidden
+}
+.age-icon{
+  width:76px;height:76px;margin:24px auto 12px;border-radius:22px;display:flex;align-items:center;
+  justify-content:center;color:#ffd447;font-size:37px;background:radial-gradient(circle at 50% 35%,#3b2f17,#241d0e 70%);
+  border:1px solid #6c5016;box-shadow:0 0 28px rgba(240,180,30,.08)
+}
+.age-card h2{margin:0;text-align:center;font-size:25px}
+.age-card .age-copy{margin:10px 26px 16px;text-align:center;color:#d0d0d0;line-height:1.55;font-size:14px}
+.age-rules{padding:0 20px 4px}
+.age-rule{
+  display:flex;align-items:center;gap:12px;padding:14px 12px;margin:7px 0;
+  border:1px solid #282828;border-radius:14px;background:#151515;color:#f1f1f1;font-size:13px
+}
+.age-rule .mark{
+  width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  background:#28220c;color:#ffd64a;flex:none
+}
+.age-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:18px 20px 22px}
+.age-actions button{height:50px;border:0;border-radius:14px;font-weight:900;font-size:15px;cursor:pointer}
+.age-yes{background:linear-gradient(145deg,#ffbd25,#ff9810);color:#111}
+.age-no{background:#1d1d1d;color:#fff;border:1px solid #343434!important}
+@media(max-width:420px){
+  .age-card{width:100%;border-radius:23px}
+  .age-card .age-copy{margin-left:20px;margin-right:20px}
+  .age-actions{padding-left:16px;padding-right:16px}
+}
+
+
 </style>
 </head>
-<body>
+<body class="intro-lock">
+<div class="startup-splash" id="startupSplash" aria-label="Loading">
+  <div class="splash-inner">
+    <div class="splash-orbit"><div class="splash-play">▶</div></div>
+    <div class="splash-brand">VIRAL <span class="purple">VIDEO LINK</span></div>
+    <div class="splash-sub">অভিজ্ঞতা লোড হচ্ছে</div>
+    <div class="splash-progress"><span></span></div>
+    <div class="splash-dots"><i></i><i></i><i></i></div>
+  </div>
+</div>
+<div class="age-gate" id="ageGate" aria-modal="true" role="dialog">
+  <div class="age-card">
+    <div class="age-icon">👤🛡️</div>
+    <h2>18+ Confirmation</h2>
+    <div class="age-copy">এই সাইটে প্রাপ্তবয়স্কদের জন্য উপযুক্ত কনটেন্ট থাকতে পারে। চালিয়ে যেতে হলে নিশ্চিত করুন যে আপনার বয়স ১৮ বা তার বেশি।</div>
+    <div class="age-rules">
+      <div class="age-rule"><span class="mark">✓</span><span>আমি নিশ্চিত করছি আমার বয়স ১৮+</span></div>
+      <div class="age-rule"><span class="mark">🔒</span><span>অনুমতি ছাড়া সাইটে প্রবেশ করা যাবে না</span></div>
+      <div class="age-rule"><span class="mark">↪</span><span>না হলে Telegram WebApp বন্ধ হবে</span></div>
+    </div>
+    <div class="age-actions">
+      <button class="age-yes" onclick="confirmAge()">হ্যাঁ, আমার বয়স ১৮+</button>
+      <button class="age-no" onclick="leaveSite()">না, বের হয়ে যান</button>
+    </div>
+  </div>
+</div>
+
+
 <div class="app">
 <div class="topbar"><button onclick="openMenu()">‹</button><span>VIRAL VIDEO LINK</span><button>⋯</button></div>
 <header class="mainhead">
@@ -219,9 +323,9 @@ async function openVideo(videoId){
 
       <h2>${escapeHtml(video.title || "Untitled")}</h2>
       <div class="details-meta">
-        <span>❤️ ${Number(video.likes || 0).toLocaleString()} লাইক</span>
-        <span>👁 ${Number(video.views || 0).toLocaleString()} ভিউ</span>
-        <span>↗ শেয়ার</span>
+        <button type="button" id="likeBtn_${video.id}" class="video-action like" aria-pressed="false" onclick="toggleLike(${video.id})">❤️ <span id="likeCount_${video.id}">${Number(video.likes || 0).toLocaleString()}</span> লাইক</button>
+        <button type="button" class="video-action views">👁 <span id="detailsViewCount">${Number(video.views || 0).toLocaleString()}</span> ভিউ</button>
+        <button type="button" class="video-action share" onclick="shareVideo(${video.id}, ${JSON.stringify(video.title || 'VIRAL VIDEO LINK')})">↗ <span id="detailsShareCount">${Number(video.shares || 0).toLocaleString()}</span> শেয়ার</button>
       </div>
 
       <div class="unlock-panel">
@@ -249,6 +353,8 @@ async function openVideo(videoId){
       <button class="more-video-btn" onclick="document.getElementById('videoDetails').remove()">🎥 আরো ভিডিও দেখুন</button>
     </div>`;
   document.body.appendChild(details);
+  registerVideoView(videoId);
+  refreshEngagementState(videoId);
 
   if(!unlocked){
     const v = details.querySelector(".details-player video");
@@ -261,12 +367,133 @@ async function openVideo(videoId){
   }
 }
 
-async function shareVideo(id){
-  const url = location.href.split("#")[0] + "#video-" + id;
+async function currentUser(){
+  const {data:{user}} = await supabaseClient.auth.getUser();
+  return user || null;
+}
+
+function updateVideoCounts(videoId, data){
+  if(!data) return;
+  const likes=Number(data.likes||0);
+  const views=Number(data.views||0);
+  const shares=Number(data.shares||0);
+  const likeCount=document.getElementById("likeCount_"+videoId);
+  const viewCount=document.getElementById("detailsViewCount");
+  const shareCount=document.getElementById("detailsShareCount");
+  if(likeCount) likeCount.textContent=likes.toLocaleString();
+  if(viewCount) viewCount.textContent=views.toLocaleString();
+  if(shareCount) shareCount.textContent=shares.toLocaleString();
+}
+
+async function refreshEngagementState(videoId){
+  const user=await currentUser();
+  const btn=document.getElementById("likeBtn_"+videoId);
+  if(!btn) return;
+  if(!user){btn.setAttribute("aria-pressed","false");return;}
+  const {data,error}=await supabaseClient.rpc("get_video_engagement_state",{p_video_id:String(videoId)});
+  if(!error && data){
+    const liked=!!data.liked;
+    btn.setAttribute("aria-pressed",liked?"true":"false");
+    btn.style.color=liked?"#ff2b91":"#fff";
+  }
+}
+
+async function toggleLike(videoId){
   try{
-    if(navigator.share) await navigator.share({title:"VIRAL VIDEO LINK", url});
-    else if(navigator.clipboard){ await navigator.clipboard.writeText(url); alert("ভিডিও লিংক কপি হয়েছে।"); }
-  }catch(e){}
+    const user=await currentUser();
+    if(!user){
+      openAuth();
+      const m=document.getElementById("authMessage");
+      if(m) m.innerText="❤️ লাইক দিতে আগে Login করুন।";
+      return;
+    }
+
+    const btn=document.getElementById("likeBtn_"+videoId);
+    if(btn) btn.disabled=true;
+
+    const {data,error}=await supabaseClient.rpc("toggle_video_like",{p_video_id:String(videoId)});
+    if(error){
+      console.error("toggle_video_like failed:",error);
+      alert("❌ Like কাজ করছে না।\n\n"+error.message);
+      return;
+    }
+
+    updateVideoCounts(videoId,data);
+    await refreshEngagementState(videoId);
+  }catch(err){
+    console.error("toggleLike exception:",err);
+    alert("❌ Like দিতে সমস্যা হয়েছে।");
+  }finally{
+    const btn=document.getElementById("likeBtn_"+videoId);
+    if(btn) btn.disabled=false;
+  }
+}
+
+async function registerVideoView(videoId){
+  try{
+    const user=await currentUser();
+    if(!user) return;
+    const key="vv_last_view_"+videoId;
+    const last=Number(localStorage.getItem(key)||0);
+    if(Date.now()-last<55000) return;
+    const {data,error}=await supabaseClient.rpc("register_video_view",{p_video_id:String(videoId)});
+    if(error){console.warn("register_video_view failed:",error.message);return;}
+    localStorage.setItem(key,String(Date.now()));
+    updateVideoCounts(videoId,data);
+  }catch(err){
+    console.warn("registerVideoView exception:",err);
+  }
+}
+
+async function shareVideo(videoId,title){
+  const shareUrl=location.origin+location.pathname+"#video-"+encodeURIComponent(videoId);
+  let shared=false;
+
+  try{
+    if(navigator.share){
+      await navigator.share({title:title||"VIRAL VIDEO LINK",text:"এই ভিডিওটি দেখুন 🔥",url:shareUrl});
+      shared=true;
+    }else{
+      if(navigator.clipboard && window.isSecureContext){
+        await navigator.clipboard.writeText(shareUrl);
+      }else{
+        const ta=document.createElement("textarea");
+        ta.value=shareUrl;
+        ta.style.position="fixed";
+        ta.style.opacity="0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+      }
+      shared=true;
+      alert("✅ ভিডিও লিংক কপি হয়েছে");
+    }
+  }catch(err){
+    console.warn("Share cancelled/failed:",err);
+    return;
+  }
+
+  if(!shared) return;
+
+  const user=await currentUser();
+  if(!user){
+    openAuth();
+    const m=document.getElementById("authMessage");
+    if(m) m.innerText="↗ ভিডিও Share হয়েছে। Share count সংরক্ষণ করতে Login করুন।";
+    return;
+  }
+
+  try{
+    const {data,error}=await supabaseClient.rpc("register_video_share",{p_video_id:String(videoId)});
+    if(error){
+      console.warn("register_video_share failed:",error.message);
+      return;
+    }
+    updateVideoCounts(videoId,data);
+  }catch(err){
+    console.warn("registerVideoShare exception:",err);
+  }
 }
 
 function focusSearch(){alert("ভিডিও সার্চ ফিচারটি পরের আপডেটে যুক্ত করা যাবে।")}
@@ -302,19 +529,32 @@ async function submitUsdtPayment(){
 
 function confirmAge() {
   const gate = document.getElementById("ageGate");
-
   if (gate) {
+    gate.classList.remove("show");
     gate.style.display = "none";
     gate.style.pointerEvents = "none";
   }
-
-  localStorage.setItem("ageConfirmed", "true");
+  document.body.classList.remove("intro-lock");
 }
 
 function leaveSite() {
   window.location.href = "https://www.google.com/";
 }
 
+function initStartupFlow() {
+  const splash = document.getElementById("startupSplash");
+  const gate = document.getElementById("ageGate");
+  if (gate) {
+    gate.classList.add("show");
+    gate.style.display = "flex";
+  }
+  document.body.classList.add("intro-lock");
+  setTimeout(() => {
+    if (splash) splash.classList.add("hide");
+  }, 1650);
+}
+
+  
   const SUPABASE_URL = "https://pjpblyjejypzwwpxxgpf.supabase.co";
   const SUPABASE_KEY = "sb_publishable_g1ziyyzBg57Z7WFowQnRQw_TRno8Xgn";
 
@@ -638,6 +878,7 @@ function handleAuthMenu() { supabaseClient.auth.getUser().then(({data:{user}}) =
 
 supabaseClient.auth.onAuthStateChange(() => setTimeout(updateAuthUI, 0));
 
+initStartupFlow();
 updateAuthUI();
 loadReferral().catch(()=>{});
 updateProfileAdCount();
