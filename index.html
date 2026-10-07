@@ -336,10 +336,8 @@ async function loadVideos(category = "All", button = null) {
       .select("*");
 
     if (category === "Trending") {
-      // Trending: only marked trending videos, sorted by highest views first
-      query = query
-        .eq("is_trending", true)
-        .order("views", { ascending: false });
+      // Trending: highest view count first. Do not depend on is_trending column.
+      query = query.order("views", { ascending: false });
     } else if (category !== "All") {
       query = query
         .eq("category", category)
@@ -352,8 +350,9 @@ async function loadVideos(category = "All", button = null) {
     const { data, error } = await query;
 
     if (error) {
+      console.error("loadVideos error:", error);
       videosDiv.innerHTML =
-        '<div class="message">❌ Failed to load videos.</div>';
+        '<div class="message">❌ ভিডিও লোড করা যায়নি।</div>';
       return;
     }
 
