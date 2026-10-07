@@ -296,14 +296,15 @@ function leaveSite() {
     .eq("id", user.id)
     .single();
 
-    if (!error && data) {
+  if (!error && data) {
+    const pp = document.getElementById("profilePoints");
 
-  const pp = document.getElementById("profilePoints");
-  if (pp) {
-    pp.innerText = data.points;
+    if (pp) {
+      pp.innerText = data.points;
+    }
   }
-
 }
+
 let AdController = null;
 try {
   if (window.Adsgram && typeof window.Adsgram.init === "function") {
