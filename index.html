@@ -159,7 +159,14 @@ async function openVideo(videoId){
   const {data: video, error} = await supabaseClient
     .from("videos").select("*").eq("id", videoId).single();
   if(error || !video){ alert("ভিডিও পাওয়া যায়নি।"); return; }
+const { data: newViewCount, error: viewError } =
+  await supabaseClient.rpc("register_video_view", {
+    p_video_id: videoId
+  });
 
+if (!viewError && newViewCount !== null) {
+  video.views = Number(newViewCount);
+}
   const existing = document.getElementById("videoDetails");
   if(existing) existing.remove();
 
