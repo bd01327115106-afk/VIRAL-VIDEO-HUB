@@ -446,37 +446,67 @@ async function registerVideoView(videoId){
 }
 
 async function shareVideo(videoId,title){
-  const shareUrl=location.origin+location.pathname+"#video-"+encodeURIComponent(videoId);
-  let shared=false;
+  const shareUrl = location.origin + location.pathname + "#video-" + encodeURIComponent(videoId);
+  let shared = false;
 
+  // Desktop: copy first for reliable behavior. Mobile: try native share first.
   try{
-    if(navigator.share){
-      await navigator.share({title:title||"VIRAL VIDEO LINK",text:"এই ভিডিওটি দেখুন 🔥",url:shareUrl});
-      shared=true;
-    }else{
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if(isMobile && typeof navigator.share === "function") {
+      await navigator.share({
+        title: title || "VIRAL VIDEO LINK",
+        text: "এই ভিডিওটি দেখুন 🔥",
+        url: shareUrl
+      });
+      shared = true;
+    } else {
       if(navigator.clipboard && window.isSecureContext){
         await navigator.clipboard.writeText(shareUrl);
-      }else{
-        const ta=document.createElement("textarea");
-        ta.value=shareUrl;
-        ta.style.position="fixed";
-        ta.style.opacity="0";
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = shareUrl;
+        ta.style.position = "fixed";
+        ta.style.left = "-9999px";
         document.body.appendChild(ta);
+        ta.focus();
         ta.select();
-        document.execCommand("copy");
+        const ok = document.execCommand("copy");
         ta.remove();
+        if(!ok) throw new Error("Copy command failed");
       }
-      shared=true;
+      shared = true;
       alert("✅ ভিডিও লিংক কপি হয়েছে");
     }
   }catch(err){
-    console.warn("Share cancelled/failed:",err);
-    return;
+    // Native share can fail/cancel; always try clipboard fallback.
+    try{
+      if(navigator.clipboard && window.isSecureContext){
+        await navigator.clipboard.writeText(shareUrl);
+      } else {
+        const ta=document.createElement("textarea");
+        ta.value=shareUrl;
+        ta.style.position="fixed";
+        ta.style.left="-9999px";
+        document.body.appendChild(ta);
+        ta.focus();
+        ta.select();
+        const ok=document.execCommand("copy");
+        ta.remove();
+        if(!ok) throw new Error("Fallback copy failed");
+      }
+      shared = true;
+      alert("✅ ভিডিও লিংক কপি হয়েছে");
+    }catch(copyErr){
+      console.error("Share/copy failed:", copyErr);
+      alert("❌ ভিডিও লিংক কপি করা যায়নি। আবার চেষ্টা করুন।");
+      return;
+    }
   }
 
   if(!shared) return;
 
-  const user=await currentUser();
+  const user = await currentUser();
   if(!user){
     openAuth();
     const m=document.getElementById("authMessage");
