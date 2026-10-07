@@ -25,7 +25,7 @@ button,input{font:inherit}
 .auth-modal.open{display:flex}.auth-box{width:min(100%,380px);background:linear-gradient(145deg,#1b1024,#09080c);border:1px solid #6b2a88;border-radius:22px;padding:20px;box-shadow:0 15px 50px #000}.auth-box h3{text-align:center;margin:0 0 14px;font-size:21px}.auth-box input{width:100%;height:44px;margin:6px 0;padding:0 12px;background:#111116;color:#fff;border:1px solid #493650;border-radius:12px}.auth-box .auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.auth-box button{padding:11px;border-radius:12px;border:0;background:linear-gradient(90deg,#8b2cff,#ff2d91);color:#fff;font-weight:900}.auth-box .close-auth{float:right;background:transparent;padding:0;width:auto;font-size:25px}.auth-box p{text-align:center;color:#ddd;min-height:20px}
 
 .hero{padding:12px 12px 5px}.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.hero-card{border:1px solid #58306e;border-radius:17px;padding:15px 8px;text-align:center;background:linear-gradient(145deg,#17101f,#0d0b11)}
+.hero-card{width:100%;font:inherit;color:#fff;cursor:pointer;border:1px solid #58306e;border-radius:17px;padding:15px 8px;text-align:center;background:linear-gradient(145deg,#17101f,#0d0b11)}
 .hero-card.active{background:linear-gradient(90deg,#8225ff,#ff2d91);border-color:transparent}
 .hero-card b{display:block;font-size:18px}.hero-card small{color:#ddd}
 .categories{display:flex;flex-wrap:wrap;gap:7px;padding:10px 10px 6px}
@@ -94,7 +94,7 @@ button,input{font:inherit}
 </header>
 
 <main id="homePage" class="page active">
-<section class="hero"><div class="hero-grid"><div class="hero-card active"><b>সব ভিডিও</b><small>নতুন পোস্ট আগে</small></div><div class="hero-card"><b>ট্রেন্ডিং</b><small>সবচেয়ে বেশি দেখা আগে</small></div></div></section>
+<section class="hero"><div class="hero-grid"><button type="button" class="hero-card active" onclick="selectHeroTab('All', this)"><b>সব ভিডিও</b><small>নতুন পোস্ট আগে</small></button><button type="button" class="hero-card" onclick="selectHeroTab('Trending', this)"><b>ট্রেন্ডিং</b><small>সবচেয়ে বেশি দেখা আগে</small></button></div></section>
 <div class="categories" id="categoryBar">
 <button class="active" onclick="loadVideos('All',this)">সব ভিডিও</button><button onclick="loadVideos('Trending',this)">ট্রেন্ডিং</button><button onclick="loadVideos('Bangla',this)">বাংলা</button><button onclick="loadVideos('English',this)">ইংলিশ</button><button onclick="loadVideos('TikTok',this)">টিকটক</button><button onclick="loadVideos('Japanese',this)">জাপানি</button><button onclick="loadVideos('Funny',this)">ফানি</button><button onclick="loadVideos('Music',this)">মিউজিক</button><button onclick="loadVideos('Shorts',this)">শর্টস</button><button onclick="loadVideos('Viral',this)">ভাইরাল ভিডিও</button></div>
 <h2 class="section-title">Trending Videos</h2>
@@ -310,6 +310,12 @@ try {
   }
 } catch (e) { console.warn("Adsgram initialization failed:", e); }
 
+
+function selectHeroTab(category, card) {
+  document.querySelectorAll(".hero-card").forEach(el => el.classList.remove("active"));
+  if (card) card.classList.add("active");
+  loadVideos(category, null);
+}
 
 async function loadVideos(category = "All", button = null) {
 
