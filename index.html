@@ -72,7 +72,6 @@ button,input{font:inherit}
 .details-content h2{font-size:20px;margin:14px 0 10px}
 .details-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 18px}
 .details-meta span{padding:14px 8px;text-align:center;border:1px solid #4a214f;border-radius:13px;background:#111}
-.details-meta button{padding:14px 8px;text-align:center;border:1px solid #4a214f;border-radius:13px;background:#111;color:#fff;font-weight:800;cursor:pointer}
 .details-content .unlock-panel{padding:14px;border-radius:20px}
 .unlock-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .unlock-summary>div{text-align:center;border:1px solid #6b2a88;border-radius:12px;padding:9px}
@@ -161,17 +160,6 @@ async function openVideo(videoId){
     .from("videos").select("*").eq("id", videoId).single();
   if(error || !video){ alert("ভিডিও পাওয়া যায়নি।"); return; }
 
-  // Count one view per video per browser per minute.
-  const viewKey = "vv_last_view_" + video.id;
-  const lastView = Number(localStorage.getItem(viewKey) || 0);
-  if(Date.now() - lastView >= 60000){
-    const { data: newViewCount, error: viewError } = await supabaseClient.rpc("register_video_view", { p_video_id: video.id });
-    if(!viewError && newViewCount !== null){
-      video.views = Number(newViewCount);
-      localStorage.setItem(viewKey, String(Date.now()));
-    }
-  }
-
   const existing = document.getElementById("videoDetails");
   if(existing) existing.remove();
 
@@ -199,9 +187,9 @@ async function openVideo(videoId){
 
       <h2>${escapeHtml(video.title || "Untitled")}</h2>
       <div class="details-meta">
-        <button type="button" id="likeBtn_${video.id}" onclick="toggleLike(${video.id})">❤️ <span id="likeCount_${video.id}">${Number(video.likes || 0).toLocaleString()}</span> লাইক</button>
-        <button type="button">👁 <span id="viewCount_${video.id}">${Number(video.views || 0).toLocaleString()}</span> ভিউ</button>
-        <button type="button" onclick="shareVideo(${video.id})">↗ শেয়ার</button>
+        <span>❤️ ${Number(video.likes || 0).toLocaleString()} লাইক</span>
+        <span>👁 ${Number(video.views || 0).toLocaleString()} ভিউ</span>
+        <span>↗ শেয়ার</span>
       </div>
 
       <div class="unlock-panel">
@@ -406,107 +394,12 @@ videosDiv.appendChild(card);
   }
 
   
-async function toggleLike(videoId){
-  try{
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    if(!user){
-      alert("লাইক দিতে আগে Login করুন।");
-      openAuth();
-      return;
-    }
-
-    const { data: liked, error } = await supabaseClient.rpc("toggle_video_like", { p_video_id: videoId });
-    if(error){
-      console.error("Like error:", error);
-      alert("Like দিতে সমস্যা হয়েছে: " + error.message);
-      return;
-    }
-
-    const { data: video, error: countError } = await supabaseClient
-      .from("videos").select("likes").eq("id", videoId).single();
-
-    if(countError){
-      console.error("Like count error:", countError);
-      return;
-    }
-
-    const count = Number(video?.likes || 0);
-    const likeCount = document.getElementById("likeCount_" + videoId);
-    const likeBtn = document.getElementById("likeBtn_" + videoId);
-    if(likeCount) likeCount.textContent = count.toLocaleString();
-    if(likeBtn) likeBtn.style.color = liked ? "#ff2b91" : "#fff";
-  }catch(e){
-    console.error("toggleLike error:", e);
-    alert("Like দিতে সমস্যা হয়েছে।");
-  }
+function likeVideo(btn){
+  btn.classList.toggle("liked");
+  const label=btn.querySelector("small");
+  if(label) label.textContent=btn.classList.contains("liked")?"লাইক হয়েছে":"লাইক";
 }
 
-async function watchUnlockAd(videoId){
-  const btn = document.querySelector(`#videoDetails .unlock-big`);
-  try{
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    if(!user){
-      alert("ভিডিও Unlock করতে আগে Login করুন।");
-      openAuth();
-      return;
-    }
-
-    const key = "videoAds_" + videoId;
-    let watched = Math.min(Number(localStorage.getItem(key) || 0), 5);
-
-    if(watched >= 5){
-      localStorage.setItem("videoUnlocked_" + videoId, "true");
-      await openVideo(videoId);
-      return;
-    }
-
-    if(!AdController){
-      alert("এই মুহূর্তে বিজ্ঞাপন পাওয়া যাচ্ছে না। একটু পরে আবার চেষ্টা করুন।");
-      return;
-    }
-
-    if(btn) btn.disabled = true;
-    if(btn) btn.textContent = "🎬 Ad লোড হচ্ছে...";
-
-    await AdController.show();
-
-    watched += 1;
-    localStorage.setItem(key, String(watched));
-    updateProfileAdCount();
-
-    const remain = Math.max(0, 5 - watched);
-    const watchedEl = document.getElementById("detailsWatched");
-    const remainEl = document.getElementById("detailsRemain");
-    const progressEl = document.getElementById("detailsProgress");
-    const hintEl = document.getElementById("unlockHint");
-
-    if(watchedEl) watchedEl.textContent = watched;
-    if(remainEl) remainEl.textContent = remain;
-    if(progressEl) progressEl.style.width = ((watched/5)*100) + "%";
-
-    if(watched >= 5){
-      localStorage.setItem("videoUnlocked_" + videoId, "true");
-      if(hintEl) hintEl.textContent = "✅ ভিডিও আনলক হয়েছে। এখন ভিডিওটি দেখতে পারবেন।";
-      if(btn){
-        btn.disabled = true;
-        btn.textContent = "✅ Video Unlocked";
-      }
-      const videoEl = document.querySelector("#videoDetails .details-player video");
-      if(videoEl) videoEl.controlsList.remove("nodownload");
-      alert("✅ ৫টি Ads সম্পূর্ণ হয়েছে। ভিডিও Unlock হয়েছে।");
-    }else{
-      if(hintEl) hintEl.textContent = `ভিডিও দেখতে ${remain}টি Ads বাকি।`;
-      if(btn){
-        btn.disabled = false;
-        btn.textContent = `🎬 Ad দেখুন — ${remain}টি বাকি`;
-      }
-    }
-  }catch(e){
-    console.error("watchUnlockAd error:", e);
-    if(btn){ btn.disabled = false; btn.textContent = "🎬 Ad দেখুন"; }
-    alert("❌ Ad সম্পূর্ণ করা যায়নি: " + (e?.message || "Unknown error"));
-  }
-}
 
 
 async function loadUserPoints(){
@@ -548,6 +441,81 @@ async function hasPurchasedVideo(videoId){
   if(!user) return false;
   const {data,error}=await supabaseClient.from("video_purchases").select("id").eq("user_id",user.id).eq("video_id",videoId).limit(1);
   return !error && Array.isArray(data) && data.length>0;
+}
+
+async function watchUnlockAd(videoId){
+  try {
+    if (!window.Adsgram || typeof window.Adsgram.init !== "function") {
+      alert("❌ AdsGram SDK লোড হয়নি।");
+      return;
+    }
+
+    if (!AdController) {
+      AdController = window.Adsgram.init({ blockId: "52134" });
+    }
+
+    if (!AdController || typeof AdController.show !== "function") {
+      alert("❌ AdsGram ad controller পাওয়া যায়নি।");
+      return;
+    }
+
+    const button = document.querySelector(`.unlock-big[onclick=\"watchUnlockAd(${videoId})\"]`);
+    if (button) {
+      button.disabled = true;
+      button.innerText = "🎬 Ad লোড হচ্ছে...";
+    }
+
+    const result = await AdController.show();
+
+    // AdsGram resolves this promise when the ad is completed (rewarded) or closed (interstitial).
+    // We count only a completed/acceptable result for the unlock flow.
+    const completed = !result || result.done !== false;
+
+    if (!completed) {
+      if (button) {
+        const now = Math.min(5, Number(localStorage.getItem("videoAds_" + videoId) || 0));
+        button.disabled = false;
+        button.innerText = `🎬 Ad দেখুন — ${Math.max(0, 5 - now)}টি বাকি`;
+      }
+      return;
+    }
+
+    const key = "videoAds_" + videoId;
+    const current = Math.min(5, Number(localStorage.getItem(key) || 0));
+    const next = Math.min(5, current + 1);
+    localStorage.setItem(key, String(next));
+
+    if (next >= 5) {
+      localStorage.setItem("videoUnlocked_" + videoId, "true");
+      alert("✅ ৫টি Ads সম্পূর্ণ হয়েছে। ভিডিও Unlock হয়েছে!");
+      openVideo(videoId);
+      return;
+    }
+
+    const watchedEl = document.getElementById("detailsWatched");
+    const remainEl = document.getElementById("detailsRemain");
+    const progressEl = document.getElementById("detailsProgress");
+    const hintEl = document.getElementById("unlockHint");
+
+    if (watchedEl) watchedEl.textContent = String(next);
+    if (remainEl) remainEl.textContent = String(5 - next);
+    if (progressEl) progressEl.style.width = `${(next / 5) * 100}%`;
+    if (hintEl) hintEl.textContent = `ভিডিও দেখতে ${5 - next}টি Ads বাকি।`;
+
+    if (button) {
+      button.disabled = false;
+      button.innerText = `🎬 Ad দেখুন — ${5 - next}টি বাকি`;
+    }
+  } catch (error) {
+    console.error("AdsGram error:", error);
+    if (button) {
+      button.disabled = false;
+      const now = Math.min(5, Number(localStorage.getItem("videoAds_" + videoId) || 0));
+      button.innerText = `🎬 Ad দেখুন — ${Math.max(0, 5 - now)}টি বাকি`;
+    }
+
+    alert("❌ Ad দেখানো যায়নি।\n" + (error?.description || error?.message || "AdsGram error"));
+  }
 }
 
 async function unlockVideo(videoId){
