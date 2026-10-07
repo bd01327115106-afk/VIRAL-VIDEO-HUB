@@ -325,7 +325,7 @@ async function openVideo(videoId){
       <div class="details-meta">
         <button type="button" id="likeBtn_${video.id}" class="video-action like" aria-pressed="false" onclick="toggleLike(${video.id})">❤️ <span id="likeCount_${video.id}">${Number(video.likes || 0).toLocaleString()}</span> লাইক</button>
         <button type="button" class="video-action views">👁 <span id="detailsViewCount">${Number(video.views || 0).toLocaleString()}</span> ভিউ</button>
-        <button type="button" class="video-action share" onclick='shareVideo(${video.id}, ${JSON.stringify(video.title || "VIRAL VIDEO LINK").replace(/'/g, "&#39;")})'>↗ <span id="detailsShareCount">${Number(video.shares || 0).toLocaleString()}</span> শেয়ার</button>
+        <button type="button" id="shareBtn_${video.id}" class="video-action share" onclick="shareVideo(${video.id})">↗ <span id="detailsShareCount">${Number(video.shares || 0).toLocaleString()}</span> শেয়ার</button>
       </div>
 
       <div class="unlock-panel">
@@ -446,6 +446,12 @@ async function registerVideoView(videoId){
 }
 
 async function shareVideo(videoId,title){
+  if(!title){
+    try{
+      const {data:v}=await supabaseClient.from("videos").select("title").eq("id",videoId).single();
+      title=v?.title || "VIRAL VIDEO LINK";
+    }catch(e){ title="VIRAL VIDEO LINK"; }
+  }
   const shareUrl = location.origin + location.pathname + "#video-" + encodeURIComponent(videoId);
   let shared = false;
 
