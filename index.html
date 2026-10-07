@@ -82,6 +82,9 @@ button,input{font:inherit}
 .details-heading{margin-top:28px!important}
 .details-notice{border:1px solid #6b4714;border-radius:20px;background:linear-gradient(145deg,#2a1b08,#17100a);padding:25px;text-align:center;line-height:1.8;color:#eee}
 .buy-points-badge{margin-top:10px;padding:10px 12px;border:1px solid #6b4714;border-radius:14px;background:#171109;color:#f5c64d;font-weight:900;text-align:center}.purchase-btn{width:100%;border:0;border-radius:14px;padding:14px;margin-top:10px;font-size:16px;font-weight:900;color:#fff;background:linear-gradient(90deg,#f0a800,#ff2b91)}.account-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.account-actions button{flex:1;min-width:130px}.logout-btn{background:#181818!important;border:1px solid #63364f!important}.auth-status{font-size:12px;color:#aaa;margin-top:4px;word-break:break-all}
+
+
+.usdt-box{margin-top:12px;border:1px solid #315b55;border-radius:20px;background:linear-gradient(145deg,#0d1717,#0b0d10);padding:14px}.usdt-box h3{margin:0 0 7px}.usdt-box p{margin:6px 0;color:#bbb;font-size:13px;line-height:1.5}.usdt-address{display:flex;gap:7px;margin-top:10px}.usdt-address input{flex:1;height:42px;background:#07090c;color:#fff;border:1px solid #2b4547;border-radius:10px;padding:0 10px;font-size:12px}.usdt-address button,.usdt-buy{border:0;border-radius:10px;background:linear-gradient(90deg,#20c997,#1e88ff);color:#fff;font-weight:900;padding:0 12px}.usdt-buy{width:100%;height:44px;margin-top:10px}.usdt-note{font-size:11px;color:#9ec7bd;margin-top:8px}.usdt-modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:500;display:none;align-items:center;justify-content:center;padding:18px}.usdt-modal.open{display:flex}.usdt-card{width:min(100%,430px);background:#111318;border:1px solid #315b55;border-radius:22px;padding:18px}.usdt-card h3{margin:0 0 8px}.usdt-card .amount{font-size:22px;font-weight:900;margin:8px 0}.usdt-card code{display:block;background:#07090c;padding:12px;border-radius:10px;word-break:break-all;color:#8ef0d4;font-size:12px}.usdt-card input{width:100%;height:44px;margin-top:10px;background:#080a0d;color:#fff;border:1px solid #2b4547;border-radius:10px;padding:0 10px}.usdt-card .actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.usdt-card button{height:42px;border:0;border-radius:10px;font-weight:900}.usdt-card .close{background:#222;color:#fff}.usdt-card .submit{background:linear-gradient(90deg,#20c997,#1e88ff);color:#fff}
 </style>
 </head>
 <body>
@@ -111,6 +114,21 @@ button,input{font:inherit}
 <div class="row"><span>🎁 প্রতি রেফারেলে</span><b>রিওয়ার্ড</b></div><div class="row"><span>👤 জয়েন বোনাস</span><b>সক্রিয়</b></div><div class="row"><span>🎫 রেফারেল কোড</span><b id="profileReferralCode">Loading...</b></div>
 <h3>আপনার রেফারেল লিংক</h3><div class="refcode" id="profileReferralLink">লোড হচ্ছে...</div><div class="twobtn"><button onclick="copyReferral()">📋 লিংক কপি</button><button onclick="shareReferral()">↗ শেয়ার</button></div></div>
 <h3>কিভাবে কাজ করে</h3><div class="earnbox"><div class="row"><span>👥 বন্ধু আপনার কোড দিয়ে জয়েন করলে</span><b>রিওয়ার্ড যোগ হবে</b></div><div class="row"><span>⚡ ভিডিও আনলক</span><b>৫টি Ads সম্পূর্ণ করুন</b></div><button class="go" onclick="showHome()">🎬 আরো ভিডিও দেখুন</button></div>
+<h3>পয়েন্ট কিনুন</h3>
+<div class="usdt-box">
+  <h3>💵 USDT (TRC20)</h3>
+  <p>শুধু USDT (TRC20) দিয়ে Points কিনুন। নিচের wallet address-এ payment পাঠিয়ে Transaction ID সংরক্ষণ করুন।</p>
+  <div class="usdt-address">
+    <input id="usdtWalletDisplay" value="TDW3PWAJKtvZf4NDNuX5hk2SGmbZuZHbyM" readonly>
+    <button onclick="copyUsdtWallet()">Copy</button>
+  </div>
+  <button class="usdt-buy" onclick="openUsdtPayment(100,1)">🪙 100 Points — 1 USDT</button>
+  <button class="usdt-buy" onclick="openUsdtPayment(550,5)">🪙 550 Points — 5 USDT</button>
+  <button class="usdt-buy" onclick="openUsdtPayment(1200,10)">🪙 1200 Points — 10 USDT</button>
+  <button class="usdt-buy" onclick="openUsdtPayment(2600,20)">🪙 2600 Points — 20 USDT</button>
+  <div class="usdt-note">⚠️ Wallet address-টি অবশ্যই তোমার নিজের TRC20 USDT address দিয়ে replace করতে হবে। Payment verify না হওয়া পর্যন্ত Points automatically যোগ হবে না।</div>
+</div>
+
 </div></main>
 <div class="footer">🔥 VIRAL VIDEO LINK<br>নতুন ভিডিও নিয়মিত যুক্ত হবে...</div>
 <nav class="bottom"><button id="homeTab" class="active" onclick="showHome()">🏠<br><span>হোম</span></button><button id="profileTab" onclick="showProfile()">👤<br><span>প্রোফাইল</span></button></nav>
@@ -120,6 +138,20 @@ button,input{font:inherit}
 <button class="menuitem" onclick="showHome();closeMenu()">🏠 হোম</button><button class="menuitem" onclick="showProfile();closeMenu()">👤 প্রোফাইল</button><button class="menuitem" id="menuAuthBtn" onclick="handleAuthMenu();closeMenu()">🔐 Login / Sign Up</button><button class="menuitem">▶ ভিডিও দেখার নিয়ম</button><button class="menuitem">⚠ ১৮+ কনটেন্ট</button><button class="menuitem">👥 ফ্রি পয়েন্ট আয় করার নিয়ম</button><button class="menuitem">🪙 পয়েন্ট কেনার নিয়ম</button>
 <h3>ভাষা পরিবর্তন</h3><div class="lang"><button>বাংলা</button><button>ENGLISH</button></div><h3>সোশ্যাল লিংক</h3><button class="menuitem">🔗 WhatsApp</button><button class="menuitem">🔗 Telegram</button></aside></div>
 
+
+
+<div class="usdt-modal" id="usdtModal" onclick="closeUsdtPayment(event)">
+  <div class="usdt-card" onclick="event.stopPropagation()">
+    <h3>💵 USDT (TRC20) Payment</h3>
+    <div class="amount" id="usdtPayAmount">1 USDT</div>
+    <p>এই address-এ ঠিক amount USDT (TRC20) পাঠাও:</p>
+    <code id="usdtPayAddress">TDW3PWAJKtvZf4NDNuX5hk2SGmbZuZHbyM</code>
+    <button style="width:100%;margin-top:8px;background:#222;color:#fff" onclick="copyUsdtPaymentAddress()">📋 Wallet Address Copy</button>
+    <input id="usdtTxHash" placeholder="Transaction ID / TX Hash">
+    <div class="actions"><button class="close" onclick="closeUsdtPayment()">Cancel</button><button class="submit" onclick="submitUsdtPayment()">Payment পাঠিয়েছি</button></div>
+    <div class="usdt-note">Payment পাঠানোর পর TX Hash জমা হবে। Admin verification-এর পরে Points যোগ করতে হবে।</div>
+  </div>
+</div>
 
 <div class="auth-modal" id="authModal" onclick="closeAuth(event)">
   <div class="auth-box" onclick="event.stopPropagation()">
@@ -240,6 +272,33 @@ async function shareVideo(id){
 function focusSearch(){alert("ভিডিও সার্চ ফিচারটি পরের আপডেটে যুক্ত করা যাবে।")}
 </script>
 <script>
+
+const USDT_TRC20_ADDRESS = "TDW3PWAJKtvZf4NDNuX5hk2SGmbZuZHbyM";
+let pendingUsdtOrder = null;
+function copyTextSafe(value){
+  if(navigator.clipboard) return navigator.clipboard.writeText(value);
+  const ta=document.createElement("textarea"); ta.value=value; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); return Promise.resolve();
+}
+async function copyUsdtWallet(){ await copyTextSafe(USDT_TRC20_ADDRESS); alert("✅ USDT wallet address copied."); }
+function openUsdtPayment(points, usdt){
+  pendingUsdtOrder={points:Number(points),usdt:Number(usdt)};
+  document.getElementById("usdtPayAmount").textContent=`${usdt} USDT → ${points} Points`;
+  document.getElementById("usdtPayAddress").textContent=USDT_TRC20_ADDRESS;
+  document.getElementById("usdtWalletDisplay").value=USDT_TRC20_ADDRESS;
+  document.getElementById("usdtTxHash").value="";
+  document.getElementById("usdtModal").classList.add("open");
+}
+function closeUsdtPayment(e){ if(!e || e.target.id==="usdtModal") document.getElementById("usdtModal").classList.remove("open"); }
+async function copyUsdtPaymentAddress(){ await copyTextSafe(USDT_TRC20_ADDRESS); alert("✅ Wallet address copied."); }
+async function submitUsdtPayment(){
+  const tx=(document.getElementById("usdtTxHash").value||"").trim();
+  if(!pendingUsdtOrder) return;
+  if(USDT_TRC20_ADDRESS.includes("YOUR_TRC20")){ alert("প্রথমে তোমার আসল TRC20 USDT wallet address code-এ বসাতে হবে।"); return; }
+  if(tx.length<8){ alert("TX Hash/Transaction ID দিন।"); return; }
+  localStorage.setItem("pendingUsdtPayment",JSON.stringify({ ...pendingUsdtOrder,txHash:tx,createdAt:new Date().toISOString(),status:"pending" }));
+  closeUsdtPayment();
+  alert(`✅ Payment তথ্য সংরক্ষণ হয়েছে। ${pendingUsdtOrder.usdt} USDT-এর ${pendingUsdtOrder.points} Points admin verification-এর পরে যোগ হবে।`);
+}
 
 function confirmAge() {
   const gate = document.getElementById("ageGate");
