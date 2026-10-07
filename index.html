@@ -297,13 +297,12 @@ function leaveSite() {
 
     if (!error && data) {
 
-  document.getElementById("points").innerText = data.points;
-  const pp=document.getElementById("profilePoints"); if(pp) pp.innerText=data.points;
+  const pp = document.getElementById("profilePoints");
+  if (pp) {
+    pp.innerText = data.points;
+  }
 
 }
-
-}
-
 let AdController = null;
 try {
   if (window.Adsgram && typeof window.Adsgram.init === "function") {
