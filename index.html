@@ -71,7 +71,7 @@ button,input{font:inherit}
 .details-player video{width:100%;display:block;max-height:68vh;background:#000}
 .details-content h2{font-size:20px;margin:14px 0 10px}
 .details-meta{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 18px}
-.details-meta span{padding:14px 8px;text-align:center;border:1px solid #4a214f;border-radius:13px;background:#111}
+.details-meta span{padding:14px 8px;text-align:center;border:1px solid #4a214f;border-radius:13px;background:#111}.details-meta button{padding:14px 8px;text-align:center;border:1px solid #4a214f;border-radius:13px;background:#111;color:#fff;font-weight:800;cursor:pointer}.details-meta button:disabled{opacity:1;cursor:default}
 .details-content .unlock-panel{padding:14px;border-radius:20px}
 .unlock-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .unlock-summary>div{text-align:center;border:1px solid #6b2a88;border-radius:12px;padding:9px}
@@ -155,18 +155,57 @@ function formatVideoAge(dateString){
   if(days < 30) return Math.floor(days/7) + " week ago";
   return Math.floor(days/30) + " month ago";
 }
+async function toggleLike(videoId){
+  try {
+    const { data: { user } } = await supabaseClient.auth.getUser();
+
+    if (!user) {
+      alert("লাইক দিতে আগে Login করুন।");
+      openAuth();
+      return;
+    }
+
+    const { data, error } = await supabaseClient.rpc("toggle_video_like", {
+      p_video_id: videoId
+    });
+
+    if (error) {
+      console.error("Like error:", error);
+      alert("Like দিতে সমস্যা হয়েছে: " + error.message);
+      return;
+    }
+
+    const { data: video, error: countError } = await supabaseClient
+      .from("videos")
+      .select("likes")
+      .eq("id", videoId)
+      .single();
+
+    if (countError) {
+      console.error("Like count error:", countError);
+      return;
+    }
+
+    const count = Number(video?.likes || 0);
+    const countEl = document.getElementById("likeCount_" + videoId);
+    const btn = document.getElementById("likeBtn_" + videoId);
+
+    if (countEl) countEl.textContent = count.toLocaleString();
+    if (btn) {
+      btn.style.color = data ? "#ff2b91" : "#fff";
+      btn.setAttribute("aria-pressed", data ? "true" : "false");
+    }
+  } catch (err) {
+    console.error("toggleLike error:", err);
+    alert("Like দিতে সমস্যা হয়েছে।");
+  }
+}
+
 async function openVideo(videoId){
   const {data: video, error} = await supabaseClient
     .from("videos").select("*").eq("id", videoId).single();
   if(error || !video){ alert("ভিডিও পাওয়া যায়নি।"); return; }
-const { data: newViewCount, error: viewError } =
-  await supabaseClient.rpc("register_video_view", {
-    p_video_id: videoId
-  });
 
-if (!viewError && newViewCount !== null) {
-  video.views = Number(newViewCount);
-}
   const existing = document.getElementById("videoDetails");
   if(existing) existing.remove();
 
@@ -194,9 +233,15 @@ if (!viewError && newViewCount !== null) {
 
       <h2>${escapeHtml(video.title || "Untitled")}</h2>
       <div class="details-meta">
-        <span>❤️ ${Number(video.likes || 0).toLocaleString()} লাইক</span>
-        <span>👁 ${Number(video.views || 0).toLocaleString()} ভিউ</span>
-        <span>↗ শেয়ার</span>
+        <button type="button" onclick="toggleLike(${video.id})" id="likeBtn_${video.id}">
+          ❤️ <span id="likeCount_${video.id}">${Number(video.likes || 0).toLocaleString()}</span> লাইক
+        </button>
+        <button type="button" disabled>
+          👁 ${Number(video.views || 0).toLocaleString()} ভিউ
+        </button>
+        <button type="button" onclick="shareVideo(${video.id})">
+          ↗ শেয়ার
+        </button>
       </div>
 
       <div class="unlock-panel">
