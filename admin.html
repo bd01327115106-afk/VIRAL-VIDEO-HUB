@@ -159,7 +159,38 @@ function renderBars(){const top=state.videos.slice().sort((a,b)=>Number(b.views|
 function openVideoModal(id){const v=id?state.videos.find(x=>String(x.id)===String(id)):null;$('videoId').value=v?.id||'';$('videoModalTitle').textContent=v?'Edit Video':'Add Video';$('videoTitle').value=v?.title||'';$('videoDescription').value=v?.description||'';$('videoUrl').value=v?.video_url||'';$('videoThumb').value=v?.thumbnail_url||'';$('videoCategory').value=v?.category||'Bangla';$('videoPoints').value=Number(v?.points_price||100);$('videoUnlockHours').value=Number(v?.unlock_hours||12);$('videoTrending').checked=!!v?.is_trending;$('videoMsg').textContent='';$('videoModal').classList.add('open')}
 function editVideo(id){openVideoModal(id)}
 function closeModal(e){if(!e||e.target.id==='videoModal')$('videoModal').classList.remove('open')}
-async function saveVideo(){const id=$('videoId').value;const payload={title:$('videoTitle').value.trim(),description:$('videoDescription').value.trim(),video_url:$('videoUrl').value.trim(),thumbnail_url:$('videoThumb').value.trim(),category:$('videoCategory').value,points_price:Number($('videoPoints').value||0)unlock_hours:Number($('#videoUnlockHours').value||12),is_trending:$('videoTrending').checked};if(!payload.title||!payload.video_url){$('videoMsg').textContent='Title এবং Video URL লাগবে।';return}const r=id?await sb.from('videos').update(payload).eq('id',id):await sb.from('videos').insert(payload);if(r.error){$('videoMsg').textContent='❌ '+r.error.message;return}$('videoModal').classList.remove('open');toast('Video saved');await reloadAll()}
+async function saveVideo() {
+  const id = $('#videoId').value;
+
+  const payload = {
+    title: $('#videoTitle').value.trim(),
+    description: $('#videoDescription').value.trim(),
+    video_url: $('#videoUrl').value.trim(),
+    thumbnail_url: $('#videoThumb').value.trim(),
+    category: $('#videoCategory').value,
+    points_price: Number($('#videoPoints').value || 0),
+    unlock_hours: Number($('#videoUnlockHours').value || 12),
+    is_trending: $('#videoTrending').checked
+  };
+
+  if (!payload.title || !payload.video_url) {
+    $('#videoMsg').textContent = 'Title এবং Video URL লাগবে।';
+    return;
+  }
+
+  const r = id
+    ? await sb.from('videos').update(payload).eq('id', id)
+    : await sb.from('videos').insert(payload);
+
+  if (r.error) {
+    $('#videoMsg').textContent = '❌ ' + r.error.message;
+    return;
+  }
+
+  $('#videoModal').classList.remove('open');
+  toast('Video saved');
+  await reloadAll();
+}
 async function toggleTrending(id,val){const r=await sb.from('videos').update({is_trending:val}).eq('id',id);if(r.error){toast(r.error.message);return}await reloadAll();toast(val?'Trending enabled':'Trending disabled')}
 async function deleteVideo(id){if(!confirm('এই ভিডিও স্থায়ীভাবে delete করবেন?'))return;const r=await sb.from('videos').delete().eq('id',id);if(r.error){toast(r.error.message);return}await reloadAll();toast('Video deleted')}
 async function adjustPoints(userId){const raw=prompt('Points delta দিন। যেমন +100 বা -50');if(raw===null)return;const delta=Number(raw);if(!Number.isInteger(delta)||delta===0){alert('Valid integer দিন।');return}const reason=prompt('Reason লিখুন')||'Admin adjustment';const r=await sb.rpc('admin_adjust_points',{p_user_id:userId,p_delta:delta,p_reason:reason});if(r.error){alert(r.error.message);return}await reloadAll();toast(`Points updated: ${r.data}`)}
