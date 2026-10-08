@@ -438,7 +438,7 @@ async function downloadViaTelegram(videoId){
     }
 
     const token=data[0].token;
-    const link='https://t.me/AllVideosGrabbbot?start='+encodeURIComponent(token);
+    const link='https://t.me/AllVideosGrabbdbot?start='+encodeURIComponent(token);
     try{
       if(window.Telegram?.WebApp?.openTelegramLink){
         window.Telegram.WebApp.openTelegramLink(link);
