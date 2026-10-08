@@ -667,14 +667,30 @@ let AdController = null;
 
 try {
   if (window.Adsgram && typeof window.Adsgram.init === "function") {
-   AdController = window.Adsgram.init({
-  blockId: "52134"
-});
+    AdController = window.Adsgram.init({
+      blockId: "52134"
+    });
+
+    AdController.addEventListener("onBannerNotFound", () => {
+      alert("❌ AdsGram: এখন কোনো Ad পাওয়া যায়নি।");
+    });
+
+    AdController.addEventListener("onTooLongSession", () => {
+      alert("⏳ AdsGram: Session অনেকক্ষণ চলছে। Mini App বন্ধ করে আবার খুলুন।");
+    });
+
+    AdController.addEventListener("onNonStopShow", () => {
+      alert("⚠️ AdsGram: পরপর অনেকগুলো Ad দেখানোর চেষ্টা হয়েছে। একটু অপেক্ষা করুন।");
+    });
+
+    AdController.addEventListener("onError", () => {
+      alert("❌ AdsGram: Ad চালানোর সময় একটি error হয়েছে।");
+    });
   }
 } catch (e) {
   console.warn("Adsgram initialization failed:", e);
+  alert("❌ AdsGram SDK initialize হয়নি।");
 }
-
 function selectHeroTab(category, card) {
   document.querySelectorAll(".hero-card").forEach(el => el.classList.remove("active"));
   if (card) card.classList.add("active");
