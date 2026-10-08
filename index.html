@@ -667,12 +667,9 @@ let AdController = null;
 
 try {
   if (window.Adsgram && typeof window.Adsgram.init === "function") {
-    AdController = window.Adsgram.init({
-      blockId: "52134",
-      debug: true,
-      debugConsole: true,
-      debugBannerType: "RewardedVideo"
-    });
+   AdController = window.Adsgram.init({
+  blockId: "52134"
+});
   }
 } catch (e) {
   console.warn("Adsgram initialization failed:", e);
