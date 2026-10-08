@@ -23,6 +23,9 @@ button,input{font:inherit}
 .page{display:none}.page.active{display:block}
 .auth-modal{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:150;display:none;align-items:center;justify-content:center;padding:18px}
 .auth-modal.open{display:flex}.auth-box{width:min(100%,380px);background:linear-gradient(145deg,#1b1024,#09080c);border:1px solid #6b2a88;border-radius:22px;padding:20px;box-shadow:0 15px 50px #000}.auth-box h3{text-align:center;margin:0 0 14px;font-size:21px}.auth-box input{width:100%;height:44px;margin:6px 0;padding:0 12px;background:#111116;color:#fff;border:1px solid #493650;border-radius:12px}.auth-box .auth-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.auth-box button{padding:11px;border-radius:12px;border:0;background:linear-gradient(90deg,#8b2cff,#ff2d91);color:#fff;font-weight:900}.auth-box .close-auth{float:right;background:transparent;padding:0;width:auto;font-size:25px}.auth-box p{text-align:center;color:#ddd;min-height:20px}
+.google-login-btn{width:100%;height:46px;border-radius:12px;border:1px solid #3b3b3b;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:900;cursor:pointer}
+.google-login-btn:hover{background:#f4f4f4}
+.google-g{width:24px;height:24px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-weight:1000;font-size:17px;color:#4285f4;background:#f1f3f4}
 
 .hero{padding:12px 12px 5px}.hero-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .hero-card{width:100%;font:inherit;color:#fff;cursor:pointer;border:1px solid #58306e;border-radius:17px;padding:15px 8px;text-align:center;background:linear-gradient(145deg,#17101f,#0d0b11)}
@@ -267,12 +270,36 @@ body.intro-lock{overflow:hidden}
       <button onclick="signUp()">Sign Up</button>
       <button onclick="login()">Login</button>
     </div>
+    <div style="display:flex;align-items:center;gap:8px;margin:14px 0;color:#9f96aa;font-size:12px"><span style="height:1px;background:#2b2333;flex:1"></span><span>অথবা</span><span style="height:1px;background:#2b2333;flex:1"></span></div>
+    <button type="button" class="google-login-btn" onclick="loginWithGoogle()">
+      <span class="google-g">G</span><span>Continue with Google</span>
+    </button>
     <p id="authMessage"></p>
   </div>
 </div>
 <script>
 function openAuth(){document.getElementById("authModal").classList.add("open")}
 function closeAuth(e){if(!e || e.target.id==="authModal")document.getElementById("authModal").classList.remove("open")}
+
+async function loginWithGoogle(){
+  const msg=document.getElementById("authMessage");
+  if(msg) msg.textContent="⏳ Google Login হচ্ছে...";
+  const redirectTo = window.location.origin + window.location.pathname;
+  try{
+    const {error}=await supabaseClient.auth.signInWithOAuth({
+      provider:"google",
+      options:{redirectTo}
+    });
+    if(error){
+      console.error("Google login error:",error);
+      if(msg) msg.textContent="❌ Google Login চালু করা যায়নি: "+error.message;
+    }
+  }catch(err){
+    console.error("Google login exception:",err);
+    if(msg) msg.textContent="❌ Google Login চালু করা যায়নি।";
+  }
+}
+
 function showHome(){document.getElementById("homePage").classList.add("active");document.getElementById("profilePage").classList.remove("active");document.getElementById("homeTab").classList.add("active");document.getElementById("profileTab").classList.remove("active");window.scrollTo(0,0)}
 function showProfile(){document.getElementById("profilePage").classList.add("active");document.getElementById("homePage").classList.remove("active");document.getElementById("profileTab").classList.add("active");document.getElementById("homeTab").classList.remove("active");loadReferral();updateProfileAdCount();loadUserPoints();window.scrollTo(0,0)}
 function openMenu(){document.getElementById("menu").classList.add("open")}
