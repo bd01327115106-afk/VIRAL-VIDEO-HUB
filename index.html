@@ -284,7 +284,7 @@ function closeAuth(e){if(!e || e.target.id==="authModal")document.getElementById
 async function loginWithGoogle(){
   const msg=document.getElementById("authMessage");
   if(msg) msg.textContent="⏳ Google Login হচ্ছে...";
-  const redirectTo = window.location.origin + window.location.pathname;
+  const redirectTo = "https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/";
   try{
     const {error}=await supabaseClient.auth.signInWithOAuth({
       provider:"google",
