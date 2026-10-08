@@ -664,12 +664,19 @@ function updateProfileAdCount(){
 function loadPoints(){ updateProfileAdCount(); }
 
 let AdController = null;
+
 try {
   if (window.Adsgram && typeof window.Adsgram.init === "function") {
-    AdController = window.Adsgram.init({ blockId: "52134" });
+    AdController = window.Adsgram.init({
+      blockId: "52134",
+      debug: true,
+      debugConsole: true,
+      debugBannerType: "RewardedVideo"
+    });
   }
-} catch (e) { console.warn("Adsgram initialization failed:", e); }
-
+} catch (e) {
+  console.warn("Adsgram initialization failed:", e);
+}
 
 function selectHeroTab(category, card) {
   document.querySelectorAll(".hero-card").forEach(el => el.classList.remove("active"));
