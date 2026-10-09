@@ -1107,7 +1107,33 @@ async function updateAuthUI() {
 
 function handleAuthMenu() { supabaseClient.auth.getUser().then(({data:{user}}) => user ? logout() : openAuth()); }
 
-supabaseClient.auth.onAuthStateChange(() => setTimeout(updateAuthUI, 0));
+async function claimPendingReferral() {
+  const code = localStorage.getItem("vvh_pending_referral_code");
+  if (!code) return;
+
+  const { data, error } = await supabaseClient.rpc(
+    "claim_referral",
+    { p_referral_code: code }
+  );
+
+  if (error) {
+    console.error("Referral claim error:", error);
+    return;
+  }
+
+  if (data && data.claimed) {
+    localStorage.removeItem("vvh_pending_referral_code");
+    await loadReferral();
+  }
+}
+
+
+supabaseClient.auth.onAuthStateChange(() => {
+  setTimeout(() => {
+    updateAuthUI();
+    claimPendingReferral().catch(console.error);
+  }, 0);
+});
 
 initStartupFlow();
 updateAuthUI();
