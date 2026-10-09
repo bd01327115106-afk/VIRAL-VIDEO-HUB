@@ -255,7 +255,7 @@ body.intro-lock{overflow:hidden}
 <div class="profile">
 <div class="profile-head"><div class="avatar">👤</div><div><div class="profile-name">PRINCES OWNER</div><div class="handle">@PrimesupportbdT</div><button class="small-action" id="accountActionBtn" onclick="openAuth()">🔐 Login / Sign Up</button><div class="auth-status" id="profileAuthStatus">লগইন করা হয়নি</div></div></div>
 <div class="overview-title">ওভারভিউ</div>
-<div class="overview"><div class="box">🪙<div class="num" id="profilePoints">0</div>Points</div><div class="box">🎬<div class="num" id="totalAdsWatched">0</div>Ads দেখা</div></div>
+<div class="overview"><div class="box">🪙<div class="num" id="profilePoints">0</div>Points</div><div class="box">👥<div class="num" id="profileReferralCount">0</div>মোট রেফারেল</div></div>
 <h3>রেফারেল সিস্টেম</h3><div class="refbox">
 <div class="row"><span>🎁 প্রতি রেফারেলে</span><b>রিওয়ার্ড</b></div><div class="row"><span>👤 জয়েন বোনাস</span><b>সক্রিয়</b></div><div class="row"><span>🎫 রেফারেল কোড</span><b id="profileReferralCode">Loading...</b></div>
 <h3>আপনার রেফারেল লিংক</h3><div class="refcode" id="profileReferralLink">লোড হচ্ছে...</div><div class="twobtn"><button onclick="copyReferral()">📋 লিংক কপি</button><button onclick="shareReferral()">↗ শেয়ার</button></div></div>
@@ -813,7 +813,7 @@ function initStartupFlow() {
 
     const { data, error } = await supabaseClient
       .from("profiles")
-      .select("referral_code")
+     .select("referral_code, referral_count, points, total_referral_points")
       .eq("id", user.id)
       .single();
 
@@ -826,8 +826,15 @@ function initStartupFlow() {
     const pl=document.getElementById("profileReferralLink");
     if(pl) pl.innerText=referralUrl;
     window.currentReferralUrl = referralUrl;
-  }
+  const rc = document.getElementById("profileReferralCount");
+if (rc) rc.innerText = data.referral_count || 0;
 
+const pts = document.getElementById("profilePoints");
+if (pts) pts.innerText = data.points || 0;
+
+const totalPts = document.getElementById("profileTotalReferralPoints");
+if (totalPts) totalPts.innerText = data.total_referral_points || 0;
+}
 function updateProfileAdCount(){
   let total=0;
   try{
