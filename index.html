@@ -895,6 +895,7 @@ function initStartupFlow() {
   }, 1650);
 }
 
+
   
   const SUPABASE_URL = "https://pjpblyjejypzwwpxxgpf.supabase.co";
   const SUPABASE_KEY = "sb_publishable_g1ziyyzBg57Z7WFowQnRQw_TRno8Xgn";
@@ -903,6 +904,52 @@ function initStartupFlow() {
     SUPABASE_URL,
     SUPABASE_KEY
   );
+async function loginWithTelegramMiniApp() {
+  const tgApp = window.Telegram?.WebApp;
+  const initData = tgApp?.initData;
+
+  if (!initData) return false;
+
+  try {
+    tgApp.ready();
+
+    const response = await fetch(
+      `${SUPABASE_URL}/functions/v1/telegram-miniapp-auth`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY
+        },
+        body: JSON.stringify({ initData })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.token_hash) {
+      console.error("Telegram login failed:", result.error);
+      return false;
+    }
+
+    const { data, error } = await supabaseClient.auth.verifyOtp({
+      token_hash: result.token_hash,
+      type: "magiclink"
+    });
+
+    if (error || !data.session) {
+      console.error("Telegram session failed:", error?.message);
+      return false;
+    }
+
+    await loadReferral();
+    return true;
+  } catch (error) {
+    console.error("Telegram login error:", error);
+    return false;
+  }
+}
+
   async function loadReferral() {
     const {
       data: { user }
@@ -1232,6 +1279,13 @@ supabaseClient.auth.onAuthStateChange(() => {
     updateAuthUI();
     claimPendingReferral().catch(console.error);
   }, 0);
+});
+
+loginWithTelegramMiniApp().then((loggedIn) => {
+  if (loggedIn) {
+    updateAuthUI();
+    loadReferral().catch(console.error);
+  }
 });
 
 initStartupFlow();
