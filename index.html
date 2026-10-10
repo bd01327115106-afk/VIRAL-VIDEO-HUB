@@ -204,6 +204,76 @@ body.intro-lock{overflow:hidden}
 .support-compose textarea:disabled,.support-send:disabled{opacity:.55;cursor:not-allowed}
 @media(min-width:700px){.support-modal{align-items:center}.support-card{height:min(75vh,700px)}}
 
+/* Profile design polish — existing colors preserved */
+#profilePage .profile {
+  border: 1px solid #392344;
+  border-radius: 20px;
+  padding: 14px;
+  background: linear-gradient(145deg, #17101f, #08070b);
+}
+
+#profilePage .overview {
+  gap: 10px;
+  margin: 14px 0;
+}
+
+#profilePage .overview .box {
+  border: 1px solid #392344;
+  border-radius: 18px;
+  padding: 16px 10px;
+  background: linear-gradient(145deg, #20142d, #100c16);
+}
+
+#profilePage .refcode {
+  overflow-wrap: anywhere;
+  border: 1px solid #392344;
+  border-radius: 14px;
+  padding: 13px;
+  background: #171717;
+  line-height: 1.6;
+}
+
+#profilePage .twobtn {
+  gap: 10px;
+  margin-top: 12px;
+}
+
+#profilePage .twobtn button {
+  min-height: 50px;
+  border-radius: 14px;
+  font-weight: 800;
+}
+
+#profilePage .twobtn button:first-child {
+  background: linear-gradient(100deg, #8225ff, #ff2c91);
+  color: #fff;
+}
+
+#profilePage .twobtn button:last-child {
+  background: #191919;
+  color: #fff;
+  border: 1px solid #302630;
+}
+
+#profilePage h3 {
+  margin-top: 18px;
+  margin-bottom: 10px;
+}
+
+@media (max-width: 420px) {
+  #profilePage .profile {
+    padding: 11px;
+  }
+
+  #profilePage .overview .box {
+    padding: 14px 8px;
+  }
+
+  #profilePage .twobtn button {
+    font-size: 14px;
+  }
+}
+
 </style>
 </head>
 <body class="intro-lock">
