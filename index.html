@@ -364,7 +364,36 @@ function showProfile(){document.getElementById("profilePage").classList.add("act
 function openMenu(){document.getElementById("menu").classList.add("open")}
 function closeMenu(e){if(!e||e.target.id==="menu")document.getElementById("menu").classList.remove("open")}
 function copyReferral(){const x=window.currentReferralUrl || document.getElementById("profileReferralLink").innerText;navigator.clipboard?.writeText(x).then(()=>alert("লিংক কপি হয়েছে।"))}
-function shareReferral(){const x=window.currentReferralUrl || document.getElementById("profileReferralLink").innerText;if(navigator.share)navigator.share({title:"VIRAL VIDEO LINK",url:x})}
+
+async function shareReferral() {
+  const el = document.getElementById("profileReferralLink");
+  const url = window.currentReferralUrl || (el ? el.innerText.trim() : "");
+
+  if (!url) {
+    alert("রেফারেল লিংক পাওয়া যায়নি!");
+    return;
+  }
+
+  try {
+    if (navigator.share) {
+      await navigator.share({
+        title: "VIRAL VIDEO LINK",
+        text: "আমার রেফারেল লিংক দিয়ে Viral Video Hub-এ যোগ দিন:",
+        url: url
+      });
+    } else if (navigator.clipboard && window.isSecureContext) {
+      await navigator.clipboard.writeText(url);
+      alert("রেফারেল লিংক কপি হয়েছে! এখন বন্ধুকে পাঠিয়ে দিন।");
+    } else {
+      window.prompt("এই লিংকটি কপি করে বন্ধুকে পাঠান:", url);
+    }
+  } catch (err) {
+    if (err.name !== "AbortError") {
+      window.prompt("রেফারেল লিংকটি কপি করুন:", url);
+    }
+  }
+}
+
 
 function formatVideoAge(dateString){
   if(!dateString) return "";
