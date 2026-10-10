@@ -819,8 +819,7 @@ function initStartupFlow() {
 
     if (error || !data) return;
 
-    const referralUrl =
-      "https://t.me/AllVideosGrabbbot/app?startapp=ref_" + data.referral_code;
+    const referralUrl = "https://t.me/AllVideosGrabbdbot/app?startapp=ref_" + data.referral_code;
     const pr=document.getElementById("profileReferralCode");
     if(pr) pr.innerText=data.referral_code || "Not available";
     const pl=document.getElementById("profileReferralLink");
