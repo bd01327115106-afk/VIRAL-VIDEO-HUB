@@ -1244,13 +1244,13 @@ async function updateAuthUI() {
 const profileName = document.querySelector(".profile-name");
 
 if (user && avatar) {
-  const photo = user.user_metadata?.avatar_url || user.user_metadata?.picture;
+ const photo = user.user_metadata?.avatar_url || user.user_metadata?.picture || user.user_metadata?.telegram_photo_url;
   if (photo) {
     avatar.innerHTML = `<img src="${photo}" alt="Profile" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">`;
   }
 }
 if (user && profileName) {
-  profileName.textContent = user.user_metadata?.full_name || user.user_metadata?.name || user.email || "User";
+  profileName.textContent = user.user_metadata?.full_name || user.user_metadata?.name || [user.user_metadata?.telegram_first_name, user.user_metadata?.telegram_last_name].filter(Boolean).join(" ") || user.user_metadata?.telegram_username || user.email || "User";
 }
   const menuBtn = document.getElementById("menuAuthBtn");
   const accountBtn = document.getElementById("accountActionBtn");
