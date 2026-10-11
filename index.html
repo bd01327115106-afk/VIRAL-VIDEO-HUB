@@ -1239,6 +1239,7 @@ async function logout() {
 
 async function updateAuthUI() {
   const { data: { user } } = await supabaseClient.auth.getUser();
+  console.log("USER PROFILE:", user?.user_metadata);
   const menuBtn = document.getElementById("menuAuthBtn");
   const accountBtn = document.getElementById("accountActionBtn");
   const status = document.getElementById("profileAuthStatus");
