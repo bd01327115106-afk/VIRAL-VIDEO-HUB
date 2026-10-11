@@ -928,7 +928,8 @@ async function loginWithTelegramMiniApp() {
     const result = await response.json();
 
     if (!response.ok || !result.token_hash) {
-      console.error("Telegram login failed:", result.error);
+     console.error("Telegram login failed:", response.status, result);
+alert("Telegram login failed: " + (result.error || JSON.stringify(result)));
       return false;
     }
 
@@ -937,10 +938,11 @@ async function loginWithTelegramMiniApp() {
       type: "magiclink"
     });
 
-    if (error || !data.session) {
-      console.error("Telegram session failed:", error?.message);
-      return false;
-    }
+if (error || !data.session) {
+  console.error("Telegram session failed:", error?.message, error);
+  alert("Telegram session failed: " + (error?.message || "Session missing"));
+  return false;
+}
 
     await loadReferral();
     return true;
