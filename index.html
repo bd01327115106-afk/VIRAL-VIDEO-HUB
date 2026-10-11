@@ -1426,7 +1426,9 @@ async function sendSupportMessage(){
   const body=(input.value||'').trim();
   if(!body || !supportConversationId) return;
   btn.disabled=true; input.disabled=true;
-  const {error}=await supabaseClient.from('support_messages').insert({conversation_id:supportConversationId,body});
+ 
+const {error}=await supabaseClient.from('support_messages').insert({conversation_id:supportConversationId,sender_role:'user',body});
+
   if(error){alert('❌ Message পাঠানো যায়নি: '+error.message)}else{input.value='';}
   btn.disabled=false;input.disabled=false;input.focus();
 }
