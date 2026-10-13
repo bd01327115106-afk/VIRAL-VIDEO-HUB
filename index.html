@@ -623,6 +623,32 @@ body.intro-lock{overflow:hidden}
 .video-details-page .unlock-ornate-notice{min-height:245px;box-sizing:border-box}
 .video-details-page .more-video-btn{width:100%;min-height:60px}
 @media(max-width:420px){.video-details-page .details-content{max-width:370px;padding-left:14px;padding-right:14px}.video-details-page .details-meta button{min-height:72px}}
+
+/* Final icon treatment: white glyph centered in a bright gold circular badge */
+.video-details-page .details-meta button.like{color:#ff3157!important;border-color:#762033!important;background:linear-gradient(145deg,#1b0b10,#100b0d)!important}
+.video-details-page .details-meta button.views{color:#159cff!important;border-color:#164d70!important;background:linear-gradient(145deg,#071723,#0b1016)!important}
+.video-details-page .details-meta button.share{color:#00df72!important;border-color:#145d37!important;background:linear-gradient(145deg,#061b11,#0b1510)!important}
+.video-details-page .unlock-points-button .coin-icon{width:42px!important;height:42px!important;flex:0 0 42px!important;border-radius:50%!important;display:inline-flex!important;align-items:center!important;justify-content:center!important;background:radial-gradient(circle at 35% 30%,#ffdf67 0%,#ffc022 45%,#ff9d00 100%)!important;color:#fff!important;border:3px solid #7b5200!important;box-shadow:0 0 0 3px rgba(255,190,25,.18),inset 0 0 0 2px rgba(255,255,255,.16)!important}
+.video-details-page .unlock-points-button .coin-icon svg{width:23px;height:23px;fill:none;stroke:#fff;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;display:block}
+.video-details-page .more-video-btn{display:flex!important;align-items:center!important;justify-content:center!important;gap:12px!important;background:linear-gradient(145deg,#171717,#1c1a16)!important;border:2px solid #b77b00!important;border-radius:22px!important;color:#fff!important;min-height:76px!important;padding:12px 16px!important;box-shadow:inset 0 0 0 1px rgba(255,190,25,.08),0 0 18px rgba(255,177,0,.08)!important}
+.video-details-page .more-video-icon{display:inline-flex;align-items:center;justify-content:center;flex:0 0 48px;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffdc57,#ffb400 60%,#f28a00)!important;border:3px solid #795300;color:#fff;box-shadow:0 0 0 4px rgba(255,184,0,.13),inset 0 0 0 2px rgba(255,255,255,.14)}
+.video-details-page .more-video-icon svg{width:25px;height:25px;fill:none;stroke:#fff;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;display:block}
+.video-details-page .more-video-btn>span:last-child{font-size:18px;font-weight:900;color:#fff}
+.video-details-page .unlock-big{box-shadow:inset 0 1px 0 rgba(255,255,255,.18),0 5px 16px rgba(189,37,223,.15)!important}
+@media(max-width:420px){.video-details-page .more-video-btn{min-height:68px!important;gap:10px!important}.video-details-page .more-video-icon{width:44px;height:44px;flex-basis:44px}.video-details-page .more-video-btn>span:last-child{font-size:16px}}
+
+
+/* Reference-match stat cards: colored icon, white count and label */
+.video-details-page .details-meta button{display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;color:#fff!important}
+.video-details-page .details-meta .stat-icon{width:22px!important;height:22px!important;display:block!important;fill:currentColor!important;stroke:none!important}
+.video-details-page .details-meta .stat-count{color:#fff!important;font-size:16px!important;line-height:1.15!important;font-weight:900!important}
+.video-details-page .details-meta button small{color:#fff!important;font-size:12px!important}
+.video-details-page .details-meta button.like .stat-icon{color:#ff3157!important;filter:drop-shadow(0 0 5px rgba(255,49,87,.25))}
+.video-details-page .details-meta button.views .stat-icon{color:#159cff!important;filter:drop-shadow(0 0 5px rgba(21,156,255,.25))}
+.video-details-page .details-meta button.share .stat-icon{color:#00df72!important;filter:drop-shadow(0 0 5px rgba(0,223,114,.25))}
+.video-details-page .unlock-points-button .coin-icon svg{fill:none!important;stroke:#fff!important}
+.video-details-page .more-video-icon svg{fill:#fff!important;stroke:#fff!important}
+
 </style>
 </head>
 <body class="intro-lock">
@@ -1086,9 +1112,9 @@ async function openVideo(videoId){
       </div>
 
       <div class="details-meta">
-        <button type="button" id="likeBtn_${video.id}" class="video-action like" aria-pressed="false" onclick="toggleLike(${video.id})">❤️ <span id="likeCount_${video.id}">${Number(video.likes || 0).toLocaleString()}</span><small>লাইক</small></button>
-        <button type="button" class="video-action views">▥ <span id="detailsViewCount">${Number(video.views || 0).toLocaleString()}</span><small>ভিউ</small></button>
-        <button type="button" class="video-action share" id="shareBtn_${video.id}" aria-label="Share video"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3" fill="currentColor" stroke="none"/><circle cx="6" cy="12" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="19" r="3" fill="currentColor" stroke="none"/><path d="M8.7 10.7 15.3 6.3M8.7 13.3l6.6 4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg> <span id="detailsShareCount">${Number(video.shares || 0).toLocaleString()}</span><small>শেয়ার</small></button>
+        <button type="button" id="likeBtn_${video.id}" class="video-action like" aria-pressed="false" onclick="toggleLike(${video.id})"><svg class="stat-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.8a5.5 5.5 0 0 0-7.8 0L12 5.9l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.3 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg><span class="stat-count" id="likeCount_${video.id}">${Number(video.likes || 0).toLocaleString()}</span><small>লাইক</small></button>
+        <button type="button" class="video-action views"><svg class="stat-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="11" width="4.5" height="10" rx="1.5"/><rect x="9.75" y="3" width="4.5" height="18" rx="1.5"/><rect x="16.5" y="7" width="4.5" height="14" rx="1.5"/></svg><span class="stat-count" id="detailsViewCount">${Number(video.views || 0).toLocaleString()}</span><small>ভিউ</small></button>
+        <button type="button" class="video-action share" id="shareBtn_${video.id}" aria-label="Share video"><svg class="stat-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.7 10.7 15.3 6.3M8.7 13.3l6.6 4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span class="stat-count" id="detailsShareCount">${Number(video.shares || 0).toLocaleString()}</span><small>শেয়ার</small></button>
       </div>
 
       <div class="unlock-panel ${unlocked ? 'unlock-success-panel' : ''}">
@@ -1114,7 +1140,7 @@ async function openVideo(videoId){
           <div class="unlock-progress-label">অগ্রগতি: <span id="detailsProgressLabel">${watched}/${requiredAds}</span></div>
           <div class="unlock-bottom-hint" id="unlockHint">পয়েন্ট বা বিজ্ঞাপন দিয়ে আনলক করুন।</div>
           <button class="unlock-big" id="watchUnlockButton_${video.id}" onclick="watchUnlockAd(${video.id})">🔒　ভিডিও আনলক</button>
-          <button class="unlock-points-button" onclick="purchaseVideo(${video.id})"><span class="coin-icon">🪙</span><span>আমার পয়েন্ট ব্যবহার করুন</span></button>
+          <button class="unlock-points-button" onclick="purchaseVideo(${video.id})"><span class="coin-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7.5" ry="3.2"/><path d="M4.5 6v4c0 1.8 3.4 3.2 7.5 3.2s7.5-1.4 7.5-3.2V6M4.5 10v4c0 1.8 3.4 3.2 7.5 3.2 1.5 0 2.9-.2 4.1-.7M4.5 14v3.5c0 1.8 3.4 3.2 7.5 3.2 1.8 0 3.5-.3 4.7-.9"/></svg></span><span>আমার পয়েন্ট ব্যবহার করুন</span></button>
         `}
       </div>
 
@@ -1126,7 +1152,7 @@ async function openVideo(videoId){
           : `এই কনটেন্টটি আনলক করতে আপনাকে <b>${requiredAds}টি বিজ্ঞাপন</b> দেখতে হবে অথবা <b>সমপরিমাণ পয়েন্ট</b> ব্যবহার করতে হবে। তারপর ডাউনলোড বাটন চালু হয়ে যাবে।`}</div>
         <div class="unlock-ornate-line">✦　━━━━━━━━━━━━━━━━　✦</div>
       </div>
-      <button class="more-video-btn" onclick="document.getElementById('videoDetails').remove()">🎥　আরো ভিডিও দেখুন</button>
+      <button class="more-video-btn" onclick="document.getElementById('videoDetails').remove()"><span class="more-video-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="m15 10 6-3v10l-6-3z"/></svg></span><span>আরো ভিডিও দেখুন</span></button>
     </div>`;
   document.body.appendChild(details);
   const shareTopBtn = details.querySelector('.details-share-top');
