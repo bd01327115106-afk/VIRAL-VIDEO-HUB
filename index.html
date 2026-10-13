@@ -46,6 +46,50 @@ button,input{font:inherit}
 .bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(100%,560px);height:70px;background:rgba(13,12,15,.98);display:grid;grid-template-columns:1fr 1fr;border-top:1px solid #2d2830;z-index:40}.bottom button{border:0;background:transparent;color:#aaa;font-weight:900}.bottom button.active{background:#171021;color:#fff}
 .menu{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:100;display:none}.menu.open{display:block}.drawer{width:min(390px,82%);height:100%;background:linear-gradient(180deg,#24102f,#0d0a11);padding:16px;border-right:1px solid #55206d;overflow:auto}.drawer .close{float:right;background:none;border:0;color:#fff;font-size:27px}.drawer .mini-brand{clear:both;padding:16px;border:1px solid #54206f;border-radius:17px;margin:10px 0 15px}.menuitem{width:100%;text-align:left;padding:13px;margin:6px 0;border:1px solid #43284e;border-radius:14px;background:#17101d;color:#fff}.lang{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:15px 0}.lang button{padding:10px;border:0;border-radius:9px;background:#202126;color:#fff}.lang button:first-child{background:linear-gradient(90deg,#8b2cff,#ff2d91)}
 .message{text-align:center;padding:28px;color:#ddd}.footer{padding:18px;text-align:center;color:#777}
+
+/* ===== Premium Points Purchase Demo Page ===== */
+#purchasePage{padding:0 12px 28px;background:radial-gradient(circle at 80% 0%,#190f21 0,transparent 32%),#050506;min-height:calc(100vh - 118px)}
+.purchase-page-head{height:64px;display:flex;align-items:center;gap:12px;margin:0 -12px 14px;padding:0 16px;border-bottom:2px solid transparent;border-image:linear-gradient(90deg,#8b2cff,#ff2d91) 1;background:#09080b}
+.purchase-back{width:40px;height:40px;border:0;border-radius:50%;background:#17171b;color:#fff;font-size:24px;flex:0 0 40px}
+.purchase-page-title{font-size:20px;font-weight:900;flex:1}
+.purchase-support{width:42px;height:42px;border:1px solid #a63dff;border-radius:15px;background:linear-gradient(135deg,#8b2cff,#1e9dff);color:#fff;font-size:21px}
+.premium-intro{margin:0 4px 18px;padding:16px;border:1px solid #5b421a;border-radius:27px;background:radial-gradient(circle at 0% 0%,#30220e 0,transparent 42%),linear-gradient(145deg,#15110c,#0b0a0c);box-shadow:0 9px 25px #0007}
+.premium-intro h2{text-align:center;margin:0 0 8px;font-size:24px}
+.premium-intro-row{display:flex;align-items:center;gap:13px}
+.premium-coin-icon{width:64px;height:64px;flex:0 0 64px;border-radius:20px;background:linear-gradient(145deg,#8b2cff,#ff2d91);display:flex;align-items:center;justify-content:center;color:white;font-size:29px;position:relative}
+.premium-coin-icon small{position:absolute;right:-2px;bottom:2px;background:#ffd43b;color:#342300;border-radius:8px;font-size:9px;font-weight:1000;padding:3px}
+.premium-intro p{margin:0;color:#e4dce8;font-size:13px;line-height:1.5}
+.purchase-tutorial{width:100%;margin-top:19px;min-height:52px;border:0;border-radius:16px;background:linear-gradient(100deg,#8125ff,#f32e9b);color:#fff;font-weight:900;box-shadow:0 7px 20px #ad2dff28}
+.purchase-section-label{font-size:15px;font-weight:900;margin:18px 4px 10px;color:#fff}
+.purchase-packages{display:grid;gap:9px}
+.purchase-package{display:grid;grid-template-columns:45px minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px;border:1px solid #38435a;border-radius:21px;background:linear-gradient(110deg,#101726,#090d18);min-height:73px}
+.purchase-package.gold{border-color:#9c761b;background:linear-gradient(110deg,#201909,#0c101a)}
+.purchase-package.platinum{border-color:#254a63;background:linear-gradient(110deg,#102331,#0c101a)}
+.purchase-package.diamond{border-color:#6b2c91;background:linear-gradient(110deg,#20102e,#0c101a)}
+.package-medal{width:45px;height:45px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#e4e8ee,#9ca9bd);color:#101622;font-size:22px}
+.gold .package-medal{background:linear-gradient(145deg,#ffd34d,#d99812);color:#4a3000}
+.platinum .package-medal{background:linear-gradient(145deg,#5ee3ff,#2196bf);color:#07384b}
+.diamond .package-medal{background:linear-gradient(145deg,#a22cff,#ef36c8);color:#fff}
+.package-main b{display:block;font-size:16px;margin-bottom:5px}
+.package-details{display:flex;align-items:center;gap:7px;flex-wrap:wrap;font-size:11px;color:#eee}
+.package-details span{display:inline-flex;align-items:center;gap:4px}
+.package-details .usdt-pill,.package-details .coins-pill{padding:4px 6px;border-radius:8px;background:#202635;border:1px solid #343c4e}
+.package-details .coins-pill{color:#52f0a0}
+.package-buy{border:0;border-radius:14px;padding:10px 12px;background:linear-gradient(145deg,#e3e7ef,#aeb8ca);color:#111725;font-weight:900;font-size:13px;white-space:nowrap}
+.gold .package-buy{background:linear-gradient(145deg,#ffd24d,#e6a91b);color:#392500}
+.platinum .package-buy{background:linear-gradient(145deg,#62e8ff,#2aabd3);color:#063044}
+.diamond .package-buy{background:linear-gradient(145deg,#b329ff,#ef329a);color:#fff}
+.custom-amount-card{margin-top:10px;padding:15px;border:1px solid #42264c;border-radius:25px;background:linear-gradient(145deg,#151116,#090a0d)}
+.custom-amount-card label{display:block;font-size:14px;margin-bottom:8px}
+.custom-amount-card input{width:100%;height:52px;border:1px solid #263e5d;border-radius:17px;background:#07101f;color:#fff;padding:0 13px;font-size:17px;font-weight:800;outline:none}
+.custom-amount-card input:focus{border-color:#8b2cff}
+.custom-need{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:10px 0;padding:13px;border:1px dashed #23554c;border-radius:16px;background:#151a1b;font-size:14px;font-weight:900}
+.custom-need strong{white-space:nowrap}
+.custom-purchase-btn{width:100%;min-height:52px;border:0;border-radius:17px;background:linear-gradient(100deg,#7744ff,#149ce8);color:#fff;font-weight:1000;font-size:15px}
+.purchase-demo-note{margin:11px 3px 0;color:#a9a4b0;font-size:11px;line-height:1.5;text-align:center}
+.app.purchase-open .bottom{display:none}
+@media(max-width:390px){.premium-intro h2{font-size:22px}.purchase-package{grid-template-columns:42px minmax(0,1fr) auto;gap:8px;padding:9px}.package-medal{width:42px;height:42px}.package-buy{padding:9px 10px;font-size:12px}.package-main b{font-size:15px}.package-details{gap:4px;font-size:10px}}
+
 @media(min-width:700px){body{background:#2f3948}.app{box-shadow:0 0 35px #000}}
 
 .payment-card{margin-top:10px;border:1px solid #6a4710;border-radius:22px;background:linear-gradient(145deg,#17120d,#100d0b);padding:13px;box-shadow:0 10px 25px rgba(0,0,0,.35)}
@@ -87,9 +131,25 @@ button,input{font:inherit}
 .details-pay,.more-video-btn{background:#181818;border:1px solid #6b4714}
 .details-heading{margin-top:28px!important}
 .details-notice{border:1px solid #6b4714;border-radius:20px;background:linear-gradient(145deg,#2a1b08,#17100a);padding:25px;text-align:center;line-height:1.8;color:#eee}
-.buy-points-badge{margin-top:10px;padding:10px 12px;border:1px solid #6b4714;border-radius:14px;background:#171109;color:#f5c64d;font-weight:900;text-align:center}.purchase-btn{width:100%;border:0;border-radius:14px;padding:14px;margin-top:10px;font-size:16px;font-weight:900;color:#fff;background:linear-gradient(90deg,#f0a800,#ff2b91)}.account-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.account-actions button{flex:1;min-width:130px}.logout-btn{background:#181818!important;border:1px solid #63364f!important}.auth-status{font-size:12px;color:#aaa;margin-top:4px;word-break:break-all}
+.purchase-btn{width:100%;border:0;border-radius:14px;padding:14px;margin-top:10px;font-size:16px;font-weight:900;color:#fff;background:linear-gradient(90deg,#f0a800,#ff2b91)}.account-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.account-actions button{flex:1;min-width:130px}.logout-btn{background:#181818!important;border:1px solid #63364f!important}.auth-status{font-size:12px;color:#aaa;margin-top:4px;word-break:break-all}
 
 
+/* Screenshot-matched video unlock states */
+.unlock-panel{border:1px dashed #80520d!important;background:linear-gradient(160deg,#1b1408,#100d0a)!important;padding:13px!important}
+.unlock-summary>div{background:linear-gradient(145deg,#17121c,#100e13);border-color:#5a326a;font-size:13px;color:#f5e8ff}
+.unlock-summary b{color:#fff}
+.unlock-panel .progress-line{height:9px;margin:13px 0;background:#292929}
+.unlock-panel .progress-line span{background:linear-gradient(90deg,#762cff,#f8329c)}
+.unlock-hint{font-size:13px;line-height:1.5;color:#f4d8a0;margin:8px 0 10px}
+.unlock-points-button{width:100%;margin-top:9px;padding:13px;border:1px solid #6b4714;border-radius:14px;background:#1a1918;color:#fff;font-weight:900;font-size:15px}
+.unlock-success-banner{border:1px solid #185a34;border-radius:14px;background:linear-gradient(145deg,#10251a,#101711);padding:12px;margin:10px 0;color:#8ef3b0;font-weight:900;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.unlock-success-banner small{display:block;font-size:11px;font-weight:500;color:#a5d9b5;margin-top:4px}
+.unlock-download-main{width:100%;border:0;border-radius:14px;padding:15px;margin-top:10px;font-size:16px;font-weight:900;color:#fff;background:#22c96b;box-shadow:0 7px 18px #22c96b20}
+.unlock-ornate-notice{position:relative;margin:16px 0;padding:24px 18px;border:1px solid #63400d;border-radius:24px;background:linear-gradient(145deg,#2c1d09,#17130d);text-align:center;line-height:1.85;font-weight:800;color:#f0e7d5;overflow:hidden}
+.unlock-ornate-notice:before,.unlock-ornate-notice:after{content:"✦　━━━━━━━━━━━━━━━━　✦";display:block;color:#d99518;font-size:12px;letter-spacing:1px;white-space:nowrap}
+.unlock-ornate-notice b{color:#ffd17b}
+.unlock-success-panel .unlock-summary>div{border-color:#4d3260}
+.unlock-success-panel .unlock-hint{color:#8cf0ad}
 .unlock-expiry{margin:12px 0 0;padding:11px 12px;border:1px solid #214d45;border-radius:14px;background:linear-gradient(145deg,#10221f,#0b1211);text-align:center}
 .unlock-expiry small{display:block;color:#a9c9c3;font-size:11px;margin-bottom:4px}
 .unlock-expiry b{font-size:24px;letter-spacing:1px;color:#71f4c3}
@@ -274,6 +334,184 @@ body.intro-lock{overflow:hidden}
   }
 }
 
+
+/* Reference-inspired home and profile layout polish; existing actions/data remain intact */
+.mainhead{height:58px;padding:0 18px;border-bottom:2px solid #d02cff;background:#100e12}
+.mainhead .brand{font-size:21px;letter-spacing:-.45px}
+.mainhead .icon{font-size:25px;line-height:1}
+.hero{padding:10px 10px 3px}
+.hero-grid{gap:10px}
+.hero-card{min-height:63px;padding:10px 7px;border-radius:17px;border-color:#202f63;background:linear-gradient(145deg,#0d111e,#090a10)}
+.hero-card.active{background:linear-gradient(105deg,#8123ff,#f52f9a);box-shadow:0 5px 16px #8b2cff30}
+.hero-card b{font-size:17px}
+.hero-card small{display:block;margin-top:3px;font-size:11px;color:#eee}
+.categories{gap:5px;padding:9px 7px 7px}
+.categories button{padding:7px 11px;font-size:13px;border-radius:18px;background:#1b1a1d;border-color:#302d33}
+.categories button.active{background:linear-gradient(90deg,#8b2cff,#ff2d91)}
+.latest-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:12px 10px 8px}
+.latest-heading .section-title{margin:0;font-size:21px;letter-spacing:-.35px}
+.video-guide-btn{flex-shrink:0;border:1px solid #ff48c0;border-radius:22px;padding:7px 10px;background:linear-gradient(90deg,#8b2cff,#ff2d91);color:#fff;font-size:11px;font-weight:900;box-shadow:0 4px 15px #d02cff35}
+.notice{margin:0 12px 10px;padding:6px 8px;border-radius:14px;font-size:12px;line-height:1.35}
+#videos{padding:0 11px}
+.video-card{margin:10px 0 13px;border-radius:15px;border-color:#612276;background:#100d13;box-shadow:0 5px 16px #0008}
+.video-info{padding:10px}
+.video-title{font-size:15px;line-height:1.45;margin-bottom:5px}
+.video-actions{gap:6px;margin-top:9px}
+.video-action{padding:8px 4px;border-radius:10px;font-size:12px}
+.bottom{height:67px;border-top-color:#28232b}
+.bottom button{font-size:22px}
+.bottom button span{font-size:12px}
+#profilePage{padding-bottom:6px}
+#profilePage .profile{padding:14px;border:1px solid #3b263f;border-radius:0 0 20px 20px;background:linear-gradient(180deg,#100d13,#08070b)}
+#profilePage .profile-head{background:linear-gradient(135deg,#21102f,#100b16);border-color:#512364}
+#profilePage .overview-title{font-weight:900}
+#profilePage .overview .box{background:linear-gradient(145deg,#20142d,#100c16)}
+#profilePage .refbox{background:linear-gradient(145deg,#15121a,#100d13);border-color:#392642;border-radius:18px;padding:13px}
+#profilePage .row{align-items:center;line-height:1.45}
+#profilePage .row b{white-space:normal;text-align:right;max-width:52%;color:#fff}
+#profilePage .refcode{background:#100d13;border-color:#4a3156}
+#profilePage .twobtn button{min-height:51px;font-size:16px}
+#profilePage .earnbox{background:linear-gradient(145deg,#17121b,#100d13);border-color:#442650;padding:14px;border-radius:19px}
+#profilePage .earnbox .row{gap:12px}
+#profilePage .earnbox .go{background:linear-gradient(90deg,#8b2cff,#ff2d91);box-shadow:0 6px 17px #9d2cff25}
+#profilePage .usdt-box{margin-top:10px;border:1px solid #43264e;border-radius:20px;background:linear-gradient(145deg,#17121b,#100d13);padding:14px}
+@media(max-width:420px){
+ .mainhead .brand{font-size:20px}
+ .latest-heading .section-title{font-size:20px}
+ .video-guide-btn{font-size:10px;padding:7px 9px}
+ .categories button{padding:6px 10px}
+ #profilePage .profile{padding:11px}
+ #profilePage .row{font-size:14px}
+}
+
+
+/* Added only the missing profile sections from the supplied reference screenshot */
+#profilePage .profile-shortcuts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+#profilePage .profile-shortcuts button{min-height:49px;border:0;border-radius:13px;padding:9px 8px;color:#fff;font-weight:900;font-size:14px;background:linear-gradient(100deg,#8125ff,#f32e9b)}
+#profilePage .profile-shortcuts button:last-child{background:linear-gradient(100deg,#8125ff,#f32e9b)}
+@media(max-width:420px){#profilePage .profile-shortcuts button{font-size:13px}}
+
+
+/* Screenshot-matched compact video cards; data and destination URLs stay unchanged. */
+.video-card{margin:10px 2px 13px;border:1px solid #6a277a;border-radius:14px;background:#100d13;box-shadow:0 4px 15px #0008}
+.video-thumb{aspect-ratio:1.68/1;border-radius:0;}
+.video-thumb img{object-fit:cover}
+.video-info{padding:9px 10px 10px}
+.video-title-row{display:flex;align-items:center;gap:8px}
+.video-title-row .video-title{flex:1;min-width:0;margin:0;font-size:15px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.card-share{flex:0 0 32px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1px solid #6b4216;border-radius:9px;background:#201507;color:#ffb12b;cursor:pointer;padding:0}.card-share svg{width:18px;height:18px;display:block}.details-share-top svg,.video-action.share svg{width:18px;height:18px;display:inline-block;vertical-align:middle;margin-right:4px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.video-category{display:inline-block;margin-top:7px}
+.video-stats{gap:8px;margin-top:8px;font-size:11px}
+.video-stats span:not(.video-age){padding:3px 7px;border-radius:12px;background:#201b22;color:#ddd}
+.video-age{font-size:10px}
+@media(max-width:420px){.video-title-row .video-title{font-size:14px}.video-info{padding:8px 9px}.card-share{width:30px;height:30px;flex-basis:30px}}
+
+#earnPage .earn-points-card{margin:0 0 12px;padding:17px 15px;border:1px solid #493052;border-radius:21px;background:radial-gradient(circle at 100% 0%,#2a2112 0,transparent 38%),linear-gradient(145deg,#17141a,#0d0c10);box-shadow:0 8px 24px #0006}
+#earnPage .earn-points-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+#earnPage .earn-points-icon svg{width:27px;height:27px;fill:#ffc441;stroke:#ffc441;stroke-width:1.4;stroke-linejoin:round}
+#profilePage .reference-mini-icon svg{width:16px;height:16px;fill:none;stroke:#ffca4c;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+#profilePage .profile-shortcuts .shortcut-icon svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;vertical-align:middle}
+#earnPage .earn-points-icon{width:53px;height:53px;flex:0 0 53px;display:flex;align-items:center;justify-content:center;border:1px solid #65450f;border-radius:16px;background:#241b0e;color:#ffc441;font-size:27px}
+#earnPage .earn-points-head b{font-size:19px;line-height:1.4}
+#earnPage .earn-points-card p{margin:8px 0 12px;padding-left:65px;color:#e1dce5;font-size:14px;line-height:1.55}
+#earnPage .earn-points-tags{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 13px}
+#earnPage .earn-points-tags span{display:inline-flex;align-items:center;gap:4px;border:1px solid #39313d;border-radius:18px;padding:7px 9px;color:#e7e2ea;font-size:11px}
+#earnPage .earn-points-tags svg{width:13px;height:13px;fill:#e7e2ea;stroke:#e7e2ea;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:0 0 13px}
+#earnPage .earn-points-cta svg{width:17px;height:17px;fill:#fff;stroke:#fff;stroke-width:1.4;vertical-align:-3px;margin-right:5px}
+#earnPage .earn-points-cta{width:100%;min-height:49px;border:0;border-radius:13px;background:linear-gradient(90deg,#8125ff,#f32e9b);color:#fff;font-weight:900;font-size:15px;box-shadow:0 6px 17px #9d2cff25}
+@media(max-width:420px){#earnPage .earn-points-head b{font-size:17px}#earnPage .earn-points-card p{padding-left:0}}
+
+
+
+/* Fine details matched to the supplied profile screenshot: wording, icon tiles and shortcut labels. */
+#profilePage .earnbox .reference-how-row{display:flex;justify-content:space-between;gap:10px;padding:9px 0;border-bottom:1px solid #28232b;min-height:51px}
+#profilePage .reference-how-row>span{display:flex;align-items:center;gap:9px;min-width:0;color:#d7d0df;font-size:14px}
+#profilePage .reference-mini-icon{font-style:normal;display:inline-flex;align-items:center;justify-content:center;flex:0 0 25px;width:25px;height:25px;border:1px solid #61461b;border-radius:8px;background:#211a0e;color:#ffca4c;font-size:14px}
+#profilePage .reference-how-row>b{max-width:52%;font-size:18px;line-height:1.25;text-align:right}
+#profilePage .profile-shortcuts button{display:flex;align-items:center;justify-content:center;gap:5px;line-height:1.35;min-height:76px;font-size:16px}
+#profilePage .profile-shortcuts .shortcut-icon{font-size:17px;color:#fff}
+#earnPage .earn-points-card p{padding-left:65px}
+@media(max-width:420px){#profilePage .reference-how-row>b{font-size:16px}#profilePage .profile-shortcuts button{font-size:15px;gap:4px}#earnPage .earn-points-card p{padding-left:65px}}
+
+/* Category chips and video category labels: keep existing category filters visible. */
+#categoryBar{display:flex;flex-wrap:wrap;gap:6px;padding:9px 10px 7px}
+#categoryBar button{border:1px solid #343039;border-radius:20px;background:#18171b;color:#fff;padding:7px 11px;font-size:13px;font-weight:800;white-space:nowrap}
+#categoryBar button.active{background:linear-gradient(90deg,#8b2cff,#ff2d91);border-color:transparent}
+.video-category{display:inline-block;margin-top:7px;padding:4px 8px;border:1px solid #4c2b5a;border-radius:12px;background:#21132b;color:#dcb3ff;font-size:11px;font-weight:800}
+
+
+/* Floating quick actions: tap the side arrow to reveal the 18+ and play buttons. */
+.quick-actions{position:fixed;right:12px;bottom:155px;z-index:1100;width:48px;height:64px}
+.quick-actions-toggle{position:absolute;right:0;top:0;width:42px;height:64px;border:1px solid #5c4b70;border-radius:22px;background:linear-gradient(180deg,#261b32,#111015);color:#f3d9ff;box-shadow:0 5px 16px #0009;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:900;cursor:pointer}
+.quick-actions-menu{position:absolute;right:49px;top:5px;display:flex;align-items:center;gap:9px;opacity:0;transform:translateX(10px) scale(.96);pointer-events:none;transition:opacity .18s ease,transform .18s ease}
+.quick-actions.open .quick-actions-menu{opacity:1;transform:translateX(0) scale(1);pointer-events:auto}
+.quick-action{width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:2px solid #101014;box-shadow:0 5px 15px #0009;cursor:pointer;font-weight:1000}
+.quick-action.age{background:linear-gradient(145deg,#ff3030,#e60000);color:#fff;font-size:17px}
+.quick-action.play{background:linear-gradient(145deg,#ffbf00,#ff8a00);color:#17100a}
+.quick-action.play svg{width:23px;height:23px;fill:currentColor}
+.quick-actions-toggle svg{width:22px;height:22px;stroke:currentColor;stroke-width:2.7;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:transform .18s ease}
+.quick-actions.open .quick-actions-toggle svg{transform:rotate(180deg)}
+@media(max-width:420px){.quick-actions{right:8px;bottom:153px}.quick-action{width:52px;height:52px}}
+
+
+/* Earnings screen inspired by the two supplied references */
+#earnPage .earn-hub{margin:0 0 14px;padding:0 0 8px}
+#earnPage .earn-hub-title{display:flex;align-items:center;gap:10px;margin:0 -14px 14px;padding:0 14px 12px;border-bottom:2px solid transparent;border-image:linear-gradient(90deg,#ffbd37,#8b2cff,#ff2d91) 1}
+#earnPage .earn-hub-title h3{margin:0;font-size:20px;font-weight:900}
+#earnPage .earn-back-mark{font-size:32px;line-height:1;color:#fff}
+#earnPage .earn-premium-card{position:relative;overflow:hidden;margin:0 0 15px;padding:25px 16px 17px;border:1px solid #493052;border-radius:22px;text-align:center;background:radial-gradient(circle at 100% 0%,#3b2b10 0,transparent 35%),linear-gradient(145deg,#171717,#09090b)}
+#earnPage .earn-premium-emblem{position:relative;display:flex;align-items:center;justify-content:center;width:76px;height:76px;margin:0 auto 16px;border:1px solid #80621b;border-radius:24px;background:#11100d;box-shadow:0 0 28px #ffc43a12}
+#earnPage .earn-premium-emblem svg{width:39px;height:39px;fill:#ffcc4d;stroke:#ffcc4d;stroke-width:1.3;filter:drop-shadow(0 0 7px #ffbd37)}
+#earnPage .earn-premium-emblem span{position:absolute;right:-7px;top:-7px;padding:4px 6px;border:1px solid #89631c;border-radius:9px;background:#21190a;color:#ffcc4d}
+#earnPage .earn-premium-badge{display:inline-block;margin:0 auto 8px;padding:5px 14px;border-radius:18px;background:linear-gradient(90deg,#8125ff,#f32e9b);font-size:12px;font-weight:900}
+#earnPage .earn-premium-card h2{margin:0 0 6px;font-size:25px;line-height:1.35;color:#fff}
+#earnPage .earn-premium-card p{max-width:330px;margin:0 auto 17px;padding:0;color:#b9c2d4;font-size:13px;line-height:1.5}
+#earnPage .earn-benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+#earnPage .earn-benefits div{display:flex;min-height:60px;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px solid #303033;border-radius:14px;background:#171719;font-size:11px;color:#f4dca0}
+#earnPage .earn-benefits b{font-size:18px;color:#ffca4c}
+#earnPage .earn-stats-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 16px}
+#earnPage .earn-stat{display:flex;min-height:102px;flex-direction:column;align-items:center;justify-content:center;gap:4px;border:1px solid #303033;border-radius:16px;background:linear-gradient(145deg,#171717,#101012)}
+#earnPage .earn-stat>span{color:#ffca4c;font-size:19px}
+#earnPage .earn-stat>b{font-size:23px;line-height:1.2;color:#fff}
+#earnPage .earn-stat small{font-size:12px;color:#aab9ce;text-align:center}
+#earnPage .earn-subheading{margin:16px 0 10px;font-size:15px;font-weight:900;color:#fff}
+#earnPage .earn-settings-card{padding:12px 15px 16px;border:1px solid #493052;border-radius:19px;background:linear-gradient(145deg,#171717,#0d0d0f)}
+#earnPage .earn-setting-row{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;border-bottom:1px solid #252529;font-size:13px;color:#aab9ce}
+#earnPage .earn-setting-row:last-of-type{border-bottom:0}
+#earnPage .earn-setting-row b{font-size:16px;color:#fff;white-space:nowrap}
+#earnPage .earn-progress-track{height:11px;margin:10px 0 10px;border-radius:20px;background:#28282b;overflow:hidden}
+#earnPage .earn-progress-track span{display:block;width:0;height:100%;border-radius:20px;background:linear-gradient(90deg,#8125ff,#ff2d91);transition:width .2s}
+#earnPage .earn-progress-label{text-align:center;color:#c8d1df;font-size:12px}
+#earnPage .earn-watch-main{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:54px;margin:16px 0 19px;border:0;border-radius:14px;background:linear-gradient(90deg,#8125ff,#f32e9b);box-shadow:0 8px 22px #b522ed25;color:#fff;font-size:17px;font-weight:900}
+#earnPage .earn-watch-main span{font-size:15px}
+#earnPage .earn-task-list{display:flex;flex-direction:column;gap:9px;padding:13px;border:1px solid #493052;border-radius:19px;background:linear-gradient(145deg,#171717,#0d0d0f)}
+#earnPage .earn-task{display:flex;align-items:center;gap:10px;min-width:0;padding:10px;border:1px solid #303033;border-radius:15px;background:linear-gradient(100deg,#1a1a1d,#111113)}
+#earnPage .earn-task-icon{display:flex;align-items:center;justify-content:center;flex:0 0 36px;height:36px;border:1px solid #67440f;border-radius:11px;background:#2a1c0b;color:#ffbd37;font-size:19px}
+#earnPage .earn-task-info{display:flex;flex:1;min-width:0;flex-direction:column;gap:2px}
+#earnPage .earn-task-info b{font-size:13px;color:#fff}
+#earnPage .earn-task-info small{font-size:11px;color:#9fa9b9}
+#earnPage .earn-task-info em{align-self:flex-start;padding:2px 6px;border-radius:12px;background:linear-gradient(90deg,#8125ff,#f32e9b);color:#fff;font-size:9px;font-style:normal}
+#earnPage .earn-task button{flex:0 0 auto;border:0;border-radius:10px;padding:8px 14px;background:linear-gradient(90deg,#8125ff,#f32e9b);color:#fff;font-size:12px;font-weight:900}
+@media(max-width:420px){#earnPage .earn-premium-card h2{font-size:22px}#earnPage .earn-benefits div{font-size:10px}#earnPage .earn-task{gap:8px;padding:8px}#earnPage .earn-task button{padding:8px 11px}}
+
+
+/* Profile entry opens the full earnings page; the two reference sections live inside it. */
+#profilePage .earn-entry-card{display:block;width:100%;margin:14px 0 12px;padding:17px 15px;border:1px solid #493052;border-radius:19px;background:radial-gradient(circle at 100% 0%,#2a2112 0,transparent 38%),linear-gradient(145deg,#17141a,#0d0c10);color:#fff;text-align:left;box-shadow:0 8px 24px #0006}
+#profilePage .earn-entry-main{display:flex;align-items:flex-start;gap:12px}
+#profilePage .earn-entry-icon{display:flex;align-items:center;justify-content:center;flex:0 0 53px;width:53px;height:53px;border:1px solid #65450f;border-radius:16px;background:#241b0e}
+#profilePage .earn-entry-icon svg{width:29px;height:29px;fill:#ffc441;stroke:#ffc441;stroke-width:1.4;stroke-linejoin:round}
+#profilePage .earn-entry-copy{display:flex;flex:1;flex-direction:column;gap:5px;min-width:0}
+#profilePage .earn-entry-copy b{font-size:19px;line-height:1.4;font-weight:900}
+#profilePage .earn-entry-copy small{font-size:13px;line-height:1.5;color:#e1dce5}
+#profilePage .earn-entry-tags{display:flex;gap:7px;flex-wrap:wrap;margin:12px 0 13px}
+#profilePage .earn-entry-tags span{display:inline-flex;align-items:center;gap:4px;border:1px solid #39313d;border-radius:18px;padding:7px 9px;color:#e7e2ea;font-size:11px}
+#profilePage .earn-entry-cta{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:49px;border:0;border-radius:13px;background:linear-gradient(90deg,#8125ff,#f32e9b);color:#fff;font-weight:900;font-size:15px;box-shadow:0 6px 17px #9d2cff25;cursor:pointer}
+#profilePage .earn-entry-cta svg{width:18px;height:18px;fill:#fff}
+@media(max-width:420px){#profilePage .earn-entry-copy b{font-size:17px}#profilePage .earn-entry-copy small{font-size:12px}}
+#earnPage .earn-hub{margin:0 0 14px;padding:0 14px 8px}
+#earnPage .earn-hub-title{margin:0 -14px 14px;padding:8px 14px 12px}
+#earnPage .earn-back-button{display:flex;align-items:center;justify-content:center;flex:0 0 34px;width:34px;height:34px;border:0;border-radius:50%;background:#1b1b20;color:#fff;font-size:31px;line-height:1;cursor:pointer}
+
 </style>
 </head>
 <body class="intro-lock">
@@ -315,9 +553,23 @@ body.intro-lock{overflow:hidden}
 <main id="homePage" class="page active">
 <section class="hero"><div class="hero-grid"><button type="button" class="hero-card active" onclick="selectHeroTab('All', this)"><b>সব ভিডিও</b><small>নতুন পোস্ট আগে</small></button><button type="button" class="hero-card" onclick="selectHeroTab('Trending', this)"><b>ট্রেন্ডিং</b><small>সবচেয়ে বেশি দেখা আগে</small></button></div></section>
 <div class="categories" id="categoryBar">
-<button class="active" onclick="loadVideos('All',this)">সব ভিডিও</button><button onclick="loadVideos('Trending',this)">ট্রেন্ডিং</button><button onclick="loadVideos('Bangla',this)">বাংলা</button><button onclick="loadVideos('English',this)">ইংলিশ</button><button onclick="loadVideos('TikTok',this)">টিকটক</button><button onclick="loadVideos('Japanese',this)">জাপানি</button><button onclick="loadVideos('Funny',this)">ফানি</button><button onclick="loadVideos('Music',this)">মিউজিক</button><button onclick="loadVideos('Shorts',this)">শর্টস</button><button onclick="loadVideos('Viral',this)">ভাইরাল ভিডিও</button></div>
-<h2 class="section-title">Trending Videos</h2>
-<div class="notice">বেশি ভিডিও শেয়ার করুন 🚀 এবং আনন্দ করুন আরও 🔥</div>
+<button class="active" onclick="loadVideos('All',this)">সব ভিডিও</button>
+<button onclick="loadVideos('Trending',this)">ট্রেন্ডিং</button>
+<button onclick="loadVideos('Bangla',this)">বাংলা</button>
+<button onclick="loadVideos('English',this)">ইংলিশ</button>
+<button onclick="loadVideos('TikTok',this)">টিকটক</button>
+<button onclick="loadVideos('Japanese',this)">জাপানি</button>
+<button onclick="loadVideos('Funny',this)">ফানি</button>
+<button onclick="loadVideos('Music',this)">মিউজিক</button>
+<button onclick="loadVideos('Shorts',this)">শর্টস</button>
+<button onclick="loadVideos('Viral',this)">ভাইরাল ভিডিও</button>
+<button onclick="loadVideos('Drama',this)">ড্রামা</button>
+<button onclick="loadVideos('Comedy',this)">কমেডি</button>
+<button onclick="loadVideos('Sports',this)">স্পোর্টস</button>
+<button onclick="loadVideos('News',this)">নিউজ</button>
+</div>
+<div class="latest-heading"><h2 class="section-title">Latest Videos</h2><button class="video-guide-btn" type="button" onclick="openMenu()">▶ ভিডিও দেখার নিয়ম</button></div>
+<div class="notice">🔔 নতুন ভিডিও নিয়মিত দেখুন — ক্যাটাগরি বেছে ভিডিও খুঁজুন ✨</div>
 <div id="videos"><div class="message">ভিডিও লোড হচ্ছে...</div></div>
 </main>
 
@@ -329,25 +581,103 @@ body.intro-lock{overflow:hidden}
 <h3>রেফারেল সিস্টেম</h3><div class="refbox">
 <div class="row"><span>🎁 প্রতি রেফারেলে</span><b>রিওয়ার্ড</b></div><div class="row"><span>👤 জয়েন বোনাস</span><b>সক্রিয়</b></div><div class="row"><span>🎫 রেফারেল কোড</span><b id="profileReferralCode">Loading...</b></div>
 <h3>আপনার রেফারেল লিংক</h3><div class="refcode" id="profileReferralLink">লোড হচ্ছে...</div><div class="twobtn"><button onclick="copyReferral()">📋 লিংক কপি</button><button onclick="shareReferral()">↗ শেয়ার</button></div></div>
-<h3>কিভাবে কাজ করে</h3><div class="earnbox"><div class="row"><span>👥 বন্ধু আপনার কোড দিয়ে জয়েন করলে</span><b>রিওয়ার্ড যোগ হবে</b></div><div class="row"><span>⚡ ভিডিও আনলক</span><b>৫টি Ads সম্পূর্ণ করুন</b></div><button class="go" onclick="showHome()">🎬 আরো ভিডিও দেখুন</button></div>
-<h3>পয়েন্ট কিনুন</h3>
-<div class="usdt-box">
-  <h3>💵 USDT (TRC20)</h3>
-  <p>শুধু USDT (TRC20) দিয়ে Points কিনুন। নিচের wallet address-এ payment পাঠিয়ে Transaction ID সংরক্ষণ করুন।</p>
-  <div class="usdt-address">
-    <input id="usdtWalletDisplay" value="TDW3PWAJKtvZf4NDNuX5hk2SGmbZuZHbyM" readonly>
-    <button onclick="copyUsdtWallet()">Copy</button>
+<h3>কিভাবে কাজ করে</h3><div class="earnbox"><div class="row reference-how-row"><span><i class="reference-mini-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 19c.5-3.2 2.7-5 6.5-5s6 1.8 6.5 5"/></svg></i><span>বন্ধু আপনার কোড দিয়ে<br>জয়েন করলে</span></span><b>রিওয়ার্ড যোগ<br>হবে</b></div><div class="row reference-how-row"><span><i class="reference-mini-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13.5 2.8 5.8 13h5l-.5 8.2L18.4 10h-5.1z"/></svg></i><span>আরো আয়</span></span><b>বিজ্ঞাপন দেখে আয় করুন</b></div><div class="profile-shortcuts"><button type="button" onclick="openMenu()"><span class="shortcut-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.8v14.4L19 12z" fill="currentColor" stroke="none"/></svg></span> টিউটোরিয়াল<br>দেখুন</button><button type="button" onclick="openPurchasePage()"><span class="shortcut-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.2 10.1a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 8H6"/><circle cx="9.5" cy="19" r="1.3"/><circle cx="17.5" cy="19" r="1.3"/></svg></span> পয়েন্ট<br>কিনুন</button></div></div>
+<section class="earn-entry-card" aria-label="বিজ্ঞাপন দেখে পয়েন্ট আয় করুন">
+  <div class="earn-entry-main">
+    <span class="earn-entry-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13.5 2.5 5.7 13h5.2l-.5 8.5L18.3 10h-5.1z"/></svg></span>
+    <div class="earn-entry-copy"><b>বিজ্ঞাপন দেখে পয়েন্ট আয় করুন</b><small>প্রধান থেকে অতিরিক্ত পয়েন্ট আয় করা যাবে। বিজ্ঞাপন সম্পন্ন করলে পয়েন্ট যোগ হবে, আর সেই পয়েন্ট দিয়ে ভিডিও আনলক করতে পারবেন।</small></div>
   </div>
-  <button class="usdt-buy" onclick="openUsdtPayment(100,1)">🪙 100 Points — 1 USDT</button>
-  <button class="usdt-buy" onclick="openUsdtPayment(550,5)">🪙 550 Points — 5 USDT</button>
-  <button class="usdt-buy" onclick="openUsdtPayment(1200,10)">🪙 1200 Points — 10 USDT</button>
-  <button class="usdt-buy" onclick="openUsdtPayment(2600,20)">🪙 2600 Points — 20 USDT</button>
-  <div class="usdt-note">⚠️ Wallet address-টি অবশ্যই তোমার নিজের TRC20 USDT address দিয়ে replace করতে হবে। Payment verify না হওয়া পর্যন্ত Points automatically যোগ হবে না।</div>
-</div>
+  <div class="earn-entry-tags"><span>◉ তাৎক্ষণিক রিওয়ার্ড</span><span>🪙 আরো পয়েন্ট</span><span>♙ ভিডিও আনলক</span></div>
+  <button class="earn-entry-cta" type="button" onclick="showEarnPage()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg> আরো পয়েন্ট আয়</button>
+</section>
 
 </div></main>
+
+<main id="earnPage" class="page" aria-label="আরো পয়েন্ট আয়">
+<section class="earn-hub" id="earnPointsCard" aria-labelledby="earnPointsHeading">
+  <div class="earn-hub-title"><button class="earn-back-button" type="button" onclick="closeEarnPage()" aria-label="প্রোফাইলে ফিরে যান">‹</button><h3 id="earnPointsHeading">আরো পয়েন্ট আয়</h3></div>
+  <section class="earn-premium-card">
+    <div class="earn-premium-emblem"><svg viewBox="0 0 48 48" aria-hidden="true"><path d="M7 17 15 8h18l8 9-17 22z"/><path d="m7 17 17 5 17-5M15 8l9 14 9-14"/></svg><span>♛</span></div>
+    <div class="earn-premium-badge">প্রিমিয়াম আর্নিং</div>
+    <h2>বিজ্ঞাপন দেখে আয় করুন</h2>
+    <p>নিয়মিত বিজ্ঞাপন ও আর্নিং টাস্ক সম্পন্ন করে সহজেই পয়েন্ট সংগ্রহ করুন।</p>
+    <div class="earn-benefits">
+      <div><b>🪙</b><span>ইনস্ট্যান্ট পেমেন্ট</span></div>
+      <div><b>🛡</b><span>নিরাপদ আয়</span></div>
+      <div><b>🎁</b><span>দৈনিক রিওয়ার্ড</span></div>
+    </div>
+  </section>
+
+  <section class="earn-stats-grid" aria-label="আয়ের পরিসংখ্যান">
+    <div class="earn-stat"><span>▣</span><b id="earnCurrentPoints">0</b><small>বর্তমান পয়েন্ট</small></div>
+    <div class="earn-stat"><span>🪙</span><b>2</b><small>প্রতি বিজ্ঞাপনে পয়েন্ট</small></div>
+    <div class="earn-stat"><span>▶</span><b id="earnTodayCount">0</b><small>আজকের বিজ্ঞাপন</small></div>
+    <div class="earn-stat"><span>🏆</span><b>20</b><small>দৈনিক সীমা</small></div>
+  </section>
+
+  <h3 class="earn-subheading">👑 আয়ের সেটিংস</h3>
+  <section class="earn-settings-card">
+    <div class="earn-setting-row"><span>প্রতি বিজ্ঞাপনে রিওয়ার্ড</span><b>2 পয়েন্ট</b></div>
+    <div class="earn-setting-row"><span>সর্বোচ্চ দৈনিক বিজ্ঞাপন</span><b>20</b></div>
+    <div class="earn-setting-row"><span>আজকে বাকি</span><b id="earnRemainingCount">20</b></div>
+    <div class="earn-progress-track"><span id="earnProgressFill"></span></div>
+    <div class="earn-progress-label" id="earnProgressLabel">0 / 20 completed today</div>
+  </section>
+
+  <button class="earn-watch-main" type="button" onclick="startEarnAdDemo()"><span>▶</span> এখন বিজ্ঞাপন দেখুন</button>
+
+  <h3 class="earn-subheading">👑 আরো আয়ের বাটন</h3>
+  <section class="earn-task-list">
+    <div class="earn-task"><span class="earn-task-icon">🎁</span><div class="earn-task-info"><b>one click ads</b><small>Reward: 1 pt • Daily</small><em>◆ প্রিমিয়াম রিওয়ার্ড</em></div><button type="button" onclick="startEarnAdDemo(1)">Start</button></div>
+    <div class="earn-task"><span class="earn-task-icon">🎁</span><div class="earn-task-info"><b>one click ads</b><small>Reward: 1 pt • Daily</small><em>◆ প্রিমিয়াম রিওয়ার্ড</em></div><button type="button" onclick="startEarnAdDemo(1)">Start</button></div>
+    <div class="earn-task"><span class="earn-task-icon">🎁</span><div class="earn-task-info"><b>one click ads</b><small>Reward: 2 pt • Daily</small><em>◆ প্রিমিয়াম রিওয়ার্ড</em></div><button type="button" onclick="startEarnAdDemo(2)">Start</button></div>
+  </section>
+</section>
+</main>
+
+
+<main id="purchasePage" class="page" aria-label="পয়েন্ট কিনুন">
+  <div class="purchase-page-head">
+    <button class="purchase-back" type="button" onclick="closePurchasePage()" aria-label="পেছনে যান">‹</button>
+    <div class="purchase-page-title">পয়েন্ট কিনুন</div>
+    <button class="purchase-support" type="button" onclick="openSupportChat()" aria-label="সাপোর্ট">🎧</button>
+  </div>
+  <section class="premium-intro">
+    <h2>প্রিমিয়াম পয়েন্ট কিনুন</h2>
+    <div class="premium-intro-row">
+      <div class="premium-coin-icon" aria-hidden="true">▤<small>VIP</small></div>
+      <p>প্যাকেজ বেছে নিন, Binance Pay অথবা USDT TRC20 নির্বাচন করে সঠিক অ্যামাউন্ট পাঠান, তারপর Order ID / Transaction ID দিয়ে অটোমেটিক ভেরিফাই করুন।</p>
+    </div>
+    <button class="purchase-tutorial" type="button" onclick="showPurchaseDemoMessage('পেমেন্টের নিয়মের টিউটোরিয়াল')">▶　পয়েন্ট কেনার নিয়ম</button>
+  </section>
+  <div class="purchase-section-label">💎　প্যাকেজ নির্বাচন করুন</div>
+  <div class="purchase-packages">
+    <div class="purchase-package silver"><div class="package-medal">🏅</div><div class="package-main"><b>সিলভার</b><div class="package-details"><span class="usdt-pill">$　1 USDT</span><span class="coins-pill">▤　100 পয়েন্ট</span></div></div><button class="package-buy" type="button" onclick="selectDemoPackage('সিলভার',1,100)">▣ কিনুন</button></div>
+    <div class="purchase-package gold"><div class="package-medal">♛</div><div class="package-main"><b>গোল্ড</b><div class="package-details"><span class="usdt-pill">$　5 USDT</span><span class="coins-pill">▤　550 পয়েন্ট</span></div></div><button class="package-buy" type="button" onclick="selectDemoPackage('গোল্ড',5,550)">▣ কিনুন</button></div>
+    <div class="purchase-package platinum"><div class="package-medal">♙</div><div class="package-main"><b>প্লাটিনাম প্যাক</b><div class="package-details"><span class="usdt-pill">$　10 USDT</span><span class="coins-pill">▤　1200 পয়েন্ট</span></div></div><button class="package-buy" type="button" onclick="selectDemoPackage('প্লাটিনাম প্যাক',10,1200)">▣ কিনুন</button></div>
+    <div class="purchase-package diamond"><div class="package-medal">◆</div><div class="package-main"><b>ডায়মন্ড প্যাক</b><div class="package-details"><span class="usdt-pill">$　20 USDT</span><span class="coins-pill">▤　2600 পয়েন্ট</span></div></div><button class="package-buy" type="button" onclick="selectDemoPackage('ডায়মন্ড প্যাক',20,2600)">▣ কিনুন</button></div>
+  </div>
+  <div class="purchase-section-label">🪄　CUSTOM AMOUNT</div>
+  <section class="custom-amount-card">
+    <label for="customCoinAmount">পয়েন্টের পরিমাণ লিখুন</label>
+    <input id="customCoinAmount" type="number" min="100" step="100" placeholder="উদাহরণ: 1000" oninput="updateCustomCoinEstimate()">
+    <div class="custom-need"><span>প্রয়োজনীয় USDT</span><strong id="customUsdtEstimate">0.00 USDT</strong></div>
+    <button class="custom-purchase-btn" type="button" onclick="submitCustomCoinDemo()">♛　Purchase Custom Coins</button>
+  </section>
+  <p class="purchase-demo-note">ডেমো প্রিভিউ: এখানে প্যাকেজ বেছে নেওয়া ও হিসাব দেখা যাবে। কোনো বাস্তব পেমেন্ট বা পয়েন্ট যোগ করা হবে না।</p>
+</main>
+
 <div class="footer">🔥 VIRAL VIDEO LINK<br>নতুন ভিডিও নিয়মিত যুক্ত হবে...</div>
 <nav class="bottom"><button id="homeTab" class="active" onclick="showHome()">🏠<br><span>হোম</span></button><button id="profileTab" onclick="showProfile()">👤<br><span>প্রোফাইল</span></button></nav>
+</div>
+
+
+<div class="quick-actions" id="quickActions">
+  <div class="quick-actions-menu" id="quickActionsMenu" aria-hidden="true">
+    <button class="quick-action age" type="button" aria-label="১৮+ নিশ্চিতকরণ" title="১৮+ নিশ্চিতকরণ" onclick="openAgeConfirmation()">18+</button>
+    <button class="quick-action play" type="button" aria-label="ভিডিওতে যান" title="ভিডিওতে যান" onclick="goToVideos()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.8v14.4L19 12z"/></svg></button>
+  </div>
+  <button class="quick-actions-toggle" type="button" id="quickActionsToggle" aria-label="দ্রুত বাটন দেখান" aria-expanded="false" onclick="toggleQuickActions()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
 </div>
 
 <button class="support-fab" id="supportFab" type="button" onclick="openSupportChat()" aria-label="Live Support">
@@ -371,23 +701,12 @@ body.intro-lock{overflow:hidden}
 </div>
 
 <div class="menu" id="menu" onclick="closeMenu(event)"><aside class="drawer" onclick="event.stopPropagation()"><button class="close" onclick="closeMenu()">×</button><div class="mini-brand"><b>ভিডিও শেয়ার করুন</b><br><strong>VIRAL <span class="p">VIDEO LINK</span></strong></div><h2>মেনু</h2>
-<button class="menuitem" onclick="showHome();closeMenu()">🏠 হোম</button><button class="menuitem" onclick="showProfile();closeMenu()">👤 প্রোফাইল</button><button class="menuitem" id="menuAuthBtn" onclick="handleAuthMenu();closeMenu()">🔐 Login / Sign Up</button><button class="menuitem" onclick="openSupportChat();closeMenu()">💬 Live Support <span id="menuSupportBadge" style="float:right;display:none;background:#ff3e68;border-radius:999px;padding:2px 7px;font-size:11px">0</span></button><button class="menuitem">▶ ভিডিও দেখার নিয়ম</button><button class="menuitem">⚠ ১৮+ কনটেন্ট</button><button class="menuitem">👥 ফ্রি পয়েন্ট আয় করার নিয়ম</button><button class="menuitem">🪙 পয়েন্ট কেনার নিয়ম</button>
+<button class="menuitem" onclick="showHome();closeMenu()">🏠 হোম</button><button class="menuitem" onclick="showProfile();closeMenu()">👤 প্রোফাইল</button><button class="menuitem" id="menuAuthBtn" onclick="handleAuthMenu();closeMenu()">🔐 Login / Sign Up</button><button class="menuitem" onclick="openSupportChat();closeMenu()">💬 Live Support <span id="menuSupportBadge" style="float:right;display:none;background:#ff3e68;border-radius:999px;padding:2px 7px;font-size:11px">0</span></button><button class="menuitem">▶ ভিডিও দেখার নিয়ম</button><button class="menuitem">⚠ ১৮+ কনটেন্ট</button><button class="menuitem">👥 ফ্রি পয়েন্ট আয় করার নিয়ম</button>
 <h3>ভাষা পরিবর্তন</h3><div class="lang"><button>বাংলা</button><button>ENGLISH</button></div><h3>সোশ্যাল লিংক</h3><button class="menuitem">🔗 WhatsApp</button><button class="menuitem">🔗 Telegram</button></aside></div>
 
 
 
-<div class="usdt-modal" id="usdtModal" onclick="closeUsdtPayment(event)">
-  <div class="usdt-card" onclick="event.stopPropagation()">
-    <h3>💵 USDT (TRC20) Payment</h3>
-    <div class="amount" id="usdtPayAmount">1 USDT</div>
-    <p>এই address-এ ঠিক amount USDT (TRC20) পাঠাও:</p>
-    <code id="usdtPayAddress">TDW3PWAJKtvZf4NDNuX5hk2SGmbZuZHbyM</code>
-    <button style="width:100%;margin-top:8px;background:#222;color:#fff" onclick="copyUsdtPaymentAddress()">📋 Wallet Address Copy</button>
-    <input id="usdtTxHash" placeholder="Transaction ID / TX Hash">
-    <div class="actions"><button class="close" onclick="closeUsdtPayment()">Cancel</button><button class="submit" onclick="submitUsdtPayment()">Payment পাঠিয়েছি</button></div>
-    <div class="usdt-note">Payment পাঠানোর পর TX Hash জমা হবে। Admin verification-এর পরে Points যোগ করতে হবে।</div>
-  </div>
-</div>
+
 
 <div class="auth-modal" id="authModal" onclick="closeAuth(event)">
   <div class="auth-box" onclick="event.stopPropagation()">
@@ -429,8 +748,18 @@ async function loginWithGoogle(){
   }
 }
 
-function showHome(){document.getElementById("homePage").classList.add("active");document.getElementById("profilePage").classList.remove("active");document.getElementById("homeTab").classList.add("active");document.getElementById("profileTab").classList.remove("active");window.scrollTo(0,0)}
-function showProfile(){document.getElementById("profilePage").classList.add("active");document.getElementById("homePage").classList.remove("active");document.getElementById("profileTab").classList.add("active");document.getElementById("homeTab").classList.remove("active");loadReferral();updateProfileAdCount();loadUserPoints();window.scrollTo(0,0)}
+
+function hideAllMainPages(){["homePage","profilePage","earnPage","purchasePage"].forEach(id=>document.getElementById(id)?.classList.remove("active"));document.querySelector(".app")?.classList.remove("purchase-open")}
+function showHome(){hideAllMainPages();document.getElementById("homePage").classList.add("active");document.getElementById("homeTab").classList.add("active");document.getElementById("profileTab").classList.remove("active");window.scrollTo(0,0)}
+function showProfile(){hideAllMainPages();document.getElementById("profilePage").classList.add("active");document.getElementById("profileTab").classList.add("active");document.getElementById("homeTab").classList.remove("active");loadReferral();updateProfileAdCount();loadUserPoints();window.scrollTo(0,0)}
+function showEarnPage(){hideAllMainPages();document.getElementById("earnPage")?.classList.add("active");document.getElementById("profileTab")?.classList.add("active");document.getElementById("homeTab")?.classList.remove("active");loadUserPoints();updateProfileAdCount();window.scrollTo(0,0)}
+function closeEarnPage(){showProfile()}
+function openPurchasePage(){hideAllMainPages();document.getElementById("purchasePage").classList.add("active");document.querySelector(".app")?.classList.add("purchase-open");window.scrollTo(0,0);updateCustomCoinEstimate()}
+function closePurchasePage(){showProfile()}
+function showPurchaseDemoMessage(label){alert(label+" — এটি শুধু ডেমো। পেমেন্ট এখনো চালু করা হয়নি।")}
+function selectDemoPackage(name,usdt,points){alert(name+" প্যাকেজ নির্বাচিত: "+usdt+" USDT = "+points+" পয়েন্ট। এটি ডেমো; পেমেন্ট নেওয়া বা পয়েন্ট যোগ করা হবে না।")}
+function updateCustomCoinEstimate(){const el=document.getElementById("customCoinAmount");const out=document.getElementById("customUsdtEstimate");if(!el||!out)return;const n=Math.max(0,Number(el.value)||0);out.textContent=(n/100).toFixed(2)+" USDT"}
+function submitCustomCoinDemo(){const n=Number(document.getElementById("customCoinAmount")?.value||0);if(!Number.isFinite(n)||n<100){alert("কমপক্ষে 100 পয়েন্ট লিখুন।");return}alert("ডেমো হিসাব: "+n.toLocaleString()+" পয়েন্টের জন্য "+(n/100).toFixed(2)+" USDT। বাস্তব পেমেন্ট চালু নেই।")}
 function openMenu(){document.getElementById("menu").classList.add("open")}
 function closeMenu(e){if(!e||e.target.id==="menu")document.getElementById("menu").classList.remove("open")}
 function copyReferral(){const x=window.currentReferralUrl || document.getElementById("profileReferralLink").innerText;navigator.clipboard?.writeText(x).then(()=>alert("লিংক কপি হয়েছে।"))}
@@ -593,6 +922,22 @@ async function setVideoUnlock(videoId, hours, source='ads'){
   return expiresAt;
 }
 
+async function getRequiredAdsForVideo(video){
+  const raw = video?.required_ads ?? video?.ads_required ?? video?.unlock_ads ?? video?.ads_to_unlock ?? 3;
+  const n = Number(raw);
+  return Number.isFinite(n) && n > 0 ? Math.min(20, Math.floor(n)) : 3;
+}
+
+async function getCurrentPointsBalance(){
+  try{
+    const {data:{user}} = await supabaseClient.auth.getUser();
+    if(!user) return 0;
+    const {data,error} = await supabaseClient.from('profiles').select('points').eq('id',user.id).single();
+    if(error) return 0;
+    return Number(data?.points || 0);
+  }catch(e){ return 0; }
+}
+
 async function openVideo(videoId){
   const {data: video, error} = await supabaseClient
     .from('videos').select('*').eq('id', videoId).single();
@@ -601,21 +946,26 @@ async function openVideo(videoId){
   const existing = document.getElementById('videoDetails');
   if(existing) existing.remove();
 
-  const requiredAds = 5;
+  const requiredAds = await getRequiredAdsForVideo(video);
+  localStorage.setItem('videoAdsRequired_' + video.id, String(requiredAds));
   const key = 'videoAds_' + video.id;
   let watched = Math.min(Number(localStorage.getItem(key) || 0), requiredAds);
-  let expiresAt = await getVideoUnlockExpiry(video.id, video);
+  const pointsBalance = await getCurrentPointsBalance();
+  const expiresAt = await getVideoUnlockExpiry(video.id, video);
   const unlocked = !!expiresAt && expiresAt > Date.now();
   if(!unlocked) watched = Math.min(Number(localStorage.getItem(key) || 0), requiredAds);
+  else watched = requiredAds;
 
+  const durationHours = [1,6,12].includes(Number(video.unlock_hours)) ? Number(video.unlock_hours) : 1;
+  const price = Number(video.points_price || 100);
   const details = document.createElement('div');
   details.id = 'videoDetails';
   details.className = 'video-details-page';
   details.innerHTML = `
     <div class="details-topbar">
-      <button onclick="document.getElementById('videoDetails').remove()">‹</button>
+      <button type="button" onclick="document.getElementById('videoDetails').remove()" aria-label="ফিরে যান">‹</button>
       <b>VIRAL <span>VIDEO LINK</span></b>
-      <button type="button" class="details-share-top" aria-label="Share video">↗</button>
+      <button type="button" class="details-share-top" aria-label="Share video"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3" fill="currentColor" stroke="none"/><circle cx="6" cy="12" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="19" r="3" fill="currentColor" stroke="none"/><path d="M8.7 10.7 15.3 6.3M8.7 13.3l6.6 4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
     </div>
     <div class="details-content">
       <div class="details-player">
@@ -624,39 +974,45 @@ async function openVideo(videoId){
                ${unlocked ? '' : "controlsList='nodownload'"}></video>
       </div>
 
-      <h2>${escapeHtml(video.title || 'Untitled')}</h2>
       <div class="details-meta">
-        <button type="button" id="likeBtn_${video.id}" class="video-action like" aria-pressed="false" onclick="toggleLike(${video.id})">❤️ <span id="likeCount_${video.id}">${Number(video.likes || 0).toLocaleString()}</span> লাইক</button>
-        <button type="button" class="video-action views">👁 <span id="detailsViewCount">${Number(video.views || 0).toLocaleString()}</span> ভিউ</button>
-        <button type="button" class="video-action share" id="shareBtn_${video.id}" aria-label="Share video">↗ <span id="detailsShareCount">${Number(video.shares || 0).toLocaleString()}</span> শেয়ার</button>
+        <button type="button" id="likeBtn_${video.id}" class="video-action like" aria-pressed="false" onclick="toggleLike(${video.id})">❤️ <span id="likeCount_${video.id}">${Number(video.likes || 0).toLocaleString()}</span><small>লাইক</small></button>
+        <button type="button" class="video-action views">▥ <span id="detailsViewCount">${Number(video.views || 0).toLocaleString()}</span><small>ভিউ</small></button>
+        <button type="button" class="video-action share" id="shareBtn_${video.id}" aria-label="Share video"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3" fill="currentColor" stroke="none"/><circle cx="6" cy="12" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="19" r="3" fill="currentColor" stroke="none"/><path d="M8.7 10.7 15.3 6.3M8.7 13.3l6.6 4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg> <span id="detailsShareCount">${Number(video.shares || 0).toLocaleString()}</span><small>শেয়ার</small></button>
       </div>
 
-      <div class="unlock-panel">
-        <div class="unlock-summary">
-          <div>প্রয়োজন<br><b>${requiredAds}</b></div>
-          <div>সম্পন্ন<br><b id="detailsWatched">${watched}</b></div>
-          <div>বাকি<br><b id="detailsRemain">${Math.max(0, requiredAds-watched)}</b></div>
-        </div>
-        <div class="progress-line"><span id="detailsProgress" style="width:${(watched/requiredAds)*100}%"></span></div>
-        <div class="unlock-hint" id="unlockHint">
-          ${unlocked ? '✅ ভিডিও আনলক হয়েছে। এখন ভিডিওটি দেখতে পারবেন।' : `ভিডিও দেখতে ${requiredAds-watched}টি Ads বাকি।`}
-        </div>
+      <div class="unlock-panel ${unlocked ? 'unlock-success-panel' : ''}">
+        ${unlocked ? `
+          <div class="unlock-hint">✅ কনটেন্ট সফলভাবে আনলক হয়েছে</div>
+          <div class="unlock-summary">
+            <div>প্রয়োজন<br><b>${requiredAds}</b></div>
+            <div>ব্যালেন্স<br><b id="unlockBalance">${pointsBalance.toLocaleString()}</b></div>
+            <div>সম্পন্ন<br><b>${requiredAds}/${requiredAds}</b></div>
+          </div>
+          <div class="progress-line"><span style="width:100%"></span></div>
+          <div class="unlock-hint">আনলক করা কনটেন্ট এখন সক্রিয়।</div>
+          <div class="unlock-success-banner"><div>🕒 আনলক শেষ হবে<small>এই কনটেন্ট নির্দিষ্ট সময়ের জন্য আনলক থাকবে।</small></div><b id="unlockCountdown_${video.id}">00:00:00</b></div>
+          <button class="unlock-download-main" onclick="downloadViaTelegram(${video.id})">⬇　এখন ডাউনলোড করুন</button>
+        ` : `
+          <div class="unlock-hint">বিজ্ঞাপন বা পয়েন্ট ব্যবহার করে এই কনটেন্ট আনলক করুন।</div>
+          <div class="unlock-summary">
+            <div>প্রয়োজন<br><b>${requiredAds}</b></div>
+            <div>ব্যালেন্স<br><b id="unlockBalance">${pointsBalance.toLocaleString()}</b></div>
+            <div>বাকি<br><b id="detailsRemain">${Math.max(0, requiredAds-watched)}</b></div>
+          </div>
+          <div class="progress-line"><span id="detailsProgress" style="width:${(watched/requiredAds)*100}%"></span></div>
+          <div class="unlock-hint" id="unlockHint">ভিডিও আনলক করতে ${Math.max(0,requiredAds-watched)}টি বিজ্ঞাপন দেখুন অথবা ${price.toLocaleString()} পয়েন্ট ব্যবহার করুন।</div>
+          <button class="unlock-big" id="watchUnlockButton_${video.id}" onclick="watchUnlockAd(${video.id})">▶　ভিডিও আনলক করুন — ${Math.max(0,requiredAds-watched)}টি বিজ্ঞাপন বাকি</button>
+          <button class="unlock-points-button" onclick="purchaseVideo(${video.id})">🪙　আমার পয়েন্ট ব্যবহার করুন (${price.toLocaleString()} পয়েন্ট)</button>
+        `}
+      </div>
+
+      <h2>${escapeHtml(video.title || 'Untitled')}</h2>
+      <div class="unlock-ornate-notice">
         ${unlocked
-          ? `<button class="unlock-big" disabled style="opacity:.7">✅ Video Unlocked</button>`
-          : `<button class="unlock-big" onclick="watchUnlockAd(${video.id})">🎬 Ad দেখুন — ${requiredAds-watched}টি বাকি</button>`
-        }
-        ${unlocked ? `<div class="unlock-expiry" id="unlockExpiry_${video.id}"><small>⏳ আনলক থাকা বাকি</small><b id="unlockCountdown_${video.id}">00:00:00</b></div>
-        <button class="unlock-big telegram-download-btn" onclick="downloadViaTelegram(${video.id})">⬇️ Telegram-এ ভিডিও দেখুন / Download</button>` : ''}
-        <button class="purchase-btn" onclick="purchaseVideo(${video.id})">🪙 Points দিয়ে ভিডিও কিনুন — ${Number(video.points_price || 100).toLocaleString()} Points</button>
+          ? `এই কনটেন্টটি আনলক করা হয়েছে। এখন আপনি নির্ধারিত সময়ের মধ্যে ভিডিওটি দেখতে ও ডাউনলোড করতে পারবেন।`
+          : `এই কনটেন্টটি আনলক করতে আপনাকে <b>${requiredAds}টি বিজ্ঞাপন</b> দেখতে হবে অথবা <b>সমপরিমাণ পয়েন্ট</b> ব্যবহার করতে হবে। তারপর ডাউনলোড বাটন চালু হয়ে যাবে।`}
       </div>
-
-      <h2 class="details-heading">ভিডিও আনলক করার নিয়ম 🔥</h2>
-      <div class="details-notice">
-        এই ভিডিওটি আনলক করতে মোট <b>${requiredAds}টি Ads</b> সম্পূর্ণ দেখতে হবে।<br>
-        আনলক সময়: <b>${[1,6,12].includes(Number(video.unlock_hours)) ? Number(video.unlock_hours) : 1} ঘণ্টা</b>। সময় শেষ হলে ভিডিও আবার Lock হবে।<br>
-        Ads দেখার জন্য কোনো Points দেওয়া বা কাটা হবে না।
-      </div>
-      <button class="more-video-btn" onclick="document.getElementById('videoDetails').remove()">🎥 আরো ভিডিও দেখুন</button>
+      <button class="more-video-btn" onclick="document.getElementById('videoDetails').remove()">🎥　আরো ভিডিও দেখুন</button>
     </div>`;
   document.body.appendChild(details);
   const shareTopBtn = details.querySelector('.details-share-top');
@@ -670,9 +1026,10 @@ async function openVideo(videoId){
   if(!unlocked){
     const v = details.querySelector('.details-player video');
     v.addEventListener('play', function block(){
-      if(!localStorage.getItem('videoUnlockExpires_' + video.id) || Number(localStorage.getItem('videoUnlockExpires_' + video.id)) <= Date.now()){
+      const currentExpiry = Number(localStorage.getItem('videoUnlockExpires_' + video.id) || 0);
+      if(currentExpiry <= Date.now()){
         v.pause();
-        alert('🔒 আগে ৫টি Ads সম্পূর্ণ করুন, তারপর ভিডিওটি আনলক হবে।');
+        alert(`🔒 আগে ${requiredAds}টি বিজ্ঞাপন সম্পূর্ণ করুন অথবা পয়েন্ট ব্যবহার করে ভিডিওটি আনলক করুন।`);
       }
     });
   }
@@ -837,36 +1194,35 @@ async function shareVideo(videoId,title){
   }
 }
 
+
+function toggleQuickActions(){
+  const wrap=document.getElementById('quickActions');
+  const toggle=document.getElementById('quickActionsToggle');
+  const menu=document.getElementById('quickActionsMenu');
+  if(!wrap||!toggle||!menu) return;
+  const open=wrap.classList.toggle('open');
+  toggle.setAttribute('aria-expanded',String(open));
+  toggle.setAttribute('aria-label',open?'দ্রুত বাটন লুকান':'দ্রুত বাটন দেখান');
+  menu.setAttribute('aria-hidden',String(!open));
+}
+function openAgeConfirmation(){
+  const gate=document.getElementById('ageGate');
+  if(gate){gate.classList.add('show');gate.style.display='flex';gate.style.pointerEvents='auto';document.body.classList.add('intro-lock');}
+  const wrap=document.getElementById('quickActions'); if(wrap) wrap.classList.remove('open');
+  const toggle=document.getElementById('quickActionsToggle'); if(toggle) toggle.setAttribute('aria-expanded','false');
+  const menu=document.getElementById('quickActionsMenu'); if(menu) menu.setAttribute('aria-hidden','true');
+}
+function goToVideos(){
+  const wrap=document.getElementById('quickActions'); if(wrap) wrap.classList.remove('open');
+  const toggle=document.getElementById('quickActionsToggle'); if(toggle) toggle.setAttribute('aria-expanded','false');
+  const menu=document.getElementById('quickActionsMenu'); if(menu) menu.setAttribute('aria-hidden','true');
+  const videos=document.getElementById('videos');
+  if(videos) videos.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
 function focusSearch(){alert("ভিডিও সার্চ ফিচারটি পরের আপডেটে যুক্ত করা যাবে।")}
 </script>
 <script>
-
-const USDT_TRC20_ADDRESS = "TDW3PWAJKtvZf4NDNuX5hk2SGmbZuZHbyM";
-let pendingUsdtOrder = null;
-function copyTextSafe(value){
-  if(navigator.clipboard) return navigator.clipboard.writeText(value);
-  const ta=document.createElement("textarea"); ta.value=value; document.body.appendChild(ta); ta.select(); document.execCommand("copy"); ta.remove(); return Promise.resolve();
-}
-async function copyUsdtWallet(){ await copyTextSafe(USDT_TRC20_ADDRESS); alert("✅ USDT wallet address copied."); }
-function openUsdtPayment(points, usdt){
-  pendingUsdtOrder={points:Number(points),usdt:Number(usdt)};
-  document.getElementById("usdtPayAmount").textContent=`${usdt} USDT → ${points} Points`;
-  document.getElementById("usdtPayAddress").textContent=USDT_TRC20_ADDRESS;
-  document.getElementById("usdtWalletDisplay").value=USDT_TRC20_ADDRESS;
-  document.getElementById("usdtTxHash").value="";
-  document.getElementById("usdtModal").classList.add("open");
-}
-function closeUsdtPayment(e){ if(!e || e.target.id==="usdtModal") document.getElementById("usdtModal").classList.remove("open"); }
-async function copyUsdtPaymentAddress(){ await copyTextSafe(USDT_TRC20_ADDRESS); alert("✅ Wallet address copied."); }
-async function submitUsdtPayment(){
-  const tx=(document.getElementById("usdtTxHash").value||"").trim();
-  if(!pendingUsdtOrder) return;
-  if(USDT_TRC20_ADDRESS.includes("YOUR_TRC20")){ alert("প্রথমে তোমার আসল TRC20 USDT wallet address code-এ বসাতে হবে।"); return; }
-  if(tx.length<8){ alert("TX Hash/Transaction ID দিন।"); return; }
-  localStorage.setItem("pendingUsdtPayment",JSON.stringify({ ...pendingUsdtOrder,txHash:tx,createdAt:new Date().toISOString(),status:"pending" }));
-  closeUsdtPayment();
-  alert(`✅ Payment তথ্য সংরক্ষণ হয়েছে। ${pendingUsdtOrder.usdt} USDT-এর ${pendingUsdtOrder.points} Points admin verification-এর পরে যোগ হবে।`);
-}
 
 function confirmAge() {
   const gate = document.getElementById("ageGate");
@@ -1075,16 +1431,16 @@ async function loadVideos(category = "All", button = null) {
   </div>
 
   <div class="video-info" onclick="openVideo(${video.id})">
-    <div class="video-title">${escapeHtml(video.title || "Untitled")}</div>
+    <div class="video-title-row"><div class="video-title">${escapeHtml(video.title || "Untitled")}</div><button class="card-share" type="button" aria-label="ভিডিও শেয়ার" title="ভিডিও শেয়ার করুন"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.7 10.7 15.3 6.3M8.7 13.3l6.6 4.4"/></svg></button></div>
     <div class="video-category">🎬 ${escapeHtml(video.category || "Other")}</div>
     <div class="video-stats">
       <span>👁 ${Number(video.views || 0).toLocaleString()}</span>
       <span>❤️ ${Number(video.likes || 0).toLocaleString()}</span>
-      <span>↗️ শেয়ার</span>
       <span class="video-age">${formatVideoAge(video.created_at)}</span>
     </div>
   </div>
 `;
+card.querySelector(".card-share").addEventListener("click", event => { event.stopPropagation(); shareVideo(video.id, video.title || "VIRAL VIDEO LINK"); });
 videosDiv.appendChild(card);
     });
   }
@@ -1106,6 +1462,8 @@ async function loadUserPoints(){
   const points=Number(data?.points||0);
   const el=document.getElementById("profilePoints");
   if(el) el.textContent=points.toLocaleString();
+  const earnEl=document.getElementById("earnCurrentPoints");
+  if(earnEl) earnEl.textContent=points.toLocaleString();
   return points;
 }
 
@@ -1138,7 +1496,14 @@ async function hasPurchasedVideo(videoId){
 }
 
 async function watchUnlockAd(videoId){
+  let button = document.getElementById('watchUnlockButton_' + videoId);
   try {
+    let requiredAds = Number(localStorage.getItem('videoAdsRequired_' + videoId) || 0);
+    if(!requiredAds){
+      const {data:video}=await supabaseClient.from('videos').select('*').eq('id',videoId).single();
+      requiredAds = await getRequiredAdsForVideo(video);
+      localStorage.setItem('videoAdsRequired_' + videoId, String(requiredAds));
+    }
     if (!window.Adsgram || typeof window.Adsgram.init !== 'function') {
       alert('❌ AdsGram SDK লোড হয়নি।');
       return;
@@ -1148,55 +1513,61 @@ async function watchUnlockAd(videoId){
       alert('❌ AdsGram ad controller পাওয়া যায়নি।');
       return;
     }
-    const button = document.querySelector(`.unlock-big[onclick=\"watchUnlockAd(${videoId})\"]`);
-    if (button) { button.disabled = true; button.innerText = '🎬 Ad লোড হচ্ছে...'; }
+    if (button) { button.disabled = true; button.textContent = 'বিজ্ঞাপন লোড হচ্ছে...'; }
     const result = await AdController.show();
     const completed = !result || result.done !== false;
     if (!completed) {
-      if (button) {
-        const now = Math.min(5, Number(localStorage.getItem('videoAds_' + videoId) || 0));
-        button.disabled = false; button.innerText = `🎬 Ad দেখুন — ${Math.max(0, 5-now)}টি বাকি`;
-      }
+      const now = Math.min(requiredAds, Number(localStorage.getItem('videoAds_' + videoId) || 0));
+      if (button) { button.disabled = false; button.textContent = `▶ ভিডিও আনলক করুন — ${Math.max(0,requiredAds-now)}টি বিজ্ঞাপন বাকি`; }
       return;
     }
     const key = 'videoAds_' + videoId;
-    const current = Math.min(5, Number(localStorage.getItem(key) || 0));
-    const next = Math.min(5, current + 1);
+    const current = Math.min(requiredAds, Number(localStorage.getItem(key) || 0));
+    const next = Math.min(requiredAds, current + 1);
     localStorage.setItem(key, String(next));
-    if (next >= 5) {
-      const {data:video}=await supabaseClient.from('videos').select('unlock_hours').eq('id',videoId).single();
+    if (next >= requiredAds) {
+      const {data:video}=await supabaseClient.from('videos').select('*').eq('id',videoId).single();
       const expiresAt = await setVideoUnlock(videoId, Number(video?.unlock_hours || 1), 'ads');
-      alert(`✅ ৫টি Ads সম্পূর্ণ হয়েছে। ${Number(video?.unlock_hours || 1)} ঘণ্টার জন্য ভিডিও Unlock হয়েছে!`);
-      openVideo(videoId);
+      alert(`✅ ${requiredAds}টি বিজ্ঞাপন সম্পূর্ণ হয়েছে। ${Number(video?.unlock_hours || 1)} ঘণ্টার জন্য কনটেন্ট আনলক হয়েছে!`);
+      await openVideo(videoId);
       setTimeout(()=>startUnlockCountdown(videoId, expiresAt), 400);
       return;
     }
-    const watchedEl = document.getElementById('detailsWatched');
     const remainEl = document.getElementById('detailsRemain');
     const progressEl = document.getElementById('detailsProgress');
     const hintEl = document.getElementById('unlockHint');
-    if (watchedEl) watchedEl.textContent = String(next);
-    if (remainEl) remainEl.textContent = String(5-next);
-    if (progressEl) progressEl.style.width = `${(next/5)*100}%`;
-    if (hintEl) hintEl.textContent = `ভিডিও দেখতে ${5-next}টি Ads বাকি।`;
-    if (button) { button.disabled = false; button.innerText = `🎬 Ad দেখুন — ${5-next}টি বাকি`; }
+    const balanceEl = document.getElementById('unlockBalance');
+    const {data:{user}} = await supabaseClient.auth.getUser();
+    if(user){
+      const {data:profile}=await supabaseClient.from('profiles').select('points').eq('id',user.id).single();
+      if(balanceEl) balanceEl.textContent=Number(profile?.points||0).toLocaleString();
+    }
+    if (remainEl) remainEl.textContent = String(requiredAds-next);
+    if (progressEl) progressEl.style.width = `${(next/requiredAds)*100}%`;
+    if (hintEl) hintEl.textContent = `ভিডিও আনলক করতে ${requiredAds-next}টি বিজ্ঞাপন বাকি অথবা পয়েন্ট ব্যবহার করুন।`;
+    button = document.getElementById('watchUnlockButton_' + videoId);
+    if (button) { button.disabled = false; button.textContent = `▶ ভিডিও আনলক করুন — ${requiredAds-next}টি বিজ্ঞাপন বাকি`; }
   } catch (error) {
     console.error('AdsGram error:', error);
-    if (button) {
-      button.disabled = false;
-      const now = Math.min(5, Number(localStorage.getItem('videoAds_' + videoId) || 0));
-      button.innerText = `🎬 Ad দেখুন — ${Math.max(0,5-now)}টি বাকি`;
-    }
-    alert('❌ Ad দেখানো যায়নি.\n' + (error?.description || error?.message || 'AdsGram error'));
+    button = document.getElementById('watchUnlockButton_' + videoId);
+    if (button) { button.disabled = false; button.textContent = '▶ আবার চেষ্টা করুন'; }
+    alert('❌ বিজ্ঞাপন দেখানো যায়নি।\n' + (error?.description || error?.message || 'AdsGram error'));
   }
 }
 
 async function unlockVideo(videoId){
+  let requiredAds = Number(localStorage.getItem('videoAdsRequired_' + videoId) || 0);
+  if(!requiredAds){
+    const {data:video}=await supabaseClient.from('videos').select('*').eq('id',videoId).single();
+    requiredAds = await getRequiredAdsForVideo(video);
+    localStorage.setItem('videoAdsRequired_' + videoId, String(requiredAds));
+  }
   const key='videoAds_'+videoId;
-  const watched=Math.min(5,Number(localStorage.getItem(key)||0));
-  if(watched>=5){
-    const {data:video}=await supabaseClient.from('videos').select('unlock_hours').eq('id',videoId).single();
+  const watched=Math.min(requiredAds,Number(localStorage.getItem(key)||0));
+  if(watched>=requiredAds){
+    const {data:video}=await supabaseClient.from('videos').select('*').eq('id',videoId).single();
     const expiresAt=await setVideoUnlock(videoId,Number(video?.unlock_hours||1), 'ads');
+    await openVideo(videoId);
     startUnlockCountdown(videoId,expiresAt);
     return;
   }
@@ -1441,6 +1812,48 @@ async function refreshSupportUnread(){
 document.addEventListener('keydown',e=>{if(e.key==='Enter' && !e.shiftKey && document.activeElement?.id==='supportInput'){e.preventDefault();sendSupportMessage()}});
 supabaseClient.auth.onAuthStateChange(()=>setTimeout(()=>refreshSupportUnread(),0));
 refreshSupportUnread().catch(()=>{});
+
+function syncEarnDemoStats(){
+  const points = document.getElementById('profilePoints');
+  const earnPoints = document.getElementById('earnCurrentPoints');
+  if (points && earnPoints) earnPoints.textContent = points.textContent.trim() || '0';
+  const dayKey = 'earnDemoAds_' + new Date().toISOString().slice(0,10);
+  const count = Math.min(20, Number(localStorage.getItem(dayKey) || 0));
+  const today = document.getElementById('earnTodayCount');
+  const remaining = document.getElementById('earnRemainingCount');
+  const fill = document.getElementById('earnProgressFill');
+  const label = document.getElementById('earnProgressLabel');
+  if (today) today.textContent = String(count);
+  if (remaining) remaining.textContent = String(20-count);
+  if (fill) fill.style.width = (count/20*100) + '%';
+  if (label) label.textContent = count + ' / 20 completed today';
+}
+async function startEarnAdDemo(reward=2){
+  if (!window.Adsgram || typeof window.Adsgram.init !== 'function') {
+    alert('বিজ্ঞাপনের ডেমো প্রস্তুত। AdsGram লোড হলে এখানে বিজ্ঞাপন চালু হবে।');
+    return;
+  }
+  try {
+    if (!AdController) AdController = window.Adsgram.init({ blockId: '52665' });
+    if (!AdController || typeof AdController.show !== 'function') {
+      alert('বিজ্ঞাপন চালু করা যায়নি। পরে আবার চেষ্টা করুন।');
+      return;
+    }
+    const result = await AdController.show();
+    if (result && result.done === false) return;
+    const dayKey = 'earnDemoAds_' + new Date().toISOString().slice(0,10);
+    const count = Math.min(20, Number(localStorage.getItem(dayKey) || 0));
+    if (count >= 20) { alert('আজকের বিজ্ঞাপনের সীমা শেষ হয়েছে।'); return; }
+    localStorage.setItem(dayKey, String(count + 1));
+    syncEarnDemoStats();
+    alert('বিজ্ঞাপন সম্পন্ন হয়েছে। এটি এখন UI ডেমো—পয়েন্টের ব্যালেন্সে বাস্তব রিওয়ার্ড যোগ করা হয়নি।');
+  } catch (error) {
+    console.error('Earn demo ad error:', error);
+    alert('বিজ্ঞাপন চালু করা যায়নি। পরে আবার চেষ্টা করুন।');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', syncEarnDemoStats);
 </script>
 
 </body>
