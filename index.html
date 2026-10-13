@@ -399,12 +399,16 @@ body.intro-lock{overflow:hidden}
 .video-info{padding:9px 10px 10px}
 .video-title-row{display:flex;align-items:center;gap:8px}
 .video-title-row .video-title{flex:1;min-width:0;margin:0;font-size:15px;line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.card-share{flex:0 0 32px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;border:1px solid #6b4216;border-radius:9px;background:#201507;color:#ffb12b;cursor:pointer;padding:0}.card-share svg{width:18px;height:18px;display:block}.details-share-top svg,.video-action.share svg{width:18px;height:18px;display:inline-block;vertical-align:middle;margin-right:4px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.card-share{flex:0 0 36px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border:1px solid #80500e;border-radius:10px;background:linear-gradient(145deg,#30200b,#1b1206);color:#ffad1f;cursor:pointer;padding:0;box-shadow:0 0 0 1px #ffad1f22,0 2px 8px #0008;transition:transform .15s ease,background .15s ease}
+.card-share:active{transform:scale(.94)}
+.card-share svg{width:21px;height:21px;display:block;overflow:visible;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.card-share svg circle{fill:currentColor;stroke:currentColor;stroke-width:1}
+.details-share-top svg,.video-action.share svg{width:18px;height:18px;display:inline-block;vertical-align:middle;margin-right:4px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .video-category{display:inline-block;margin-top:7px}
 .video-stats{gap:8px;margin-top:8px;font-size:11px}
 .video-stats span:not(.video-age){padding:3px 7px;border-radius:12px;background:#201b22;color:#ddd}
 .video-age{font-size:10px}
-@media(max-width:420px){.video-title-row .video-title{font-size:14px}.video-info{padding:8px 9px}.card-share{width:30px;height:30px;flex-basis:30px}}
+@media(max-width:420px){.video-title-row .video-title{font-size:14px}.video-info{padding:8px 9px}.card-share{width:34px;height:34px;flex-basis:34px}.card-share svg{width:20px;height:20px}}
 
 #earnPage .earn-points-card{margin:0 0 12px;padding:17px 15px;border:1px solid #493052;border-radius:21px;background:radial-gradient(circle at 100% 0%,#2a2112 0,transparent 38%),linear-gradient(145deg,#17141a,#0d0c10);box-shadow:0 8px 24px #0006}
 #earnPage .earn-points-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
@@ -511,6 +515,89 @@ body.intro-lock{overflow:hidden}
 #earnPage .earn-hub{margin:0 0 14px;padding:0 14px 8px}
 #earnPage .earn-hub-title{margin:0 -14px 14px;padding:8px 14px 12px}
 #earnPage .earn-back-button{display:flex;align-items:center;justify-content:center;flex:0 0 34px;width:34px;height:34px;border:0;border-radius:50%;background:#1b1b20;color:#fff;font-size:31px;line-height:1;cursor:pointer}
+
+
+/* Match the user's LEFT reference screenshot for the video unlock page */
+.video-details-page .details-player{display:none!important}
+.video-details-page .details-content{padding-top:10px;max-width:430px}
+.video-details-page .details-meta{margin:10px 0 18px;gap:8px}
+.video-details-page .details-meta button{min-height:68px;padding:10px 6px;border-radius:15px;font-size:16px}
+.video-details-page .details-meta button.like{border-color:#64202c;background:#110d10}
+.video-details-page .details-meta button.views{border-color:#21465c;background:#0c1116}
+.video-details-page .details-meta button.share{border-color:#18552e;background:#0b1510;color:#20c96a}
+.video-details-page .unlock-panel{padding:16px!important;border-radius:22px!important}
+.video-details-page .unlock-hint{color:#f4d08b;font-size:13px;line-height:1.45}
+.video-details-page .unlock-summary>div{padding:10px 5px;border-radius:13px;background:#130f18;border-color:#693080;font-size:13px}
+.video-details-page .unlock-summary b{font-size:17px}
+.video-details-page .progress-line{margin:13px 0 7px;height:9px}
+.video-details-page .unlock-progress-label{text-align:center;font-weight:800;font-size:13px;color:#e8d7f3;margin:5px 0 13px}
+.video-details-page .unlock-bottom-hint{text-align:center;color:#d7c5b0;font-size:12px;margin:0 0 10px}
+.video-details-page .unlock-big{background:#bd25df!important;border:0!important;border-radius:14px!important;padding:17px 12px!important;margin-top:0!important;font-size:17px!important;box-shadow:none!important}
+.video-details-page .unlock-points-button{display:flex;align-items:center;justify-content:flex-start;gap:9px;text-align:left;margin-top:10px;padding:13px 15px;background:#1a1918;border:1px solid #6b4714;border-radius:15px;font-size:16px}
+.video-details-page .unlock-points-button .coin-icon{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;flex:0 0 38px;border-radius:50%;background:#ffae25;color:#fff;font-size:20px;box-shadow:0 0 0 4px #3b2b12}
+.video-details-page .unlock-ornate-notice{margin:16px 0;padding:24px 18px}
+.video-details-page .more-video-btn{background:#1a1918;border:1px solid #6b4714;border-radius:15px;padding:17px 12px}
+@media(max-width:420px){.video-details-page .details-content{padding-left:14px;padding-right:14px}.video-details-page .details-meta button{min-height:68px}}
+
+
+/* Reference-matched gold/yellow unlock theme */
+.video-details-page .unlock-panel,
+.video-details-page .unlock-notice,
+.video-details-page .unlock-ornate-notice,
+.video-details-page .unlock-instruction {
+  background: linear-gradient(145deg,#241806 0%,#171109 58%,#100d08 100%) !important;
+  border-color:#9b6508 !important;
+  color:#ffd66b !important;
+}
+.video-details-page .unlock-ornate-notice {
+  border:1px solid #9b6508 !important;
+  box-shadow: inset 0 0 0 1px rgba(255,190,35,.08), 0 8px 22px rgba(0,0,0,.25);
+}
+.video-details-page .unlock-ornate-notice:before,
+.video-details-page .unlock-ornate-notice:after {
+  color:#ffb000 !important;
+}
+.video-details-page .unlock-ornate-notice b,
+.video-details-page .unlock-hint,
+.video-details-page .unlock-bottom-hint,
+.video-details-page .unlock-progress-label {
+  color:#ffd166 !important;
+}
+.video-details-page .unlock-summary > div {
+  background:linear-gradient(145deg,#1b1320,#100d12) !important;
+  border:1px solid #70418b !important;
+  color:#fff !important;
+}
+.video-details-page .progress-line {
+  background:#2b2925 !important;
+}
+.video-details-page .progress-line span {
+  background:linear-gradient(90deg,#ffb000,#ffdc65) !important;
+}
+.video-details-page .unlock-points-button {
+  border-color:#95600b !important;
+  background:linear-gradient(145deg,#21180c,#171411) !important;
+}
+.video-details-page .unlock-points-button .coin-icon {
+  background:linear-gradient(145deg,#ffc43d,#ff9900) !important;
+  color:#251600 !important;
+  box-shadow:0 0 0 4px rgba(255,176,0,.13);
+}
+.video-details-page .unlock-big {
+  background:#bd25df !important;
+  color:#fff !important;
+}
+.video-details-page .unlock-success-banner,
+.video-details-page .unlock-download-main {
+  border-color:#98620b !important;
+}
+.video-details-page .unlock-success-banner {
+  background:linear-gradient(145deg,#241906,#171109) !important;
+  color:#ffd166 !important;
+}
+.video-details-page .unlock-download-main {
+  background:linear-gradient(90deg,#7c20ff,#ff2b91) !important;
+}
 
 </style>
 </head>
@@ -1000,9 +1087,10 @@ async function openVideo(videoId){
             <div>বাকি<br><b id="detailsRemain">${Math.max(0, requiredAds-watched)}</b></div>
           </div>
           <div class="progress-line"><span id="detailsProgress" style="width:${(watched/requiredAds)*100}%"></span></div>
-          <div class="unlock-hint" id="unlockHint">ভিডিও আনলক করতে ${Math.max(0,requiredAds-watched)}টি বিজ্ঞাপন দেখুন অথবা ${price.toLocaleString()} পয়েন্ট ব্যবহার করুন।</div>
-          <button class="unlock-big" id="watchUnlockButton_${video.id}" onclick="watchUnlockAd(${video.id})">▶　ভিডিও আনলক করুন — ${Math.max(0,requiredAds-watched)}টি বিজ্ঞাপন বাকি</button>
-          <button class="unlock-points-button" onclick="purchaseVideo(${video.id})">🪙　আমার পয়েন্ট ব্যবহার করুন (${price.toLocaleString()} পয়েন্ট)</button>
+          <div class="unlock-progress-label">অগ্রগতি: <span id="detailsProgressLabel">${watched}/${requiredAds}</span></div>
+          <div class="unlock-bottom-hint" id="unlockHint">পয়েন্ট বা বিজ্ঞাপন দিয়ে আনলক করুন।</div>
+          <button class="unlock-big" id="watchUnlockButton_${video.id}" onclick="watchUnlockAd(${video.id})">🔒　ভিডিও আনলক</button>
+          <button class="unlock-points-button" onclick="purchaseVideo(${video.id})"><span class="coin-icon">🪙</span><span>আমার পয়েন্ট ব্যবহার করুন</span></button>
         `}
       </div>
 
@@ -1518,7 +1606,7 @@ async function watchUnlockAd(videoId){
     const completed = !result || result.done !== false;
     if (!completed) {
       const now = Math.min(requiredAds, Number(localStorage.getItem('videoAds_' + videoId) || 0));
-      if (button) { button.disabled = false; button.textContent = `▶ ভিডিও আনলক করুন — ${Math.max(0,requiredAds-now)}টি বিজ্ঞাপন বাকি`; }
+      if (button) { button.disabled = false; button.textContent = '🔒　ভিডিও আনলক'; }
       return;
     }
     const key = 'videoAds_' + videoId;
@@ -1544,13 +1632,15 @@ async function watchUnlockAd(videoId){
     }
     if (remainEl) remainEl.textContent = String(requiredAds-next);
     if (progressEl) progressEl.style.width = `${(next/requiredAds)*100}%`;
-    if (hintEl) hintEl.textContent = `ভিডিও আনলক করতে ${requiredAds-next}টি বিজ্ঞাপন বাকি অথবা পয়েন্ট ব্যবহার করুন।`;
+    const progressLabel = document.getElementById('detailsProgressLabel');
+    if (progressLabel) progressLabel.textContent = `${next}/${requiredAds}`;
+    if (hintEl) hintEl.textContent = `${requiredAds-next}টি বিজ্ঞাপন বাকি — অথবা পয়েন্ট ব্যবহার করুন।`;
     button = document.getElementById('watchUnlockButton_' + videoId);
-    if (button) { button.disabled = false; button.textContent = `▶ ভিডিও আনলক করুন — ${requiredAds-next}টি বিজ্ঞাপন বাকি`; }
+    if (button) { button.disabled = false; button.textContent = '🔒　ভিডিও আনলক'; }
   } catch (error) {
     console.error('AdsGram error:', error);
     button = document.getElementById('watchUnlockButton_' + videoId);
-    if (button) { button.disabled = false; button.textContent = '▶ আবার চেষ্টা করুন'; }
+    if (button) { button.disabled = false; button.textContent = '🔒　ভিডিও আনলক'; }
     alert('❌ বিজ্ঞাপন দেখানো যায়নি।\n' + (error?.description || error?.message || 'AdsGram error'));
   }
 }
