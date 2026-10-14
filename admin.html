@@ -1,206 +1,144 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="bn">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VIRAL VIDEO LINK — Pro Admin</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>VIRAL VIDEO HUB — Purple/Pink Admin Studio</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
-:root{--bg:#07070a;--panel:#0f0d14;--panel2:#15111b;--line:#2b2333;--text:#f7f3fb;--muted:#9f96aa;--a:#9b2cff;--b:#ff2d91;--good:#37df87;--warn:#f0c04b;--bad:#ff6173;--shadow:0 18px 60px rgba(0,0,0,.38)}
-*{box-sizing:border-box}html,body{margin:0;background:radial-gradient(circle at top right,#170b22 0,#07070a 38%,#050507 100%);color:var(--text);font-family:Arial,"Noto Sans Bengali",sans-serif}body{min-height:100vh}button,input,textarea,select{font:inherit}button{cursor:pointer}.hidden{display:none!important}.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-all}
-.login{min-height:100vh;display:grid;place-items:center;padding:20px}.login-card{width:min(100%,420px);padding:28px;border:1px solid #4b245e;border-radius:26px;background:linear-gradient(145deg,#171020,#0d0a12);box-shadow:var(--shadow)}.brand{font-size:24px;font-weight:1000}.brand span{background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;color:transparent}.sub{margin:7px 0 20px;color:var(--muted);font-size:13px}.field{margin:10px 0}.field label{display:block;color:#cfc6d8;font-size:12px;margin-bottom:6px}.field input,.field textarea,.field select{width:100%;background:#09080d;border:1px solid var(--line);color:#fff;border-radius:12px;padding:11px 12px;outline:none}.field textarea{min-height:100px;resize:vertical}.btn{border:0;border-radius:12px;padding:10px 13px;background:linear-gradient(90deg,var(--a),var(--b));color:#fff;font-weight:900}.btn.secondary{background:#18151d;border:1px solid #392f42}.btn.good{background:#12321f;border:1px solid #2a6843}.btn.warn{background:#372b0d;border:1px solid #6c5520}.btn.bad{background:#37131a;border:1px solid #6c2835}.msg{min-height:20px;margin-top:8px;color:#ff93a4;font-size:13px}.notice{border:1px dashed #54483c;background:#17130c;border-radius:12px;padding:10px 12px;color:#eed188;font-size:12px}
-.shell{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}.side{position:sticky;top:0;height:100vh;padding:18px 12px;border-right:1px solid var(--line);background:rgba(8,7,11,.92);backdrop-filter:blur(16px)}.side-brand{padding:7px 10px 18px}.nav{display:grid;gap:6px}.nav button{width:100%;text-align:left;padding:11px 12px;background:transparent;border:1px solid transparent;border-radius:12px;color:#cfc6d8}.nav button.active,.nav button:hover{background:#18111f;border-color:#4b2b5f;color:#fff}.side-foot{position:absolute;bottom:16px;left:12px;right:12px;color:#6f6878;font-size:11px}
-.main{padding:18px;min-width:0}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:16px}.top-left{display:flex;align-items:center;gap:10px}.badge{border:1px solid #4a3557;background:#110c15;color:#d9cbe1;border-radius:999px;padding:6px 9px;font-size:11px}.top-actions{display:flex;gap:8px}.page-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}.page-head h2{margin:0;font-size:20px}.muted{color:var(--muted);font-size:12px}
-.grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}.stat{padding:15px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,#15111b,#0d0b11)}.stat small{color:var(--muted)}.stat b{display:block;font-size:25px;margin-top:6px}.panel{margin-top:12px;background:rgba(14,12,18,.94);border:1px solid var(--line);border-radius:18px;padding:14px}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.toolbar>*{min-width:150px;flex:1}.toolbar .fit{flex:0 0 auto}.toolbar input,.toolbar select{background:#09080d;color:#fff;border:1px solid var(--line);border-radius:11px;padding:10px}.table-wrap{overflow:auto}.table{width:100%;border-collapse:collapse}.table th,.table td{padding:10px 8px;border-bottom:1px solid #211a29;text-align:left;vertical-align:top;font-size:12px}.table th{color:#bdb3c4;background:#110e16;position:sticky;top:0}.pill{display:inline-block;padding:5px 8px;border-radius:999px;border:1px solid #3b3242;font-size:11px}.pill.good{color:#7df5ad;background:#0e2016;border-color:#285e3f}.pill.warn{color:#ffd66f;background:#20170a;border-color:#6b5523}.pill.bad{color:#ff9aa5;background:#211015;border-color:#6e2733}.row-actions{display:flex;gap:6px;flex-wrap:wrap}.row-actions button{font-size:11px;padding:7px 9px}
-.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.video{display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px;padding:10px;background:#0e0c13;border:1px solid #241d2a;border-radius:15px}.video img{width:120px;height:68px;object-fit:cover;border-radius:10px;background:#08080c}.video h4{margin:0 0 5px}.video .actions{grid-column:1/-1}.metric-line{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}.mini{border:1px solid #342d3b;background:#131017;border-radius:10px;padding:5px 7px;font-size:11px;color:#cfc6d8}
-.chart{height:160px;display:flex;align-items:end;gap:7px;padding:12px}.bar{flex:1;min-width:7px;border-radius:7px 7px 2px 2px;background:linear-gradient(180deg,var(--b),var(--a));opacity:.9}.empty{padding:25px;text-align:center;color:var(--muted)}
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);display:none;align-items:center;justify-content:center;padding:16px;z-index:90}.modal.open{display:flex}.modal-card{width:min(100%,780px);max-height:92vh;overflow:auto;background:#111018;border:1px solid #4b245e;border-radius:22px;padding:18px;box-shadow:var(--shadow)}.modal-head{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:12px}.modal-head h3{margin:0}.close{background:#19161d;color:#fff;border:1px solid #342c39;border-radius:10px;padding:8px 10px}
-.toast{position:fixed;right:16px;bottom:16px;background:#15111b;border:1px solid #4b245e;border-radius:14px;padding:11px 13px;box-shadow:var(--shadow);z-index:200;max-width:min(90vw,420px)}
-@media(max-width:1100px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.shell{grid-template-columns:200px minmax(0,1fr)}}@media(max-width:820px){.shell{grid-template-columns:1fr}.side{position:static;height:auto;border-right:0;border-bottom:1px solid var(--line)}.side-foot{display:none}.nav{grid-template-columns:repeat(3,1fr)}.nav button{text-align:center}.cards{grid-template-columns:1fr}}@media(max-width:560px){.main{padding:12px}.top{align-items:flex-start;flex-direction:column}.top-actions{width:100%}.top-actions .btn{flex:1}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.nav{grid-template-columns:repeat(2,1fr)}.video{grid-template-columns:88px minmax(0,1fr)}.video img{width:88px;height:58px}}
+:root{--bg:#030304;--panel:#100c15;--panel2:#17101f;--line:#3e2550;--text:#ffffff;--muted:#aaa3b7;--purple:#8b2cff;--cyan:#ff2d91;--green:#6ee7a1;--red:#fb7185;--gold:#f5c64d}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -10%,#291038 0,transparent 40%),var(--bg);color:var(--text);font:14px/1.5 Inter,system-ui,-apple-system,Segoe UI,sans-serif}button,input,select,textarea{font:inherit}button{cursor:pointer}.hidden{display:none!important}
+.shell{display:grid;grid-template-columns:245px minmax(0,1fr);min-height:100vh}.side{background:#09070d;border-right:1px solid var(--line);padding:22px 15px;display:flex;flex-direction:column;gap:24px}.brand{display:flex;align-items:center;gap:11px;padding:0 7px}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(90deg,#8b2cff,#ff2d91);display:grid;place-items:center;font-weight:900;color:white;font-size:19px;box-shadow:0 8px 28px #8b5cf633}.brand b{display:block;font-size:13px;letter-spacing:1px;background:linear-gradient(90deg,#b86bff 0%,#ff2d91 58%,#ffd166 100%);-webkit-background-clip:text;background-clip:text;color:transparent}.brand small{color:var(--muted);font-size:11px}.nav-label{color:#687795;font-size:10px;font-weight:800;letter-spacing:1.5px;padding:0 12px;margin-bottom:7px}.nav{display:grid;gap:5px}.nav button{display:flex;align-items:center;gap:12px;width:100%;border:1px solid transparent;background:transparent;color:#aab5ce;padding:12px;border-radius:12px;text-align:left}.nav button.active,.nav button:hover{color:white;background:linear-gradient(90deg,#8b2cff26,#ff2d9112);border-color:#8b2cff66}.nav .ico{width:20px;text-align:center;font-size:17px}.side-foot{margin-top:auto;border:1px solid var(--line);border-radius:14px;padding:13px;background:#11182a}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--green);margin-right:7px}.side-foot small{color:var(--muted)}main{min-width:0;padding:26px clamp(14px,3vw,38px) 40px}.top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:26px}.eyebrow{color:#d66bff;font-size:10px;letter-spacing:1.7px;font-weight:800}.top h1{font-size:clamp(22px,3vw,31px);margin:4px 0 0;letter-spacing:-.7px}.top p{margin:4px 0 0;color:var(--muted)}.top-actions{display:flex;gap:9px;align-items:center}.pill{border:1px solid var(--line);border-radius:999px;padding:9px 13px;background:#17101f;color:#f1e7ff}.primary{border:0;background:linear-gradient(90deg,#8b2cff,#ff2d91);color:white;font-weight:750;border-radius:10px;padding:10px 15px;box-shadow:0 7px 20px #5c4bd52b}.secondary{border:1px solid #4b2c5e;background:#17101f;color:#f1e7ff;border-radius:9px;padding:9px 12px}.danger{border:1px solid #713145;background:#351824;color:#ffb7c4;border-radius:9px;padding:8px 11px}.grid{display:grid;gap:15px}.stats{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:18px}.card{background:linear-gradient(145deg,#17101f,#0d0b11);border:1px solid var(--line);border-radius:17px;padding:19px;min-width:0;box-shadow:0 14px 35px #00000013}.stat-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px}.stat-icon{display:grid;place-items:center;width:35px;height:35px;border-radius:11px;background:#8b2cff24;color:#d6a4ff;font-size:17px}.stat-num{font-size:30px;font-weight:800;letter-spacing:-1px;margin-top:14px}.stat-note{color:#7f8daa;font-size:11px;margin-top:3px}.content-grid{grid-template-columns:minmax(0,1.5fr) minmax(250px,.8fr)}.section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:17px}.section-head h2{font-size:16px;margin:0}.section-head p{color:var(--muted);margin:4px 0 0;font-size:12px}.tag{font-size:10px;border:1px solid #5a2a70;border-radius:999px;padding:4px 8px;color:#e5b7ff;background:#24152f}.bar-list{display:grid;gap:17px}.bar-row{display:grid;grid-template-columns:86px 1fr 35px;gap:10px;align-items:center;color:#aeb9d0;font-size:12px}.bar{height:7px;border-radius:99px;background:#252e46;overflow:hidden}.bar span{height:100%;display:block;border-radius:99px;background:linear-gradient(90deg,var(--purple),var(--cyan))}.activity{display:grid;gap:14px}.activity-row{display:flex;gap:11px;align-items:flex-start}.activity-icon{width:32px;height:32px;display:grid;place-items:center;background:#1b2440;border-radius:10px}.activity-row b{font-size:12px;display:block}.activity-row small{color:var(--muted);font-size:11px}.view{display:none}.view.active{display:block}.toolbar{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;margin-bottom:15px}.search{min-width:220px;max-width:360px;flex:1}.field{display:grid;gap:6px;margin-bottom:14px}.field label{color:#b8c4dd;font-size:12px;font-weight:650}.field input,.field select,.field textarea,.search input{width:100%;background:#090f1d;color:var(--text);border:1px solid #303b58;border-radius:10px;padding:11px 12px;outline:none}.field input:focus,.field select:focus,.field textarea:focus,.search input:focus{border-color:var(--purple);box-shadow:0 0 0 3px #8b5cf622}.field textarea{min-height:75px;resize:vertical}.muted{color:var(--muted)}.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:13px}table{border-collapse:collapse;width:100%;min-width:720px}th,td{padding:13px 14px;text-align:left;border-bottom:1px solid #222c43;font-size:12px}th{color:#8f9db9;font-size:10px;text-transform:uppercase;letter-spacing:1px;background:#0c1221}td{color:#dce4f7}tr:last-child td{border-bottom:0}.video-cell{display:flex;align-items:center;gap:10px;min-width:190px}.thumb{width:54px;height:39px;border-radius:8px;object-fit:cover;background:#252e46}.status{display:inline-flex;border-radius:99px;padding:4px 8px;background:#103126;color:#86efac;font-size:10px}.actions{display:flex;gap:6px}.smallbtn{border:1px solid #36415f;background:#151e33;color:#dbe5ff;border-radius:8px;padding:6px 9px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}.full{grid-column:1/-1}.duration-box{border:1px solid #37415e;background:#0b1221;border-radius:13px;padding:14px;margin-bottom:15px}.duration-controls{display:grid;grid-template-columns:1fr 135px;gap:10px}.preset-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.preset{background:#171f35;color:#c4d0e8;border:1px solid #303b58;border-radius:999px;padding:6px 10px;font-size:11px}.duration-preview{color:#d66bff;font-size:12px;margin-top:8px}.hint{color:#8e9db9;font-size:11px;line-height:1.6}.notice{padding:12px 14px;border-radius:11px;background:#101e31;border:1px solid #2a4660;color:#bdeefa;font-size:12px;margin-bottom:15px}.alert{padding:11px 13px;border-radius:10px;margin-bottom:13px;font-size:12px}.alert.error{background:#321923;border:1px solid #723349;color:#ffb8c6}.alert.success{background:#102b23;border:1px solid #216448;color:#9bf0ca}.login-wrap{max-width:440px;margin:8vh auto;padding:15px}.login-card{background:#101629;border:1px solid var(--line);border-radius:20px;padding:28px}.login-card h2{margin:10px 0 5px}.login-card p{color:var(--muted);margin-top:0}.empty{text-align:center;padding:34px;color:var(--muted)}.toast{position:fixed;right:18px;bottom:18px;background:#17223a;border:1px solid #405176;padding:13px 17px;border-radius:12px;box-shadow:0 15px 40px #0008;z-index:10;max-width:min(90vw,400px)}.user-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:13px 0;border-bottom:1px solid #222c43}.user-row:last-child{border:0}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.content-grid{grid-template-columns:1fr}}
+@media(max-width:720px){.shell{grid-template-columns:1fr}.side{position:sticky;top:0;z-index:5;padding:10px 12px;border-right:0;border-bottom:1px solid var(--line);gap:10px}.brand{padding:0 3px}.brand .logo{width:34px;height:34px}.nav-label,.side-foot{display:none}.nav{display:flex;overflow:auto;gap:5px}.nav button{white-space:nowrap;width:auto;padding:8px 10px;font-size:11px}.nav .ico{font-size:14px;width:auto}.top{align-items:flex-start}.top-actions .pill{display:none}main{padding:18px 12px 30px}.stats{gap:9px}.card{padding:14px}.stat-num{font-size:25px}.form-grid{grid-template-columns:1fr}.full{grid-column:auto}.duration-controls{grid-template-columns:1fr 110px}.toolbar{align-items:stretch}.search{max-width:none}.top-actions .primary{padding:9px 11px;font-size:12px}}
 </style>
 </head>
 <body>
-<section id="loginView" class="login">
-  <div class="login-card">
-    <div class="brand">VIRAL <span>VIDEO LINK</span></div>
-    <div class="sub">Pro Admin Console • Supabase Auth + RLS</div>
-    <div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="username"></div>
-    <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password"></div>
-    <button class="btn" style="width:100%" onclick="loginAdmin()">🔐 Admin Login</button>
-    <div id="loginMsg" class="msg"></div>
-    <div class="notice">এই panel শুধু `profiles.is_admin = true` account-এর জন্য। Browser-এ কখনো `service_role` key রাখবে না।</div>
-  </div>
+<div id="loginScreen" class="login-wrap">
+ <div class="login-card">
+  <div class="brand" style="padding:0"><div class="logo" aria-label="Admin logo"><svg viewBox="0 0 48 48" width="28" height="28" role="img" aria-label="play shield logo"><path d="M24 3 42 10v13c0 11-7.8 18.3-18 22C13.8 41.3 6 34 6 23V10L24 3Z" fill="none" stroke="white" stroke-width="2.5"/><path d="M20 15.5 32 24 20 32.5Z" fill="white"/><path d="M12 8.5 24 4l12 4.5" fill="none" stroke="#ffd166" stroke-width="2.5" stroke-linecap="round"/></svg></div><div><b>VIRAL VIDEO HUB</b><small>ADMIN STUDIO · SECURE ACCESS</small></div></div>
+  <h2>Admin sign in</h2><p>তোমার Supabase admin account দিয়ে লগইন করো।</p>
+  <div id="loginMsg"></div>
+  <div class="field"><label>Email</label><input id="loginEmail" type="email" autocomplete="username" placeholder="admin@example.com"></div>
+  <div class="field"><label>Password</label><input id="loginPassword" type="password" autocomplete="current-password" placeholder="Password"></div>
+  <button class="primary" style="width:100%" onclick="signIn()">Sign in securely →</button>
+  <p class="hint" style="margin-top:15px">এই প্যানেল তোমার Supabase project-এ সংযোগ করবে। Admin permissions/RLS ঠিক না থাকলে ডেটা পরিবর্তন করা যাবে না।</p>
+ </div>
+</div>
+<div id="app" class="shell hidden">
+<aside class="side">
+ <div class="brand"><div class="logo" aria-label="Admin logo"><svg viewBox="0 0 48 48" width="28" height="28" role="img" aria-label="play shield logo"><path d="M24 3 42 10v13c0 11-7.8 18.3-18 22C13.8 41.3 6 34 6 23V10L24 3Z" fill="none" stroke="white" stroke-width="2.5"/><path d="M20 15.5 32 24 20 32.5Z" fill="white"/><path d="M12 8.5 24 4l12 4.5" fill="none" stroke="#ffd166" stroke-width="2.5" stroke-linecap="round"/></svg></div><div><b>VIRAL VIDEO HUB</b><small>ADMIN STUDIO</small></div></div>
+ <div><div class="nav-label">WORKSPACE</div><nav class="nav">
+ <button class="active" data-view="dashboard" onclick="showView('dashboard',this)"><span class="ico">▦</span> Overview</button>
+ <button data-view="videos" onclick="showView('videos',this)"><span class="ico">▶</span> Videos</button>
+ <button data-view="users" onclick="showView('users',this)"><span class="ico">♙</span> Users & Points</button>
+ <button data-view="payments" onclick="showView('payments',this)"><span class="ico">৳</span> Payments</button>
+ <button data-view="support" onclick="showView('support',this)"><span class="ico">◌</span> Support</button>
+ <button data-view="settings" onclick="showView('settings',this)"><span class="ico">⚙</span> Settings & Logs</button>
+ </nav></div>
+ <div class="side-foot"><div><span class="dot"></span><b style="font-size:12px">Admin session</b></div><small id="sessionEmail">Supabase connected</small></div>
+</aside>
+<main>
+<header class="top"><div><div class="eyebrow">CONTROL CENTER / 01</div><h1 id="pageTitle">Overview</h1><p id="pageSub">তোমার প্ল্যাটফর্মের সার্বিক অবস্থা এক নজরে।</p></div><div class="top-actions"><span class="pill">● Secure workspace</span><button class="primary" onclick="openVideoForm()">＋ Add video</button><button class="secondary" onclick="signOut()">Sign out</button></div></header>
+<div id="globalMsg"></div>
+<section id="view-dashboard" class="view active">
+ <div class="grid stats">
+  <div class="card"><div class="stat-top">Total videos <span class="stat-icon">▶</span></div><div class="stat-num" id="statVideos">—</div><div class="stat-note">Supabase videos table</div></div>
+  <div class="card"><div class="stat-top">Registered users <span class="stat-icon">♙</span></div><div class="stat-num" id="statUsers">—</div><div class="stat-note">Profiles table</div></div>
+  <div class="card"><div class="stat-top">Total points <span class="stat-icon">✦</span></div><div class="stat-num" id="statPoints">—</div><div class="stat-note">Combined user balances</div></div>
+  <div class="card"><div class="stat-top">Trending videos <span class="stat-icon">↗</span></div><div class="stat-num" id="statTrending">—</div><div class="stat-note">Marked as trending</div></div>
+ </div>
+ <div class="grid content-grid">
+  <div class="card"><div class="section-head"><div><h2>Video library</h2><p>ভিডিওর অবস্থা ও পয়েন্ট মূল্য</p></div><span class="tag">LIVE DATA</span></div><div id="dashVideos" class="activity"><div class="empty">ডেটা লোড হচ্ছে…</div></div><div style="margin-top:17px"><button class="secondary" onclick="showView('videos',document.querySelector('[data-view=videos]'))">Manage all videos →</button></div></div>
+  <div class="card"><div class="section-head"><div><h2>Quick actions</h2><p>দ্রুত কাজ শুরু করো</p></div></div><div class="activity">
+   <div class="activity-row"><div class="activity-icon">＋</div><div><b>Add a new video</b><small>Title, link, price and timer set করো</small><div style="margin-top:8px"><button class="smallbtn" onclick="openVideoForm()">Create video</button></div></div></div>
+   <div class="activity-row"><div class="activity-icon">◷</div><div><b>Flexible unlock timer</b><small>১ মিনিট থেকে ২৪ ঘণ্টা পর্যন্ত duration</small></div></div>
+   <div class="activity-row"><div class="activity-icon">🛡</div><div><b>Security first</b><small>Database policy ও admin access যাচাই করো</small></div></div>
+  </div></div>
+ </div>
 </section>
-
-<section id="appView" class="hidden">
-  <div class="shell">
-    <aside class="side">
-      <div class="side-brand"><div class="brand">VIRAL <span>VIDEO LINK</span></div><div class="muted" style="margin-top:4px">Admin Console</div></div>
-      <div class="nav">
-        <button class="active" data-page="dashboard" onclick="showPage('dashboard')">📊 Overview</button>
-        <button data-page="videos" onclick="showPage('videos')">🎬 Videos</button>
-        <button data-page="users" onclick="showPage('users')">👤 Users</button>
-        <button data-page="payments" onclick="showPage('payments')">💵 USDT Payments</button>
-        <button data-page="ledger" onclick="showPage('ledger')">🧾 Point Ledger</button>
-        <button data-page="activity" onclick="showPage('activity')">🛡 Audit Log</button>
-        <button data-page="support" onclick="showPage('support')">⚙️ Settings</button>
-      </div>
-      <div class="side-foot">Secure actions use Supabase RPC + RLS.</div>
-    </aside>
-    <main class="main">
-      <div class="top">
-        <div class="top-left"><span class="badge" id="adminIdentity">Admin</span><span class="muted">Protected session</span></div>
-        <div class="top-actions"><button class="btn secondary" onclick="reloadAll()">↻ Refresh</button><button class="btn bad" onclick="logoutAdmin()">Logout</button></div>
-      </div>
-
-      <section id="page-dashboard" class="page">
-        <div class="page-head"><h2>Overview</h2><span class="muted" id="lastUpdated">—</span></div>
-        <div class="grid">
-          <div class="stat"><small>Users</small><b id="sUsers">0</b></div>
-          <div class="stat"><small>Videos</small><b id="sVideos">0</b></div>
-          <div class="stat"><small>Total Views</small><b id="sViews">0</b></div>
-          <div class="stat"><small>Total Likes</small><b id="sLikes">0</b></div>
-          <div class="stat"><small>Pending USDT</small><b id="sPending">0</b></div>
-          <div class="stat"><small>Total Points</small><b id="sPoints">0</b></div>
-        </div>
-        <div class="panel"><div class="page-head"><h2>Quick Actions</h2></div><div class="toolbar"><button class="btn" onclick="openVideoModal()">＋ Add Video</button><button class="btn secondary" onclick="showPage('payments')">Review Payments</button><button class="btn secondary" onclick="showPage('users')">Manage Points</button></div></div>
-        <div class="panel"><div class="page-head"><h2>Views Snapshot</h2><span class="muted">Top videos</span></div><div id="viewBars" class="chart"></div></div>
-        <div class="panel"><div class="page-head"><h2>Recent Videos</h2></div><div id="recentVideos" class="cards"></div></div>
-      </section>
-
-      <section id="page-videos" class="page hidden">
-        <div class="page-head"><h2>Video Management</h2><button class="btn" onclick="openVideoModal()">＋ Add Video</button></div>
-        <div class="panel"><div class="toolbar"><input id="videoQ" placeholder="Search title / category" oninput="renderVideos()"><select id="videoStatus" onchange="renderVideos()"><option value="all">All videos</option><option value="trending">Trending only</option></select></div></div>
-        <div id="videoList" class="panel"></div>
-      </section>
-
-      <section id="page-users" class="page hidden">
-        <div class="page-head"><h2>Users & Points</h2><span class="muted">Point changes are audited</span></div>
-        <div class="panel"><div class="toolbar"><input id="userQ" placeholder="Search user ID / referral code" oninput="renderUsers()"></div></div>
-        <div id="userList" class="panel"></div>
-      </section>
-
-      <section id="page-payments" class="page hidden">
-        <div class="page-head"><h2>USDT Payments</h2><span class="muted">Always verify TX Hash on-chain before approval.</span></div>
-        <div class="panel"><div class="toolbar"><select id="orderStatus" onchange="renderOrders()"><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">All orders</option></select><input id="orderQ" placeholder="Search TX hash / user ID" oninput="renderOrders()"></div></div>
-        <div id="orderList" class="panel"></div>
-      </section>
-
-      <section id="page-ledger" class="page hidden">
-        <div class="page-head"><h2>Point Ledger</h2><span class="muted">Admin adjustments + payment credits</span></div>
-        <div id="ledgerList" class="panel"></div>
-      </section>
-
-      <section id="page-activity" class="page hidden">
-        <div class="page-head"><h2>Audit Log</h2><span class="muted">Administrative actions only</span></div>
-        <div id="auditList" class="panel"></div>
-
-      <section id="page-support" class="page hidden">
-        <div class="page-head"><h2>Settings</h2><span class="muted">Saved in Supabase</span></div>
-        <div class="panel">
-          <div class="field"><label>Site Name</label><input id="setSiteName"></div>
-          <div class="field"><label>USDT TRC20 Wallet</label><input id="setWallet"></div>
-          <div class="field"><label>WhatsApp Support URL</label><input id="setWhatsApp" placeholder="https://wa.me/8801..." ></div>
-          <div class="field"><label>Telegram Support URL</label><input id="setTelegram" placeholder="https://t.me/..." ></div>
-          <button class="btn" onclick="saveSettings()">💾 Save Settings</button>
-        </div>
-        <div class="panel"><div class="notice">Never put private keys, seed phrases, Supabase service-role keys, or payment API secrets in this page.</div></div>
-      </section>
-    </main>
-  </div>
+<section id="view-videos" class="view">
+ <div class="card"><div class="section-head"><div><h2>Video management</h2><p>ভিডিও তৈরি, আপডেট, ট্রেন্ডিং ও unlock timer নিয়ন্ত্রণ</p></div><button class="primary" onclick="openVideoForm()">＋ Add video</button></div>
+ <div class="toolbar"><div class="search"><input id="videoSearch" placeholder="Search title or category…" oninput="renderVideoTable()"></div><button class="secondary" onclick="loadVideos()">↻ Refresh</button></div>
+ <div class="table-wrap"><table><thead><tr><th>Video</th><th>Category</th><th>Points</th><th>Unlock duration</th><th>Trending</th><th>Actions</th></tr></thead><tbody id="videoTable"><tr><td colspan="6" class="empty">Loading videos…</td></tr></tbody></table></div></div>
 </section>
-
-<div id="videoModal" class="modal" onclick="closeModal(event)"><div class="modal-card" onclick="event.stopPropagation()"><div class="modal-head"><h3 id="videoModalTitle">Add Video</h3><button class="close" onclick="closeModal()">×</button></div><input id="videoId" type="hidden"><div class="field"><label>Title</label><input id="videoTitle"></div><div class="field"><label>Description</label><textarea id="videoDescription"></textarea></div><div class="field"><label>Video URL</label><input id="videoUrl"></div><div class="field"><label>Thumbnail URL</label><input id="videoThumb"></div><div class="field"><label>Category</label><select id="videoCategory"><option>Bangla</option><option>English</option><option>TikTok</option><option>Japanese</option><option>Funny</option><option>Music</option><option>Shorts</option><option>Viral</option><option>Other</option></select></div><div class="field"><label>Points Price</label><input id="videoPoints" type="number" min="0" value="100"></div><div class="field">
-  <label>Unlock Time</label>
-  <select id="videoUnlockHours">
-    <option value="3">3 Hours</option>
-    <option value="6">6 Hours</option>
-    <option value="12" selected>12 Hours</option>
-  </select>
-<div class="field"><label><input id="videoTrending" type="checkbox"> Trending</label></div><div id="videoMsg" class="msg"></div><button class="btn" onclick="saveVideo()">Save Video</button></div></div>
-<div id="toast" class="toast hidden"></div>
-
+<section id="view-users" class="view"><div class="card"><div class="section-head"><div><h2>Users & Points</h2><p>ইউজার তালিকা ও পয়েন্ট ব্যালেন্স (read-only নিরাপদ ডিফল্ট)</p></div><button class="secondary" onclick="loadUsers()">↻ Refresh</button></div><div class="search" style="margin-bottom:14px"><input id="userSearch" placeholder="Search user ID / referral code…" oninput="renderUsers()"></div><div id="usersList"><div class="empty">Loading users…</div></div><p class="hint">পয়েন্ট সরাসরি বদলানোর ফিচার নিরাপদ server-side transaction/RPC ছাড়া চালু করা হয়নি, যাতে ভুল করে user balance নষ্ট না হয়।</p></div></section>
+<section id="view-payments" class="view"><div class="card"><div class="section-head"><div><h2>Payments</h2><p>পেমেন্টের টেবিল schema যাচাই করে লোড করা হবে</p></div><button class="secondary" onclick="loadPayments()">↻ Refresh</button></div><div id="paymentsBox" class="empty">Checking available payment tables…</div><p class="hint">USDT transaction যাচাই না করে points যোগ করা যাবে না। এই প্যানেল নিজে থেকে payment verify বা funds transfer করে না।</p></div></section>
+<section id="view-support" class="view"><div class="card"><div class="section-head"><div><h2>Support center</h2><p>Support tables-এর সংযোগ যাচাই</p></div><button class="secondary" onclick="loadSupportStatus()">↻ Refresh</button></div><div id="supportBox" class="empty">Checking support tables…</div><p class="hint">তোমার website-এ support_conversations এবং support_messages থাকলে status এখানে দেখাবে। Live reply UI-এর জন্য বর্তমান support schema/SQL মিলিয়ে নিতে হবে।</p></div></section>
+<section id="view-settings" class="view">
+ <div class="card"><div class="section-head"><div><h2>Project connection</h2><p>এই HTML-এ থাকা Supabase configuration</p></div><span class="tag">CLIENT KEY ONLY</span></div>
+ <div class="notice">কখনোই এখানে Supabase service_role/secret key বসাবে না। শুধু publishable/anon key ব্যবহার করো এবং database-এ Row Level Security (RLS) চালু রাখো।</div>
+ <div class="field"><label>Supabase Project URL</label><input id="cfgUrl" value="https://pjpblyjejypzwwpxxgpf.supabase.co" readonly></div>
+ <div class="field"><label>Public / Publishable key</label><input id="cfgKey" value="sb_publishable_g1ziyyzBg57Z7WFowQnRQw_TRno8Xgn" readonly></div>
+ <div class="field"><label>Session</label><input id="cfgSession" readonly></div>
+ <button class="secondary" onclick="refreshAll()">↻ Refresh all data</button> <button class="secondary" onclick="exportVideos()">Export video list CSV</button>
+ <hr style="border:0;border-top:1px solid var(--line);margin:24px 0">
+ <div class="section-head"><div><h2>Activity & diagnostics</h2><p>এই সেশনের status ও database error</p></div></div><div id="logs" class="activity"><div class="activity-row"><div class="activity-icon">✓</div><div><b>Admin panel initialized</b><small>Connection test runs after sign in.</small></div></div></div>
+</div></section>
+</main></div>
+<div id="videoModal" class="hidden" style="position:fixed;inset:0;background:#030611d9;backdrop-filter:blur(8px);z-index:20;display:grid;place-items:center;padding:15px;overflow:auto">
+ <div class="card" style="width:min(720px,100%);max-height:94vh;overflow:auto;background:#101629">
+  <div class="section-head"><div><h2 id="formTitle">Add video</h2><p>ভিডিওর তথ্য ও access duration নির্ধারণ করো</p></div><button class="secondary" onclick="closeVideoForm()">✕</button></div>
+  <div id="formMsg"></div>
+  <form id="videoForm" onsubmit="saveVideo(event)">
+   <input id="videoId" type="hidden">
+   <div class="form-grid">
+    <div class="field"><label>Video title *</label><input id="vTitle" required maxlength="180" placeholder="Enter video title"></div>
+    <div class="field"><label>Category</label><input id="vCategory" maxlength="80" placeholder="Trending / Movie / Other"></div>
+    <div class="field full"><label>Video URL *</label><input id="vUrl" type="url" required placeholder="https://…"></div>
+    <div class="field full"><label>Thumbnail URL</label><input id="vThumb" type="url" placeholder="https://…"></div>
+    <div class="field"><label>Points price</label><input id="vPrice" type="number" min="0" step="1" value="0" required></div>
+    <div class="field"><label>Duration label (optional)</label><input id="vDuration" maxlength="30" placeholder="e.g. 08:24"></div>
+    <div class="field full"><label>Unlock duration</label>
+     <div class="duration-box">
+      <div class="duration-controls"><input id="vTimeAmount" type="number" min="1" max="1440" value="1" required oninput="updateDurationPreview()"><select id="vTimeUnit" onchange="updateDurationPreview()"><option value="minutes">Minutes</option><option value="hours">Hours</option></select></div>
+      <div class="preset-row">
+       <button type="button" class="preset" onclick="setDuration(1,'minutes')">1 min</button><button type="button" class="preset" onclick="setDuration(5,'minutes')">5 min</button><button type="button" class="preset" onclick="setDuration(10,'minutes')">10 min</button><button type="button" class="preset" onclick="setDuration(30,'minutes')">30 min</button><button type="button" class="preset" onclick="setDuration(1,'hours')">1 hour</button><button type="button" class="preset" onclick="setDuration(2,'hours')">2 hours</button><button type="button" class="preset" onclick="setDuration(12,'hours')">12 hours</button><button type="button" class="preset" onclick="setDuration(24,'hours')">24 hours</button>
+      </div><div id="durationPreview" class="duration-preview">⏱ 1 minute · 60 seconds</div><div class="hint">১ মিনিট থেকে ২৪ ঘণ্টা পর্যন্ত যেকোনো সময় দাও। ২৪ ঘণ্টার বেশি গ্রহণ করা হবে না। Minute-based timer কার্যকর করতে website-এর unlock logic-এ unlock_minutes column-ও ব্যবহার করতে হবে।</div>
+     </div>
+    </div>
+    <div class="field"><label>Trending video?</label><select id="vTrending"><option value="false">No</option><option value="true">Yes</option></select></div>
+   </div>
+   <div style="display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap"><button type="button" class="secondary" onclick="closeVideoForm()">Cancel</button><button id="saveVideoBtn" class="primary" type="submit">Save video</button></div>
+  </form>
+ </div>
+</div>
+<div id="toast" class="toast hidden" role="status"></div>
 <script>
-const SUPABASE_URL="https://pjpblyjejypzwwpxxgpf.supabase.co";
-const SUPABASE_KEY="sb_publishable_g1ziyyzBg57Z7WFowQnRQw_TRno8Xgn";
-const sb=supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
-let state={user:null,profiles:[],videos:[],orders:[],ledger:[],audit:[]};
+const SUPABASE_URL='https://pjpblyjejypzwwpxxgpf.supabase.co';
+const SUPABASE_KEY='sb_publishable_g1ziyyzBg57Z7WFowQnRQw_TRno8Xgn';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+let videos=[],users=[],currentUser=null,logs=[];
 const $=id=>document.getElementById(id);
-const esc=v=>{const d=document.createElement('div');d.textContent=v==null?'':String(v);return d.innerHTML};
-const fmt=v=>Number(v||0).toLocaleString();
-function toast(msg){const t=$('toast');t.textContent=msg;t.classList.remove('hidden');setTimeout(()=>t.classList.add('hidden'),2600)}
-async function me(){const {data}=await sb.auth.getUser();return data?.user||null;}
-async function ensureAdmin(){const u=await me();if(!u)return false;const {data,error}=await sb.from('profiles').select('is_admin').eq('id',u.id).single();if(error||!data?.is_admin)return false;state.user=u;return true;}
-async function loginAdmin(){const email=$('loginEmail').value.trim(),password=$('loginPassword').value;const {error}=await sb.auth.signInWithPassword({email,password});if(error){$('loginMsg').textContent='❌ '+error.message;return}if(!(await ensureAdmin())){await sb.auth.signOut();$('loginMsg').textContent='❌ এই account-এর Admin access নেই।';return}showApp();await reloadAll()}
-async function logoutAdmin(){await sb.auth.signOut();location.reload()}
-function showApp(){$('loginView').classList.add('hidden');$('appView').classList.remove('hidden');$('adminIdentity').textContent=state.user?.email||'Admin'}
-function showPage(name){document.querySelectorAll('.page').forEach(p=>p.classList.add('hidden'));$('page-'+name).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.page===name))}
-
-async function loadProfiles(){const r=await sb.from('profiles').select('id,points,referral_code,referral_count,total_referral_points,join_bonus_claimed,is_admin,created_at').order('created_at',{ascending:false});state.profiles=r.error?[]:(r.data||[]);return r}
-async function loadVideos(){const r=await sb.from('videos').select('*').order('created_at',{ascending:false});state.videos=r.error?[]:(r.data||[]);return r}
-async function loadOrders(){const r=await sb.from('usdt_orders').select('*').order('created_at',{ascending:false});state.orders=r.error?[]:(r.data||[]);return r}
-async function loadLedger(){const r=await sb.from('admin_point_logs').select('*').order('created_at',{ascending:false}).limit(200);state.ledger=r.error?[]:(r.data||[]);return r}
-async function loadAudit(){const r=await sb.from('admin_audit_logs').select('*').order('created_at',{ascending:false}).limit(200);state.audit=r.error?[]:(r.data||[]);return r}
-async function reloadAll(){await Promise.all([loadProfiles(),loadVideos(),loadOrders(),loadLedger(),loadAudit()]);renderAll();$('lastUpdated').textContent='Updated '+new Date().toLocaleTimeString()}
-function renderAll(){
-  const users=state.profiles,v=state.videos,o=state.orders;
-  $('sUsers').textContent=fmt(users.length);$('sVideos').textContent=fmt(v.length);$('sViews').textContent=fmt(v.reduce((s,x)=>s+Number(x.views||0),0));$('sLikes').textContent=fmt(v.reduce((s,x)=>s+Number(x.likes||0),0));$('sPending').textContent=fmt(o.filter(x=>x.status==='pending').length);$('sPoints').textContent=fmt(users.reduce((s,x)=>s+Number(x.points||0),0));
-  renderVideos();renderUsers();renderOrders();renderLedger();renderAudit();renderRecent();renderBars();
-}
-function renderRecent(){const rows=state.videos.slice(0,6);$('recentVideos').innerHTML=rows.length?rows.map(v=>videoCard(v,true)).join(''):'<div class="empty">No videos.</div>'}
-function videoCard(v,mini=false){const img=v.thumbnail_url||'';return `<div class="video"><img src="${esc(img)}" onerror="this.style.visibility='hidden'"><div><h4>${esc(v.title||'Untitled')}</h4><div class="muted">${esc(v.category||'Other')} • 👁 ${fmt(v.views)} • ❤️ ${fmt(v.likes)}</div><div class="metric-line"><span class="mini">🪙 ${fmt(v.points_price||0)} Points</span>${v.is_trending?'<span class="pill good">Trending</span>':''}</div></div><div class="actions row-actions"><button class="btn secondary" onclick="editVideo(${v.id})">Edit</button><button class="btn ${v.is_trending?'warn':'good'}" onclick="toggleTrending(${v.id},${!v.is_trending})">${v.is_trending?'Untrend':'Trend'}</button>${!mini?`<button class="btn bad" onclick="deleteVideo(${v.id})">Delete</button>`:''}</div></div>`}
-function renderVideos(){const q=($('videoQ')?.value||'').toLowerCase(),f=$('videoStatus')?.value||'all';const rows=state.videos.filter(v=>(!q||`${v.title||''} ${v.category||''}`.toLowerCase().includes(q))&&(f==='all'||(f==='trending'&&v.is_trending)));$('videoList').innerHTML=rows.length?rows.map(v=>videoCard(v,false)).join(''):'<div class="empty">No videos found.</div>'}
-function renderUsers(){const q=($('userQ')?.value||'').toLowerCase();const rows=state.profiles.filter(u=>!q||`${u.id} ${u.referral_code||''}`.toLowerCase().includes(q));$('userList').innerHTML=`<div class="table-wrap"><table class="table"><thead><tr><th>User</th><th>Points</th><th>Referral</th><th>Admin</th><th>Actions</th></tr></thead><tbody>${rows.map(u=>`<tr><td class="mono">${esc(u.id)}<div class="muted">${esc(u.created_at||'')}</div></td><td><b>${fmt(u.points)}</b></td><td>${esc(u.referral_code||'—')}</td><td>${u.is_admin?'<span class="pill good">Admin</span>':'<span class="pill">User</span>'}</td><td class="row-actions"><button class="btn secondary" onclick="adjustPoints('${u.id}')">Adjust Points</button></td></tr>`).join('')||'<tr><td colspan="5" class="empty">No users.</td></tr>'}</tbody></table></div>`}
-function renderOrders(){const q=($('orderQ')?.value||'').toLowerCase(),f=$('orderStatus')?.value||'pending';const rows=state.orders.filter(o=>(f==='all'||o.status===f)&&(!q||`${o.user_id} ${o.tx_hash}`.toLowerCase().includes(q)));$('orderList').innerHTML=rows.length?rows.map(o=>`<div class="panel" style="margin-top:0;margin-bottom:8px"><div class="page-head"><div><b>${fmt(o.usdt)} USDT → ${fmt(o.points)} Points</b><div class="muted">${esc(o.created_at||'')}</div></div>${statusPill(o.status)}</div><div class="mono" style="background:#09080d;padding:10px;border-radius:10px">TX: ${esc(o.tx_hash)}</div><div class="muted" style="margin-top:6px">User: ${esc(o.user_id)}</div>${o.review_note?`<div class="muted">Note: ${esc(o.review_note)}</div>`:''}<div class="row-actions" style="margin-top:9px">${o.status==='pending'?`<button class="btn good" onclick="approveOrder('${o.id}')">✅ Approve & Credit</button><button class="btn bad" onclick="rejectOrder('${o.id}')">Reject</button>`:''}<button class="btn secondary" onclick="window.open('https://tronscan.org/#/transaction/${encodeURIComponent(o.tx_hash)}','_blank')">Open TX</button></div></div>`).join(''):'<div class="empty">No matching orders.</div>'}
-function statusPill(s){return s==='approved'?'<span class="pill good">Approved</span>':s==='rejected'?'<span class="pill bad">Rejected</span>':'<span class="pill warn">Pending</span>'}
-function renderLedger(){$('ledgerList').innerHTML=state.ledger.length?`<div class="table-wrap"><table class="table"><thead><tr><th>Time</th><th>User</th><th>Delta</th><th>Reason</th></tr></thead><tbody>${state.ledger.map(x=>`<tr><td>${esc(x.created_at||'')}</td><td class="mono">${esc(x.user_id)}</td><td>${Number(x.delta||0)>0?'<span class="pill good">+':''}${Number(x.delta||0)>0?Number(x.delta||0):Number(x.delta||0)}</span></td><td>${esc(x.reason||'')}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">No ledger records.</div>'}
-function renderAudit(){$('auditList').innerHTML=state.audit.length?`<div class="table-wrap"><table class="table"><thead><tr><th>Time</th><th>Action</th><th>Entity</th><th>Details</th></tr></thead><tbody>${state.audit.map(x=>`<tr><td>${esc(x.created_at||'')}</td><td>${esc(x.action)}</td><td>${esc(x.entity||'')} ${esc(x.entity_id||'')}</td><td class="mono">${esc(JSON.stringify(x.details||{}))}</td></tr>`).join('')}</tbody></table></div>`:'<div class="empty">No audit logs.</div>'}
-function renderBars(){const top=state.videos.slice().sort((a,b)=>Number(b.views||0)-Number(a.views||0)).slice(0,10);const max=Math.max(1,...top.map(v=>Number(v.views||0)));$('viewBars').innerHTML=top.map(v=>`<div class="bar" title="${esc(v.title||'')} — ${fmt(v.views)} views" style="height:${Math.max(8,Math.round((Number(v.views||0)/max)*140))}px"></div>`).join('')||'<div class="empty">No video data.</div>'}
-function openVideoModal(id){const v=id?state.videos.find(x=>String(x.id)===String(id)):null;$('videoId').value=v?.id||'';$('videoModalTitle').textContent=v?'Edit Video':'Add Video';$('videoTitle').value=v?.title||'';$('videoDescription').value=v?.description||'';$('videoUrl').value=v?.video_url||'';$('videoThumb').value=v?.thumbnail_url||'';$('videoCategory').value=v?.category||'Bangla';$('videoPoints').value=Number(v?.points_price||100);$('videoUnlockHours').value=Number(v?.unlock_hours||12);$('videoTrending').checked=!!v?.is_trending;$('videoMsg').textContent='';$('videoModal').classList.add('open')}
-function editVideo(id){openVideoModal(id)}
-function closeModal(e){if(!e||e.target.id==='videoModal')$('videoModal').classList.remove('open')}
-async function saveVideo() {
-  const id = $('#videoId').value;
-
-  const payload = {
-    title: $('#videoTitle').value.trim(),
-    description: $('#videoDescription').value.trim(),
-    video_url: $('#videoUrl').value.trim(),
-    thumbnail_url: $('#videoThumb').value.trim(),
-    category: $('#videoCategory').value,
-    points_price: Number($('#videoPoints').value || 0),
-    unlock_hours: Number($('#videoUnlockHours').value || 12),
-    is_trending: $('#videoTrending').checked
-  };
-
-  if (!payload.title || !payload.video_url) {
-    $('#videoMsg').textContent = 'Title এবং Video URL লাগবে।';
-    return;
-  }
-
-  const r = id
-    ? await sb.from('videos').update(payload).eq('id', id)
-    : await sb.from('videos').insert(payload);
-
-  if (r.error) {
-    $('#videoMsg').textContent = '❌ ' + r.error.message;
-    return;
-  }
-
-  $('#videoModal').classList.remove('open');
-  toast('Video saved');
-  await reloadAll();
-}
-async function toggleTrending(id,val){const r=await sb.from('videos').update({is_trending:val}).eq('id',id);if(r.error){toast(r.error.message);return}await reloadAll();toast(val?'Trending enabled':'Trending disabled')}
-async function deleteVideo(id){if(!confirm('এই ভিডিও স্থায়ীভাবে delete করবেন?'))return;const r=await sb.from('videos').delete().eq('id',id);if(r.error){toast(r.error.message);return}await reloadAll();toast('Video deleted')}
-async function adjustPoints(userId){const raw=prompt('Points delta দিন। যেমন +100 বা -50');if(raw===null)return;const delta=Number(raw);if(!Number.isInteger(delta)||delta===0){alert('Valid integer দিন।');return}const reason=prompt('Reason লিখুন')||'Admin adjustment';const r=await sb.rpc('admin_adjust_points',{p_user_id:userId,p_delta:delta,p_reason:reason});if(r.error){alert(r.error.message);return}await reloadAll();toast(`Points updated: ${r.data}`)}
-async function approveOrder(id){if(!confirm('TX verify করে নিশ্চিত তো? Approve করলে Points credit হবে।'))return;const r=await sb.rpc('approve_usdt_order',{p_order_id:id,p_note:'Approved by admin'});if(r.error){alert(r.error.message);return}await reloadAll();toast('Payment approved & points credited')}
-async function rejectOrder(id){const note=prompt('Reject reason লিখুন')||'Rejected by admin';const r=await sb.rpc('reject_usdt_order',{p_order_id:id,p_note:note});if(r.error){alert(r.error.message);return}await reloadAll();toast('Payment rejected')}
-async function loadSettings(){const r=await sb.from('site_settings').select('key,value');if(r.error)return;const m=Object.fromEntries((r.data||[]).map(x=>[x.key,x.value]));$('setSiteName').value=m.site_name||'VIRAL VIDEO LINK';$('setWallet').value=m.usdt_trc20_wallet||'';$('setWhatsApp').value=m.whatsapp_support||'';$('setTelegram').value=m.telegram_support||''}
-async function saveSettings(){const vals=[['site_name',$('setSiteName').value.trim()],['usdt_trc20_wallet',$('setWallet').value.trim()],['whatsapp_support',$('setWhatsApp').value.trim()],['telegram_support',$('setTelegram').value.trim()]];for(const [k,v] of vals){const r=await sb.rpc('admin_set_setting',{p_key:k,p_value:v});if(r.error){alert(r.error.message);return}}toast('Settings saved')}
-async function init(){if(await ensureAdmin()){showApp();await reloadAll();await loadSettings()} }
-sb.auth.onAuthStateChange(()=>setTimeout(()=>init(),0));
-init();
+function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function log(title,detail){logs.unshift({title,detail,time:new Date().toLocaleTimeString()});logs=logs.slice(0,12);renderLogs()}
+function renderLogs(){$('logs').innerHTML=logs.map(x=>`<div class="activity-row"><div class="activity-icon">•</div><div><b>${esc(x.title)}</b><small>${esc(x.detail)} · ${esc(x.time)}</small></div></div>`).join('')}
+function toast(msg){$('toast').textContent=msg;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),3200)}
+function errorBox(msg){$('globalMsg').innerHTML=`<div class="alert error">${esc(msg)}</div>`;log('Database / action error',msg)}
+async function signIn(){const email=$('loginEmail').value.trim(),password=$('loginPassword').value; $('loginMsg').innerHTML='';if(!email||!password){$('loginMsg').innerHTML='<div class="alert error">Email এবং password দিন।</div>';return}const {data,error}=await sb.auth.signInWithPassword({email,password});if(error){$('loginMsg').innerHTML=`<div class="alert error">${esc(error.message)}</div>`;return}currentUser=data.user;await startApp()}
+async function signOut(){await sb.auth.signOut();currentUser=null;$('app').classList.add('hidden');$('loginScreen').classList.remove('hidden')}
+async function startApp(){const {data:{user}}=await sb.auth.getUser();if(!user)return;currentUser=user;$('loginScreen').classList.add('hidden');$('app').classList.remove('hidden');$('sessionEmail').textContent=user.email||user.id;$('cfgSession').value=user.email||user.id;log('Signed in',user.email||user.id);await refreshAll()}
+sb.auth.onAuthStateChange((_event,session)=>{if(session?.user){currentUser=session.user;$('loginScreen').classList.add('hidden');$('app').classList.remove('hidden')}});
+const titles={dashboard:['Overview','তোমার প্ল্যাটফর্মের সার্বিক অবস্থা এক নজরে।'],videos:['Video Management','ভিডিও, পয়েন্ট মূল্য ও unlock timer পরিচালনা করো।'],users:['Users & Points','রেজিস্টার্ড ইউজার ও পয়েন্ট ব্যালেন্স দেখো।'],payments:['Payments','পেমেন্ট টেবিলের status যাচাই করো।'],support:['Support Center','সাপোর্ট টেবিল সংযোগ যাচাই করো।'],settings:['Settings & Logs','সংযোগ, diagnostics ও export।']};
+function showView(name,btn){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));$('view-'+name).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.view===name));$('pageTitle').textContent=titles[name][0];$('pageSub').textContent=titles[name][1];if(name==='users')loadUsers();if(name==='payments')loadPayments();if(name==='support')loadSupportStatus()}
+async function refreshAll(){await Promise.all([loadVideos(),loadUsers(),loadPayments(),loadSupportStatus()])}
+async function loadVideos(){const {data,error}=await sb.from('videos').select('*').order('created_at',{ascending:false}).limit(500);if(error){errorBox('ভিডিও লোড হয়নি: '+error.message);$('videoTable').innerHTML=`<tr><td colspan="6" class="empty">ভিডিও টেবিল পড়া যায়নি। RLS ও column/table permission পরীক্ষা করো।</td></tr>`;return}videos=data||[];$('statVideos').textContent=videos.length.toLocaleString();$('statTrending').textContent=videos.filter(v=>v.is_trending).length.toLocaleString();renderVideoTable();renderDashVideos();log('Videos refreshed',`${videos.length} video rows`)}
+function durationMins(v){if(v.unlock_minutes!==undefined&&v.unlock_minutes!==null&&Number(v.unlock_minutes)>0)return Number(v.unlock_minutes);return Math.max(1,Number(v.unlock_hours||1)*60)}
+function durationLabel(v){let m=durationMins(v);return m%60===0?(m/60)+' hr':m+' min'}
+function renderVideoTable(){const q=($('videoSearch')?.value||'').toLowerCase();const list=videos.filter(v=>(v.title||'').toLowerCase().includes(q)||(v.category||'').toLowerCase().includes(q));$('videoTable').innerHTML=list.length?list.map(v=>`<tr><td><div class="video-cell"><img class="thumb" src="${esc(v.thumbnail_url||v.thumbnail||'')}" onerror="this.style.visibility='hidden'"><div><b>${esc(v.title||'Untitled')}</b><div class="muted">ID: ${esc(v.id)}</div></div></div></td><td>${esc(v.category||'Other')}</td><td>${Number(v.points_price||0).toLocaleString()}</td><td><span class="tag">${esc(durationLabel(v))}</span></td><td>${v.is_trending?'<span class="status">Trending</span>':'—'}</td><td><div class="actions"><button class="smallbtn" onclick="editVideo('${esc(String(v.id))}')">Edit</button><button class="danger" onclick="deleteVideo('${esc(String(v.id))}')">Delete</button></div></td></tr>`).join(''):'<tr><td colspan="6" class="empty">কোনো ভিডিও পাওয়া যায়নি।</td></tr>'}
+function renderDashVideos(){$('dashVideos').innerHTML=videos.slice(0,5).map(v=>`<div class="activity-row"><img class="thumb" src="${esc(v.thumbnail_url||v.thumbnail||'')}" onerror="this.style.visibility='hidden'"><div style="flex:1;min-width:0"><b>${esc(v.title||'Untitled')}</b><small>${esc(v.category||'Other')} · ${Number(v.points_price||0)} points · ${esc(durationLabel(v))}</small></div><span class="tag">${v.is_trending?'Trending':'Active'}</span></div>`).join('')||'<div class="empty">এখনও ভিডিও নেই।</div>'}
+function openVideoForm(){if(!currentUser){toast('আগে admin login করো।');return} $('videoForm').reset();$('videoId').value='';$('vPrice').value='0';$('vTimeAmount').value='1';$('vTimeUnit').value='minutes';$('vTrending').value='false';$('formTitle').textContent='Add video';$('formMsg').innerHTML='';updateDurationPreview();$('videoModal').classList.remove('hidden')}
+function closeVideoForm(){$('videoModal').classList.add('hidden')}
+function setDuration(amount,unit){$('vTimeAmount').value=amount;$('vTimeUnit').value=unit;updateDurationPreview()}
+function updateDurationPreview(){let amount=Number($('vTimeAmount').value||0),unit=$('vTimeUnit').value;let mins=unit==='hours'?amount*60:amount;if(mins>1440){$('durationPreview').textContent='⚠️ সর্বোচ্চ ২৪ ঘণ্টা (১৪৪০ মিনিট)';return}let label=mins%60===0?(mins/60)+' hour'+(mins/60===1?'':'s'):mins+' minute'+(mins===1?'':'s');$('durationPreview').textContent=`⏱ ${label} · ${mins*60} seconds`}
+function editVideo(id){const v=videos.find(x=>String(x.id)===String(id));if(!v)return;openVideoForm();$('formTitle').textContent='Edit video';$('videoId').value=v.id;$('vTitle').value=v.title||'';$('vCategory').value=v.category||'';$('vUrl').value=v.video_url||'';$('vThumb').value=v.thumbnail_url||v.thumbnail||'';$('vPrice').value=Number(v.points_price||0);$('vDuration').value=v.duration||'';$('vTrending').value=String(!!v.is_trending);let mins=durationMins(v);if(mins%60===0){$('vTimeAmount').value=mins/60;$('vTimeUnit').value='hours'}else{$('vTimeAmount').value=mins;$('vTimeUnit').value='minutes'}updateDurationPreview()}
+async function saveVideo(e){e.preventDefault();const btn=$('saveVideoBtn');btn.disabled=true;btn.textContent='Saving…';$('formMsg').innerHTML='';try{const title=$('vTitle').value.trim(),url=$('vUrl').value.trim(),price=Number($('vPrice').value),amount=Number($('vTimeAmount').value),unit=$('vTimeUnit').value,mins=unit==='hours'?amount*60:amount;if(!title||!url)throw Error('Title ও Video URL দিতে হবে।');if(!Number.isInteger(price)||price<0)throw Error('Points price শূন্য বা ধনাত্মক পূর্ণসংখ্যা হতে হবে।');if(!Number.isInteger(amount)||amount<1||mins>1440)throw Error('সময় ১ মিনিট থেকে ২৪ ঘণ্টার মধ্যে দিন।');const payload={title,category:$('vCategory').value.trim()||'Other',video_url:url,points_price:price,unlock_hours:Math.max(1,Math.ceil(mins/60)),unlock_minutes:mins,is_trending:$('vTrending').value==='true'};const thumb=$('vThumb').value.trim();if(thumb)payload.thumbnail_url=thumb;else payload.thumbnail_url=null;const dur=$('vDuration').value.trim();if(dur)payload.duration=dur;const id=$('videoId').value;let result;if(id){result=await sb.from('videos').update(payload).eq('id',id).select('*').maybeSingle()}else{result=await sb.from('videos').insert(payload).select('*').maybeSingle()}if(result.error)throw result.error;if(!result.data)throw Error('কোনো row save হয়নি। Admin RLS policy/row permission পরীক্ষা করো।');toast(`Saved: ${title} · ${mins} min`);log(id?'Video updated':'Video created',`${title}; duration ${mins} minutes`);closeVideoForm();await loadVideos()}catch(err){$('formMsg').innerHTML=`<div class="alert error">${esc(err.message||String(err))}<br><span class="hint">যদি unlock_minutes column নেই, Supabase-এ নিচের SQL চালাও। Thumbnail/duration column না থাকলে schema অনুযায়ী যোগ করো বা field বাদ দাও।</span></div>`;errorBox(err.message||String(err))}finally{btn.disabled=false;btn.textContent='Save video'}}
+async function deleteVideo(id){const v=videos.find(x=>String(x.id)===String(id));if(!v||!confirm(`"${v.title}" ভিডিওটি মুছে ফেলবে? এটি স্থায়ীভাবে মুছতে পারে।`))return;const {error}=await sb.from('videos').delete().eq('id',id).select('id').maybeSingle();if(error){errorBox('Delete হয়নি: '+error.message);return}toast('ভিডিও delete request পাঠানো হয়েছে।');log('Video delete requested',v.title);await loadVideos()}
+async function loadUsers(){const box=$('usersList');box.innerHTML='<div class="empty">Loading users…</div>';const {data,error}=await sb.from('profiles').select('id,points,referral_code,referral_count,total_referral_points').order('points',{ascending:false}).limit(300);if(error){box.innerHTML=`<div class="alert error">${esc(error.message)}<br>Profiles select permission/RLS পরীক্ষা করো।</div>`;$('statUsers').textContent='—';$('statPoints').textContent='—';return}users=data||[];$('statUsers').textContent=users.length.toLocaleString();$('statPoints').textContent=users.reduce((a,u)=>a+Number(u.points||0),0).toLocaleString();renderUsers()}
+function renderUsers(){const q=($('userSearch')?.value||'').toLowerCase();const list=users.filter(u=>String(u.id||'').toLowerCase().includes(q)||String(u.referral_code||'').toLowerCase().includes(q));$('usersList').innerHTML=list.length?list.map(u=>`<div class="user-row"><div><b>${esc(String(u.id).slice(0,8))}…</b><div class="muted">Referral: ${esc(u.referral_code||'—')} · Referrals: ${Number(u.referral_count||0)}</div></div><div style="text-align:right"><b style="color:#f0abfc">${Number(u.points||0).toLocaleString()} pts</b><div class="muted">Earned ${Number(u.total_referral_points||0).toLocaleString()}</div></div></div>`).join(''):'<div class="empty">কোনো ইউজার নেই।</div>'}
+async function loadPayments(){const box=$('paymentsBox');box.innerHTML='';const names=['usdt_payments','payments','payment_requests','transactions'];let found=false;for(const name of names){const {data,error}=await sb.from(name).select('*').limit(1);if(!error){box.innerHTML+=`<div class="user-row"><div><b>${esc(name)}</b><div class="muted">Table is readable · sample rows ${data?.length||0}</div></div><span class="status">Available</span></div>`;found=true}}if(!found)box.innerHTML='<div class="alert error">পরিচিত payment table পাওয়া যায়নি। তোমার প্রকৃত table name/schema দিলে payment approval panel নিরাপদভাবে যোগ করা যাবে।</div>'}
+async function loadSupportStatus(){const box=$('supportBox');box.innerHTML='';let ok=0;for(const name of ['support_conversations','support_messages']){const {error}=await sb.from(name).select('*').limit(1);if(!error){ok++;box.innerHTML+=`<div class="user-row"><b>${name}</b><span class="status">Available</span></div>`}else box.innerHTML+=`<div class="user-row"><b>${name}</b><span style="color:var(--red);font-size:11px">Not readable</span></div>`}if(ok===2)box.innerHTML+='<div class="notice" style="margin-top:15px">Support database tables পাওয়া গেছে। Admin reply interface-এর জন্য admin-side schema/RPC permission মিলিয়ে নিতে হবে।</div>'}
+function exportVideos(){const cols=['id','title','category','video_url','thumbnail_url','points_price','unlock_minutes','unlock_hours','is_trending'];const csv=[cols.join(','),...videos.map(v=>cols.map(k=>`"${String(v[k]??'').replace(/"/g,'""')}"`).join(','))].join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='viral-video-hub-videos.csv';a.click();URL.revokeObjectURL(a.href);toast('CSV export তৈরি হয়েছে।')}
+(async()=>{const {data:{session}}=await sb.auth.getSession();if(session?.user)await startApp();else log('Ready','Waiting for secure admin sign in')})();
 </script>
 </body>
 </html>
