@@ -456,7 +456,16 @@ function removeModerationDraft(i){let list=[];try{list=JSON.parse(localStorage.g
 function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function updateAnalytics(){if($('analyticsVideos'))$('analyticsVideos').textContent=videos.length.toLocaleString();if($('analyticsUsers'))$('analyticsUsers').textContent=users.length.toLocaleString();if($('analyticsTrending'))$('analyticsTrending').textContent=videos.filter(v=>v.is_trending).length.toLocaleString();if($('analyticsPoints'))$('analyticsPoints').textContent=users.reduce((n,u)=>n+Number(u.points||0),0).toLocaleString()}
 async function refreshAll(){await Promise.all([loadVideos(),loadUsers(),loadPayments(),loadSupportStatus()])}
-async function loadVideos(){const {data,error}=await sb.from('videos').select('*').order('created_at',{ascending:false}).limit(500);if(error){errorBox('ভিডিও লোড হয়নি: '+error.message);$('videoTable').innerHTML=`<tr><td colspan="6" class="empty">ভিডিও টেবিল পড়া যায়নি। RLS ও column/table permission পরীক্ষা করো।</td></tr>`;return}videos=data||[];$('statVideos').textContent=videos.length.toLocaleString();$('statTrending').textContent=videos.filter(v=>v.is_trending).length.toLocaleString();renderVideoTable();renderDashVideos();log('Videos refreshed',`${videos.length} video rows`)}
+async function loadVideos(){const {data,error}=await sb.from('videos').select('*').order('created_at',{ascending:false}).limit(500);if(error){errorBox('ভিডিও লোড হয়নি: '+error.message);$('videoTable').innerHTML=`<tr><td colspan="6" class="empty">ভিডিও টেবিল পড়া যায়নি। RLS ও column/table permission পরীক্ষা করো।</td></tr>`;return}videos=data||[];$
+const statVideos = $('statVideos');
+if (statVideos) {
+  statVideos.textContent = videos.length.toLocaleString();
+}
+
+const statTrending = $('statTrending');
+if (statTrending) {
+  statTrending.textContent = videos.filter(v => v.is_trending).length.toLocaleString();
+}renderVideoTable();renderDashVideos();log('Videos refreshed',`${videos.length} video rows`)}
 function durationMins(v){if(v.unlock_minutes!==undefined&&v.unlock_minutes!==null&&Number(v.unlock_minutes)>0)return Number(v.unlock_minutes);return Math.max(1,Number(v.unlock_hours||1)*60)}
 function durationLabel(v){let m=durationMins(v);return m%60===0?(m/60)+' hr':m+' min'}
 function renderVideoTable(){const q=($('videoSearch')?.value||'').toLowerCase();const list=videos.filter(v=>(v.title||'').toLowerCase().includes(q)||(v.category||'').toLowerCase().includes(q));$('videoTable').innerHTML=list.length?list.map(v=>`<tr><td><div class="video-cell"><img class="thumb" src="${esc(v.thumbnail_url||v.thumbnail||'')}" onerror="this.style.visibility='hidden'"><div><b>${esc(v.title||'Untitled')}</b><div class="muted">ID: ${esc(v.id)}</div></div></div></td><td>${esc(v.category||'Other')}</td><td>${Number(v.points_price||0).toLocaleString()}</td><td><span class="tag">${esc(durationLabel(v))}</span></td><td>${v.is_trending?'<span class="status">Trending</span>':'—'}</td><td><div class="actions"><button class="smallbtn" onclick="editVideo('${esc(String(v.id))}')">Edit</button><button class="danger" onclick="deleteVideo('${esc(String(v.id))}')">Delete</button></div></td></tr>`).join(''):'<tr><td colspan="6" class="empty">কোনো ভিডিও পাওয়া যায়নি।</td></tr>'}
