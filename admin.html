@@ -397,21 +397,22 @@ function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&l
 function log(title,detail){logs.unshift({title,detail,time:new Date().toLocaleTimeString()});logs=logs.slice(0,12);renderLogs()}
 function renderLogs(){$('logs').innerHTML=logs.map(x=>`<div class="activity-row"><div class="activity-icon">•</div><div><b>${esc(x.title)}</b><small>${esc(x.detail)} · ${esc(x.time)}</small></div></div>`).join('')}
 function toast(msg) {
-  let el = $('toast');
+  let el = document.getElementById('toast');
 
   if (!el) {
     el = document.createElement('div');
     el.id = 'toast';
-    el.style.cssText =
-      'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:12px 18px;border-radius:10px;z-index:99999;max-width:90%;';
     document.body.appendChild(el);
   }
 
   el.textContent = msg;
-  el.classList.remove('hidden');
+  el.style.cssText =
+    'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:12px 18px;border-radius:10px;z-index:99999;color:white;';
 
   setTimeout(() => {
-    if (el) el.classList.add('hidden');
+    if (el && el.parentNode) {
+      el.parentNode.removeChild(el);
+    }
   }, 3200);
 }
 function errorBox(msg){$('globalMsg').innerHTML=`<div class="alert error">${esc(msg)}</div>`;log('Database / action error',msg)}
