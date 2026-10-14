@@ -357,8 +357,20 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
      <option value="বাংলা">বাংলা</option><option value="ইংলিশ">ইংলিশ</option><option value="ভাইরাল ভিডিও">ভাইরাল ভিডিও</option><option value="টেলিগ্রাম">টেলিগ্রাম</option><option value="টিকটক">টিকটক</option><option value="জাপানি">জাপানি</option><option value="ফানি">ফানি</option><option value="মিউজিক">মিউজিক</option><option value="শর্টস">শর্টস</option><option value="কমেডি">কমেডি</option><option value="নিউজ">নিউজ</option><option value="ট্রেন্ডিং">ট্রেন্ডিং</option><option value="Other">অন্যান্য</option>
     </select></div>
     <div class="field full"><label>Video URL *</label><input id="vUrl" type="url" required placeholder="https://…"></div>
-    <div class="field full"><label>Thumbnail URL</label><input id="vThumb" type="url" placeholder="https://…"></div>
-    <div class="field"><label>Points price</label><input id="vPrice" type="number" min="0" step="1" value="0" required></div>
+<div class="field full">
+  <label>Thumbnail URL</label>
+  <input id="vThumb" type="url" placeholder="https://...">
+</div>
+
+<div class="field full">
+  <label>Telegram Private Channel Message Link</label>
+  <input id="vTelegramLink" type="url" placeholder="https://t.me/c/CHANNEL_ID/MESSAGE_ID">
+</div>
+
+<div class="field">
+  <label>Points price</label>
+  <input id="vPrice" type="number" min="0" step="1" value="0" required>
+</div>
     <div class="field"><label>Duration label (optional)</label><input id="vDuration" maxlength="30" placeholder="e.g. 08:24"></div>
     <div class="field full"><label>Unlock duration</label>
      <div class="duration-box">
@@ -435,8 +447,28 @@ function openVideoForm(){if(!currentUser){toast('আগে admin login করো
 function closeVideoForm(){$('videoModal').classList.add('hidden')}
 function setDuration(amount,unit){$('vTimeAmount').value=amount;$('vTimeUnit').value=unit;updateDurationPreview()}
 function updateDurationPreview(){let amount=Number($('vTimeAmount').value||0),unit=$('vTimeUnit').value;let mins=unit==='hours'?amount*60:amount;if(mins>1440){$('durationPreview').textContent='⚠️ সর্বোচ্চ ২৪ ঘণ্টা (১৪৪০ মিনিট)';return}let label=mins%60===0?(mins/60)+' hour'+(mins/60===1?'':'s'):mins+' minute'+(mins===1?'':'s');$('durationPreview').textContent=`⏱ ${label} · ${mins*60} seconds`}
-function editVideo(id){const v=videos.find(x=>String(x.id)===String(id));if(!v)return;openVideoForm();$('formTitle').textContent='Edit video';$('videoId').value=v.id;$('vTitle').value=v.title||'';$('vCategory').value=[...$('vCategory').options].some(o=>o.value===v.category)?v.category:'Other';$('vUrl').value=v.video_url||'';$('vThumb').value=v.thumbnail_url||v.thumbnail||'';$('vPrice').value=Number(v.points_price||0);$('vDuration').value=v.duration||'';$('vTrending').value=String(!!v.is_trending);let mins=durationMins(v);if(mins%60===0){$('vTimeAmount').value=mins/60;$('vTimeUnit').value='hours'}else{$('vTimeAmount').value=mins;$('vTimeUnit').value='minutes'}updateDurationPreview()}
-async function saveVideo(e){e.preventDefault();const btn=$('saveVideoBtn');btn.disabled=true;btn.textContent='Saving…';$('formMsg').innerHTML='';try{const title=$('vTitle').value.trim(),url=$('vUrl').value.trim(),price=Number($('vPrice').value),amount=Number($('vTimeAmount').value),unit=$('vTimeUnit').value,mins=unit==='hours'?amount*60:amount;if(!title||!url)throw Error('Title ও Video URL দিতে হবে।');if(!Number.isInteger(price)||price<0)throw Error('Points price শূন্য বা ধনাত্মক পূর্ণসংখ্যা হতে হবে।');if(!Number.isInteger(amount)||amount<1||mins>1440)throw Error('সময় ১ মিনিট থেকে ২৪ ঘণ্টার মধ্যে দিন।');const payload={title,category:$('vCategory').value.trim()||'Other',video_url:url,points_price:price,unlock_hours:Math.max(1,Math.ceil(mins/60)),unlock_minutes:mins,is_trending:$('vTrending').value==='true'};const thumb=$('vThumb').value.trim();if(thumb)payload.thumbnail_url=thumb;else payload.thumbnail_url=null;const dur=$('vDuration').value.trim();if(dur)payload.duration=dur;const id=$('videoId').value;let result;if(id){result=await sb.from('videos').update(payload).eq('id',id).select('*').maybeSingle()}else{result=await sb.from('videos').insert(payload).select('*').maybeSingle()}if(result.error)throw result.error;if(!result.data)throw Error('কোনো row save হয়নি। Admin RLS policy/row permission পরীক্ষা করো।');toast(`Saved: ${title} · ${mins} min`);log(id?'Video updated':'Video created',`${title}; duration ${mins} minutes`);closeVideoForm();await loadVideos()}catch(err){$('formMsg').innerHTML=`<div class="alert error">${esc(err.message||String(err))}<br><span class="hint">যদি unlock_minutes column নেই, Supabase-এ নিচের SQL চালাও। Thumbnail/duration column না থাকলে schema অনুযায়ী যোগ করো বা field বাদ দাও।</span></div>`;errorBox(err.message||String(err))}finally{btn.disabled=false;btn.textContent='Save video'}}
+function editVideo(id){const v=videos.find(x=>String(x.id)===String(id));if(!v)return;openVideoForm();$('formTitle').textContent='Edit video';$('videoId').value=v.id;$('vTitle').value=v.title||'';$('vCategory').value=[...$('vCategory').options].some(o=>o.value===v.category)?v.category:'Other';$('vUrl').value=v.video_url||'';$('vThumb').value=v.thumbnail_url||v.thumbnail||'';$('vTelegramLink').value = v.telegram_message_id
+  ? `https://t.me/c/${String(v.telegram_chat_id || '').replace(/^-100/, '')}/${v.telegram_message_id}`
+  : '';$('vPrice').value=Number(v.points_price||0);$('vDuration').value=v.duration||'';$('vTrending').value=String(!!v.is_trending);let mins=durationMins(v);if(mins%60===0){$('vTimeAmount').value=mins/60;$('vTimeUnit').value='hours'}else{$('vTimeAmount').value=mins;$('vTimeUnit').value='minutes'}updateDurationPreview()}
+async function saveVideo(e){e.preventDefault();const btn=$('saveVideoBtn');btn.disabled=true;btn.textContent='Saving…';$('formMsg').innerHTML='';try{const title=$('vTitle').value.trim(),url=$('vUrl').value.trim(),price=Number($('vPrice').value),amount=Number($('vTimeAmount').value),unit=$('vTimeUnit').value,mins=unit==='hours'?amount*60:amount;if(!title||!url)throw Error('Title ও Video URL দিতে হবে।');if(!Number.isInteger(price)||price<0)throw Error('Points price শূন্য বা ধনাত্মক পূর্ণসংখ্যা হতে হবে।');if(!Number.isInteger(amount)||amount<1||mins>1440)throw Error('সময় ১ মিনিট থেকে ২৪ ঘণ্টার মধ্যে দিন।');const payload={title,category:$('vCategory').value.trim()||'Other',video_url:url,points_price:price,unlock_hours:Math.max(1,Math.ceil(mins/60)),unlock_minutes:mins,is_trending:$('vTrending').value==='true'};const tgLink = $('vTelegramLink').value.trim();
+
+payload.telegram_chat_id = null;
+payload.telegram_message_id = null;
+
+if (tgLink) {
+  const match = tgLink.match(
+    /^https?:\/\/t\.me\/c\/(\d+)\/(\d+)\/?(?:\?.*)?$/i
+  );
+
+  if (!match) {
+    throw Error(
+      'Telegram Private Channel-এর সম্পূর্ণ Message Link দিন। উদাহরণ: https://t.me/c/1234567890/25'
+    );
+  }
+
+  payload.telegram_chat_id = '-100' + match[1];
+  payload.telegram_message_id = Number(match[2]);
+}const thumb=$('vThumb').value.trim();if(thumb)payload.thumbnail_url=thumb;else payload.thumbnail_url=null;const dur=$('vDuration').value.trim();if(dur)payload.duration=dur;const id=$('videoId').value;let result;if(id){result=await sb.from('videos').update(payload).eq('id',id).select('*').maybeSingle()}else{result=await sb.from('videos').insert(payload).select('*').maybeSingle()}if(result.error)throw result.error;if(!result.data)throw Error('কোনো row save হয়নি। Admin RLS policy/row permission পরীক্ষা করো।');toast(`Saved: ${title} · ${mins} min`);log(id?'Video updated':'Video created',`${title}; duration ${mins} minutes`);closeVideoForm();await loadVideos()}catch(err){$('formMsg').innerHTML=`<div class="alert error">${esc(err.message||String(err))}<br><span class="hint">যদি unlock_minutes column নেই, Supabase-এ নিচের SQL চালাও। Thumbnail/duration column না থাকলে schema অনুযায়ী যোগ করো বা field বাদ দাও।</span></div>`;errorBox(err.message||String(err))}finally{btn.disabled=false;btn.textContent='Save video'}}
 async function deleteVideo(id){const v=videos.find(x=>String(x.id)===String(id));if(!v||!confirm(`"${v.title}" ভিডিওটি মুছে ফেলবে? এটি স্থায়ীভাবে মুছতে পারে।`))return;const {error}=await sb.from('videos').delete().eq('id',id).select('id').maybeSingle();if(error){errorBox('Delete হয়নি: '+error.message);return}toast('ভিডিও delete request পাঠানো হয়েছে।');log('Video delete requested',v.title);await loadVideos()}
 async function loadUsers(){const box=$('usersList');box.innerHTML='<div class="empty">Loading users…</div>';const {data,error}=await sb.from('profiles').select('id,points,referral_code,referral_count,total_referral_points').order('points',{ascending:false}).limit(300);if(error){box.innerHTML=`<div class="alert error">${esc(error.message)}<br>Profiles select permission/RLS পরীক্ষা করো।</div>`;$('statUsers').textContent='—';$('statPoints').textContent='—';return}users=data||[];$('statUsers').textContent=users.length.toLocaleString();$('statPoints').textContent=users.reduce((a,u)=>a+Number(u.points||0),0).toLocaleString();renderUsers()}
 function renderUsers(){const q=($('userSearch')?.value||'').toLowerCase();const list=users.filter(u=>String(u.id||'').toLowerCase().includes(q)||String(u.referral_code||'').toLowerCase().includes(q));$('usersList').innerHTML=list.length?list.map(u=>`<div class="user-row"><div><b>${esc(String(u.id).slice(0,8))}…</b><div class="muted">Referral: ${esc(u.referral_code||'—')} · Referrals: ${Number(u.referral_count||0)}</div></div><div style="text-align:right"><b style="color:#f0abfc">${Number(u.points||0).toLocaleString()} pts</b><div class="muted">Earned ${Number(u.total_referral_points||0).toLocaleString()}</div></div></div>`).join(''):'<div class="empty">কোনো ইউজার নেই।</div>'}
