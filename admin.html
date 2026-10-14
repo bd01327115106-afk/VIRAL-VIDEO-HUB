@@ -2,7 +2,7 @@
 <html lang="bn">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>VIRAL VIDEO HUB — Purple/Pink Admin Studio</title>
+<title>VIRAL VIDEO HUB — Admin Studio</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--bg:#030304;--panel:#100c15;--panel2:#17101f;--line:#3e2550;--text:#ffffff;--muted:#aaa3b7;--purple:#8b2cff;--cyan:#ff2d91;--green:#6ee7a1;--red:#fb7185;--gold:#f5c64d}
@@ -33,6 +33,17 @@
  <button data-view="users" onclick="showView('users',this)"><span class="ico">♙</span> Users & Points</button>
  <button data-view="payments" onclick="showView('payments',this)"><span class="ico">৳</span> Payments</button>
  <button data-view="support" onclick="showView('support',this)"><span class="ico">◌</span> Support</button>
+ <button data-view="ads" onclick="showView('ads',this)"><span class="ico">▣</span> Ads Manager</button>
+ <button data-view="links" onclick="showView('links',this)"><span class="ico">↗</span> Link Manager</button>
+ <button data-view="homepage" onclick="showView('homepage',this)"><span class="ico">⌂</span> Homepage</button>
+ <button data-view="adult" onclick="showView('adult',this)"><span class="ico">18+</span> 18+ Content</button>
+ <button data-view="referrals" onclick="showView('referrals',this)"><span class="ico">♧</span> Referral & Points</button>
+ <button data-view="analytics" onclick="showView('analytics',this)"><span class="ico">▤</span> Analytics</button>
+ <button data-view="categories" onclick="showView('categories',this)"><span class="ico">▦</span> Categories</button>
+ <button data-view="moderation" onclick="showView('moderation',this)"><span class="ico">✓</span> Moderation</button>
+ <button data-view="notifications" onclick="showView('notifications',this)"><span class="ico">♧</span> Notifications</button>
+ <button data-view="seo" onclick="showView('seo',this)"><span class="ico">⌕</span> SEO & Social</button>
+ <button data-view="maintenance" onclick="showView('maintenance',this)"><span class="ico">⚒</span> Site Controls</button>
  <button data-view="settings" onclick="showView('settings',this)"><span class="ico">⚙</span> Settings & Logs</button>
  </nav></div>
  <div class="side-foot"><div><span class="dot"></span><b style="font-size:12px">Admin session</b></div><small id="sessionEmail">Supabase connected</small></div>
@@ -64,6 +75,165 @@
 <section id="view-users" class="view"><div class="card"><div class="section-head"><div><h2>Users & Points</h2><p>ইউজার তালিকা ও পয়েন্ট ব্যালেন্স (read-only নিরাপদ ডিফল্ট)</p></div><button class="secondary" onclick="loadUsers()">↻ Refresh</button></div><div class="search" style="margin-bottom:14px"><input id="userSearch" placeholder="Search user ID / referral code…" oninput="renderUsers()"></div><div id="usersList"><div class="empty">Loading users…</div></div><p class="hint">পয়েন্ট সরাসরি বদলানোর ফিচার নিরাপদ server-side transaction/RPC ছাড়া চালু করা হয়নি, যাতে ভুল করে user balance নষ্ট না হয়।</p></div></section>
 <section id="view-payments" class="view"><div class="card"><div class="section-head"><div><h2>Payments</h2><p>পেমেন্টের টেবিল schema যাচাই করে লোড করা হবে</p></div><button class="secondary" onclick="loadPayments()">↻ Refresh</button></div><div id="paymentsBox" class="empty">Checking available payment tables…</div><p class="hint">USDT transaction যাচাই না করে points যোগ করা যাবে না। এই প্যানেল নিজে থেকে payment verify বা funds transfer করে না।</p></div></section>
 <section id="view-support" class="view"><div class="card"><div class="section-head"><div><h2>Support center</h2><p>Support tables-এর সংযোগ যাচাই</p></div><button class="secondary" onclick="loadSupportStatus()">↻ Refresh</button></div><div id="supportBox" class="empty">Checking support tables…</div><p class="hint">তোমার website-এ support_conversations এবং support_messages থাকলে status এখানে দেখাবে। Live reply UI-এর জন্য বর্তমান support schema/SQL মিলিয়ে নিতে হবে।</p></div></section>
+<section id="view-ads" class="view">
+ <div class="notice"><b>Ads Manager · Draft controls</b><br>এখানে সেটিংস সাজিয়ে রাখা যাবে। এই কন্ট্রোলগুলো এখনো বিজ্ঞাপন নেটওয়ার্ক বা লাইভ ওয়েবসাইটে যুক্ত নয়; তাই এগুলো পরিবর্তন করলেই বাস্তবে বিজ্ঞাপন চালু/বন্ধ হবে না।</div>
+ <div class="grid content-grid">
+  <div class="card"><div class="section-head"><div><h2>Global advertisement controls</h2><p>সব ভিডিওর বিজ্ঞাপন-সংক্রান্ত ডিফল্ট</p></div><span class="tag">DRAFT</span></div>
+   <label class="user-row"><span><b>Enable ads globally</b><div class="muted">সাইটজুড়ে বিজ্ঞাপন চালু করার ডিফল্ট</div></span><input id="adsGlobal" type="checkbox" style="width:22px;height:22px"></label>
+   <div class="field"><label>Default ads per video</label><select id="adsDefault"><option>0</option><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></div>
+   <div class="field"><label>Ad placement</label><select id="adsPlacement"><option value="before">Before video</option><option value="midroll">Mid-roll</option><option value="after">After video</option><option value="mixed">Mixed placement</option></select></div>
+   <div class="field"><label>Ad network / provider name</label><input id="adsNetwork" placeholder="Enter the provider you actually use"></div>
+  </div>
+  <div class="card"><div class="section-head"><div><h2>Per-video policy</h2><p>প্রতি ভিডিওর জন্য বিজ্ঞাপনের সংখ্যা</p></div></div>
+   <div class="field"><label>Default policy</label><select id="adsPolicy"><option value="global">Use global default</option><option value="override">Allow per-video override</option></select></div>
+   <div class="field"><label>Maximum ads per video</label><select id="adsMax"><option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option></select></div>
+   <div class="field"><label>Minimum seconds between ads</label><input id="adsGap" type="number" min="0" max="3600" value="60"></div>
+   <p class="hint">বিজ্ঞাপন নেটওয়ার্কের নীতিমালা, consent ও ভিডিও প্লেয়ারের সমর্থন অনুযায়ী সেটিংস বাস্তবায়ন করতে হবে।</p>
+  </div>
+ </div>
+ <div style="margin-top:15px" class="card"><div class="section-head"><div><h2>Ad configuration</h2><p>বর্তমান ড্রাফট ব্রাউজারে সংরক্ষণ বা JSON হিসেবে এক্সপোর্ট করো</p></div></div><button class="primary" onclick="saveAdminDraft('ads')">Save local draft</button> <button class="secondary" onclick="exportAdminDraft()">Export settings JSON</button><span id="adsSaveStatus" class="muted" style="margin-left:10px"></span></div>
+</section>
+<section id="view-links" class="view">
+ <div class="notice"><b>Link Manager · Configurable draft</b><br>এখানে WhatsApp, Telegram এবং যেকোনো কাস্টম বাটনের নাম, URL, অবস্থান ও চালু/বন্ধ অবস্থা সাজাতে পারবে। এই সংস্করণে Save করলে এই ব্রাউজারে draft সংরক্ষণ হয়; লাইভ ওয়েবসাইটে কার্যকর করতে একই settings database এবং index.html-এর সঙ্গে যুক্ত করতে হবে।</div>
+ <div class="card"><div class="section-head"><div><h2>WhatsApp & Telegram</h2><p>সোশ্যাল বাটন কন্ট্রোল</p></div></div>
+  <div class="form-grid">
+   <div class="field"><label>WhatsApp button label</label><input id="linkWhatsAppLabel" maxlength="50" value="WhatsApp" placeholder="WhatsApp"></div>
+   <div class="field"><label>WhatsApp URL</label><input id="linkWhatsAppUrl" type="url" placeholder="https://wa.me/8801XXXXXXXXX"></div>
+   <div class="field"><label>WhatsApp placement</label><select id="linkWhatsAppPlacement"><option value="header">Header</option><option value="footer">Footer</option><option value="support">Support/contact area</option><option value="video">Video page</option><option value="floating">Floating button</option></select></div>
+   <div class="field"><label>WhatsApp status</label><select id="linkWhatsAppEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select></div>
+   <div class="field"><label>Telegram button label</label><input id="linkTelegramLabel" maxlength="50" value="Telegram" placeholder="Telegram"></div>
+   <div class="field"><label>Telegram URL</label><input id="linkTelegramUrl" type="url" placeholder="https://t.me/yourchannel"></div>
+   <div class="field"><label>Telegram placement</label><select id="linkTelegramPlacement"><option value="header">Header</option><option value="footer">Footer</option><option value="support">Support/contact area</option><option value="video">Video page</option><option value="floating">Floating button</option></select></div>
+   <div class="field"><label>Telegram status</label><select id="linkTelegramEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select></div>
+  </div>
+ </div>
+ <div class="card" style="margin-top:15px"><div class="section-head"><div><h2>Any custom button</h2><p>যেকোনো নাম ও URL দিয়ে বাটন যোগ করো</p></div></div>
+  <div class="form-grid">
+   <div class="field"><label>Button name</label><input id="linkCustomLabel" maxlength="50" placeholder="যেমন: Facebook, Shop, YouTube"></div>
+   <div class="field"><label>Destination URL</label><input id="linkCustomUrl" type="url" placeholder="https://example.com"></div>
+   <div class="field"><label>Show location</label><select id="linkCustomPlacement"><option value="header">Header</option><option value="footer">Footer</option><option value="support">Support/contact area</option><option value="video">Video page</option><option value="shop">Shop area</option><option value="floating">Floating button</option></select></div>
+   <div class="field"><label>Button status</label><select id="linkCustomEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select></div>
+  </div>
+  <button class="primary" onclick="addCustomLinkDraft()">＋ Add custom button</button>
+  <div id="customLinkDraftList" style="margin-top:14px"></div>
+ </div>
+ <div class="card" style="margin-top:15px"><div class="section-head"><div><h2>Save & export</h2><p>Save local draft অথবা JSON export</p></div></div><button class="primary" onclick="saveLinkManagerDraft()">Save link settings</button> <button class="secondary" onclick="exportAdminDraft()">Export settings JSON</button> <span id="linkSaveStatus" class="muted" style="margin-left:10px"></span></div>
+</section>
+<section id="view-homepage" class="view">
+ <div class="notice"><b>Homepage Builder · Draft</b><br>এই প্যানেলে হোমপেজের সেকশন ও ব্যানারের পরিকল্পনা সাজানো যাবে। লাইভ হোমপেজ বদলাতে পরে এই সেটিংসকে index.html/ডেটাবেসের সঙ্গে যুক্ত করতে হবে।</div>
+ <div class="grid content-grid">
+  <div class="card"><div class="section-head"><div><h2>Homepage sections</h2><p>কোন সেকশনগুলো দেখাতে চাও</p></div></div>
+   <label class="user-row"><span><b>Trending videos</b><div class="muted">ট্রেন্ডিং ভিডিওর সেকশন</div></span><input type="checkbox" id="homeTrending" checked style="width:22px;height:22px"></label>
+   <label class="user-row"><span><b>Latest videos</b><div class="muted">সর্বশেষ আপলোড</div></span><input type="checkbox" id="homeLatest" checked style="width:22px;height:22px"></label>
+   <label class="user-row"><span><b>Categories</b><div class="muted">ক্যাটাগরি ফিল্টার/কার্ড</div></span><input type="checkbox" id="homeCategories" checked style="width:22px;height:22px"></label>
+   <label class="user-row"><span><b>Shop section</b><div class="muted">শপ বা অফার সেকশন</div></span><input type="checkbox" id="homeShop" style="width:22px;height:22px"></label>
+   <label class="user-row"><span><b>Referral section</b><div class="muted">রেফারেল লিংক ও তথ্য</div></span><input type="checkbox" id="homeReferral" checked style="width:22px;height:22px"></label>
+  </div>
+  <div class="card"><div class="section-head"><div><h2>Hero banner</h2><p>হোমপেজের শিরোনাম ও ঘোষণা</p></div></div>
+   <div class="field"><label>Banner title</label><input id="homeTitle" maxlength="120" value="VIRAL VIDEO HUB"></div>
+   <div class="field"><label>Banner subtitle</label><textarea id="homeSubtitle" maxlength="300" placeholder="Write a short announcement"></textarea></div>
+   <div class="field"><label>Banner image URL (optional)</label><input id="homeBanner" type="url" placeholder="https://…"></div>
+   <div class="field"><label>Announcement text</label><textarea id="homeAnnouncement" maxlength="500" placeholder="Announcement for visitors"></textarea></div>
+  </div>
+ </div>
+ <div class="card" style="margin-top:15px"><button class="primary" onclick="saveAdminDraft('homepage')">Save local draft</button> <button class="secondary" onclick="exportAdminDraft()">Export settings JSON</button></div>
+</section>
+<section id="view-adult" class="view">
+ <div class="notice"><b>18+ Content & Age Gate · Draft controls</b><br>শুধু আইনসম্মত, প্রাপ্তবয়স্কদের জন্য অনুমোদিত কনটেন্টে প্রযোজ্য। এই সেটিংস এখনো লাইভ সাইটের age gate-এ সংযুক্ত নয়। শুধু “আমি ১৮+” ক্লিককে নির্ভরযোগ্য বয়স যাচাই ধরে নেওয়া যাবে না।</div>
+ <div class="card"><div class="section-head"><div><h2>Age-gate preferences</h2><p>প্রদর্শন ও কনটেন্ট শ্রেণিবিভাগের ড্রাফট</p></div></div>
+  <label class="user-row"><span><b>Show age warning</b><div class="muted">18+ কনটেন্টের আগে সতর্কতা দেখানো</div></span><input type="checkbox" id="adultGate" checked style="width:22px;height:22px"></label>
+  <label class="user-row"><span><b>Hide adult category by default</b><div class="muted">ডিফল্ট হোমপেজে 18+ ক্যাটাগরি লুকানো</div></span><input type="checkbox" id="adultHidden" checked style="width:22px;height:22px"></label>
+  <label class="user-row"><span><b>Require explicit confirmation</b><div class="muted">প্রবেশের আগে আলাদা confirmation</div></span><input type="checkbox" id="adultConfirm" checked style="width:22px;height:22px"></label>
+  <div class="field"><label>Age warning message</label><textarea id="adultMessage" maxlength="500">এই অংশটি শুধুমাত্র প্রাপ্তবয়স্কদের জন্য। প্রবেশের আগে আপনার বয়স নিশ্চিত করুন।</textarea></div>
+  <button class="primary" onclick="saveAdminDraft('adult')">Save local draft</button> <button class="secondary" onclick="exportAdminDraft()">Export settings JSON</button>
+ </div>
+</section>
+<section id="view-referrals" class="view">
+ <div class="notice"><b>Referral & Points · Draft controls</b><br>পয়েন্টের নিয়ম এখানে পরিকল্পনা করা যাবে। লাইভ ব্যালেন্স পরিবর্তন করতে নিরাপদ server-side transaction/RPC দরকার; এই প্যানেল সরাসরি ইউজারের পয়েন্ট পরিবর্তন করছে না।</div>
+ <div class="grid content-grid">
+  <div class="card"><div class="section-head"><div><h2>Points rules</h2><p>পয়েন্ট ও unlock-এর প্রস্তাবিত নিয়ম</p></div></div>
+   <div class="field"><label>Points per referral</label><input id="refPoints" type="number" min="0" max="1000000" value="10"></div>
+   <div class="field"><label>Minimum points to unlock</label><input id="refMinUnlock" type="number" min="0" max="1000000" value="0"></div>
+   <div class="field"><label>Daily earning cap</label><input id="refDailyCap" type="number" min="0" max="1000000" value="100"></div>
+  </div>
+  <div class="card"><div class="section-head"><div><h2>Referral controls</h2><p>রেফারেল ব্যবস্থা</p></div></div>
+   <label class="user-row"><span><b>Enable referrals</b><div class="muted">রেফারেল প্রোগ্রামের ডিফল্ট</div></span><input type="checkbox" id="refEnabled" checked style="width:22px;height:22px"></label>
+   <div class="field"><label>Maximum referrals per account (0 = no cap)</label><input id="refMax" type="number" min="0" max="1000000" value="0"></div>
+   <div class="field"><label>Referral abuse notes</label><textarea id="refNotes" maxlength="500" placeholder="Manual review rules"></textarea></div>
+  </div>
+ </div>
+ <div class="card" style="margin-top:15px"><button class="primary" onclick="saveAdminDraft('referrals')">Save local draft</button> <button class="secondary" onclick="exportAdminDraft()">Export settings JSON</button></div>
+</section>
+<section id="view-analytics" class="view">
+ <div class="grid stats">
+  <div class="card"><div class="stat-top">Videos currently loaded</div><div class="stat-num" id="analyticsVideos">—</div><div class="stat-note">Live query count from videos table</div></div>
+  <div class="card"><div class="stat-top">Profiles currently loaded</div><div class="stat-num" id="analyticsUsers">—</div><div class="stat-note">Live query count from profiles table</div></div>
+  <div class="card"><div class="stat-top">Trending items</div><div class="stat-num" id="analyticsTrending">—</div><div class="stat-note">From loaded video records</div></div>
+  <div class="card"><div class="stat-top">Total points in loaded profiles</div><div class="stat-num" id="analyticsPoints">—</div><div class="stat-note">Sum of currently readable profiles</div></div>
+ </div>
+ <div class="card"><div class="section-head"><div><h2>Analytics notes</h2><p>কোন তথ্য আসল ডেটা, কোনটা এখনো অনুপস্থিত</p></div><button class="secondary" onclick="refreshAll();updateAnalytics()">↻ Refresh metrics</button></div>
+  <p>এই সংখ্যাগুলো শুধু Supabase থেকে সফলভাবে লোড হওয়া row-এর সারাংশ। Watch time, unique views, ad impressions, clicks, revenue বা conversion দেখতে আলাদা event tracking/analytics integration দরকার।</p>
+  <div class="notice">Live views/revenue দেখানোর জন্য website-এ event collection এবং privacy-conscious analytics যোগ করতে হবে। বর্তমানে এই panel কোনো views/revenue সংখ্যা বানিয়ে দেখায় না।</div>
+ </div>
+</section>
+<section id="view-categories" class="view">
+ <div class="notice"><b>Categories Manager · Local draft</b><br>এখানে ক্যাটাগরির তালিকা ও display order সাজাও। Save local draft করলে এই ব্রাউজারে সংরক্ষণ হবে; লাইভ সাইটে প্রকাশ করতে ডেটাবেস/সাইট কোড সংযোগ দরকার।</div>
+ <div class="card"><div class="section-head"><div><h2>Category editor</h2><p>নতুন ক্যাটাগরি, আইকন ও প্রদর্শনের ক্রম</p></div></div>
+  <div class="form-grid"><div class="field"><label>Category name</label><input id="catName" maxlength="60" placeholder="e.g. Trending"></div><div class="field"><label>Icon / emoji</label><input id="catIcon" maxlength="8" placeholder="🔥"></div><div class="field"><label>Display order</label><input id="catOrder" type="number" min="0" value="1"></div><div class="field"><label>Visibility</label><select id="catVisible"><option value="true">Visible</option><option value="false">Hidden</option></select></div></div>
+  <button class="primary" onclick="addCategoryDraft()">Add category to draft</button> <button class="secondary" onclick="exportAdminDraft()">Export all draft settings</button>
+  <div id="categoryDraftList" style="margin-top:15px"></div>
+ </div>
+</section>
+<section id="view-moderation" class="view">
+ <div class="notice"><b>Content Moderation · Review checklist</b><br>এখানে রিপোর্ট/রিভিউয়ের ড্রাফট রাখা যায়। লাইভ রিপোর্ট জমা, hidden/deleted status বা user ban কার্যকর করতে reporting table ও server-side authorization যুক্ত করতে হবে।</div>
+ <div class="card"><div class="section-head"><div><h2>Moderation queue notes</h2><p>রিপোর্ট পর্যালোচনার জন্য ম্যানুয়াল নোট</p></div></div>
+  <div class="field"><label>Video ID or URL</label><input id="modVideo" placeholder="Video ID / URL"></div>
+  <div class="field"><label>Reason</label><select id="modReason"><option>Broken link</option><option>Copyright complaint</option><option>Policy violation</option><option>Incorrect category</option><option>Spam / misleading</option><option>Other</option></select></div>
+  <div class="field"><label>Review decision</label><select id="modDecision"><option>Needs review</option><option>Keep published</option><option>Hide pending review</option><option>Escalate / verify rights</option></select></div>
+  <div class="field"><label>Reviewer notes</label><textarea id="modNotes" maxlength="1000" placeholder="Write review notes"></textarea></div>
+  <button class="primary" onclick="addModerationDraft()">Add to local review list</button> <button class="secondary" onclick="exportAdminDraft()">Export JSON</button>
+  <div id="moderationDraftList" style="margin-top:15px"></div>
+ </div>
+</section>
+<section id="view-notifications" class="view">
+ <div class="notice"><b>Notifications · Draft composer</b><br>এখানে ঘোষণার লেখা তৈরি করা যাবে। Telegram bot, email বা in-site notification-এ পাঠাতে আলাদা integration লাগবে; এই ফর্ম নিজে থেকে কাউকে মেসেজ পাঠায় না।</div>
+ <div class="card"><div class="section-head"><div><h2>Announcement composer</h2><p>ওয়েবসাইটের ঘোষণা প্রস্তুত করো</p></div></div>
+  <div class="field"><label>Title</label><input id="noticeTitle" maxlength="100" placeholder="Announcement title"></div>
+  <div class="field"><label>Message</label><textarea id="noticeBody" maxlength="1500" placeholder="Write a clear announcement"></textarea></div>
+  <div class="field"><label>Audience</label><select id="noticeAudience"><option>All visitors</option><option>Signed-in users</option><option>Admins only</option></select></div>
+  <div class="field"><label>Priority</label><select id="noticePriority"><option>Normal</option><option>Important</option><option>Urgent</option></select></div>
+  <button class="primary" onclick="saveAdminDraft('notifications')">Save local draft</button> <button class="secondary" onclick="exportAdminDraft()">Export settings JSON</button>
+ </div>
+</section>
+<section id="view-seo" class="view">
+ <div class="notice"><b>SEO & Social Preview · Draft</b><br>মেটাডেটা ও শেয়ার প্রিভিউয়ের লেখা তৈরি করা যাবে। বাস্তবে প্রয়োগ করতে index.html-এর metadata এবং OG/Twitter tags আপডেট করতে হবে।</div>
+ <div class="card"><div class="section-head"><div><h2>Search & sharing metadata</h2><p>Google result এবং social share-এর title/description</p></div></div>
+  <div class="field"><label>Page title</label><input id="seoTitle" maxlength="70" value="VIRAL VIDEO HUB"></div>
+  <div class="field"><label>Meta description</label><textarea id="seoDescription" maxlength="160" placeholder="Describe your site in a short, accurate sentence"></textarea></div>
+  <div class="field"><label>Canonical URL</label><input id="seoCanonical" type="url" placeholder="https://your-site.example/"></div>
+  <div class="field"><label>Social preview image URL</label><input id="seoImage" type="url" placeholder="https://…/preview.jpg"></div>
+  <div class="field"><label>Robots directive</label><select id="seoRobots"><option value="index,follow">index, follow</option><option value="noindex,nofollow">noindex, nofollow</option></select></div>
+  <button class="primary" onclick="saveAdminDraft('seo')">Save local draft</button> <button class="secondary" onclick="exportAdminDraft()">Export settings JSON</button>
+ </div>
+</section>
+<section id="view-maintenance" class="view">
+ <div class="notice"><b>Site Controls · Safety lock</b><br>এই কন্ট্রোলগুলো পরিকল্পনা/ড্রাফট। লাইভ সাইট maintenance mode, cache, backup schedule বা access restriction কার্যকর করতে server-side feature বা website code লাগবে।</div>
+ <div class="grid content-grid">
+  <div class="card"><div class="section-head"><div><h2>Maintenance preferences</h2><p>সাইট রক্ষণাবেক্ষণ মোডের প্রস্তাবিত সেটিংস</p></div></div>
+   <label class="user-row"><span><b>Maintenance mode</b><div class="muted">ড্রাফট: সাইটে রক্ষণাবেক্ষণ বার্তা দেখানো</div></span><input id="maintMode" type="checkbox" style="width:22px;height:22px"></label>
+   <div class="field"><label>Maintenance message</label><textarea id="maintMessage" maxlength="500">আমরা সাইট আপডেট করছি। অনুগ্রহ করে কিছুক্ষণ পরে আবার চেষ্টা করুন।</textarea></div>
+   <label class="user-row"><span><b>Show support contact</b><div class="muted">রক্ষণাবেক্ষণ পেজে সাপোর্ট লিংক</div></span><input id="maintSupport" type="checkbox" checked style="width:22px;height:22px"></label>
+  </div>
+  <div class="card"><div class="section-head"><div><h2>Backup & security checklist</h2><p>লাইভ পরিবর্তনের আগে যাচাই করো</p></div></div>
+   <label class="user-row"><span>Database backup completed</span><input type="checkbox" id="checkDbBackup" style="width:22px;height:22px"></label>
+   <label class="user-row"><span>Admin role verified</span><input type="checkbox" id="checkAdminRole" style="width:22px;height:22px"></label>
+   <label class="user-row"><span>RLS policies tested</span><input type="checkbox" id="checkRls" style="width:22px;height:22px"></label>
+   <label class="user-row"><span>Restore procedure tested</span><input type="checkbox" id="checkRestore" style="width:22px;height:22px"></label>
+   <p class="hint">চেকবক্স টিক দেওয়া শুধু তোমার নিজের চেকলিস্ট; এটি আসল ব্যাকআপ বা নিরাপত্তা পরীক্ষা চালায় না।</p>
+  </div>
+ </div>
+ <div class="card" style="margin-top:15px"><button class="primary" onclick="saveAdminDraft('maintenance')">Save local draft</button> <button class="secondary" onclick="exportAdminDraft()">Export settings JSON</button></div>
+</section>
 <section id="view-settings" class="view">
  <div class="card"><div class="section-head"><div><h2>Project connection</h2><p>এই HTML-এ থাকা Supabase configuration</p></div><span class="tag">CLIENT KEY ONLY</span></div>
  <div class="notice">কখনোই এখানে Supabase service_role/secret key বসাবে না। শুধু publishable/anon key ব্যবহার করো এবং database-এ Row Level Security (RLS) চালু রাখো।</div>
@@ -118,8 +288,41 @@ async function signIn(){const email=$('loginEmail').value.trim(),password=$('log
 async function signOut(){await sb.auth.signOut();currentUser=null;$('app').classList.add('hidden');$('loginScreen').classList.remove('hidden')}
 async function startApp(){const {data:{user}}=await sb.auth.getUser();if(!user)return;currentUser=user;$('loginScreen').classList.add('hidden');$('app').classList.remove('hidden');$('sessionEmail').textContent=user.email||user.id;$('cfgSession').value=user.email||user.id;log('Signed in',user.email||user.id);await refreshAll()}
 sb.auth.onAuthStateChange((_event,session)=>{if(session?.user){currentUser=session.user;$('loginScreen').classList.add('hidden');$('app').classList.remove('hidden')}});
-const titles={dashboard:['Overview','তোমার প্ল্যাটফর্মের সার্বিক অবস্থা এক নজরে।'],videos:['Video Management','ভিডিও, পয়েন্ট মূল্য ও unlock timer পরিচালনা করো।'],users:['Users & Points','রেজিস্টার্ড ইউজার ও পয়েন্ট ব্যালেন্স দেখো।'],payments:['Payments','পেমেন্ট টেবিলের status যাচাই করো।'],support:['Support Center','সাপোর্ট টেবিল সংযোগ যাচাই করো।'],settings:['Settings & Logs','সংযোগ, diagnostics ও export।']};
-function showView(name,btn){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));$('view-'+name).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.view===name));$('pageTitle').textContent=titles[name][0];$('pageSub').textContent=titles[name][1];if(name==='users')loadUsers();if(name==='payments')loadPayments();if(name==='support')loadSupportStatus()}
+const titles={dashboard:['Overview','তোমার প্ল্যাটফর্মের সার্বিক অবস্থা এক নজরে।'],videos:['Video Management','ভিডিও, পয়েন্ট মূল্য ও unlock timer পরিচালনা করো।'],users:['Users & Points','রেজিস্টার্ড ইউজার ও পয়েন্ট ব্যালেন্স দেখো।'],payments:['Payments','পেমেন্ট টেবিলের status যাচাই করো।'],support:['Support Center','সাপোর্ট টেবিল সংযোগ যাচাই করো।'],ads:['Ads Manager','বিজ্ঞাপনের নিয়ম ও প্রতি ভিডিওর ড্রাফট সেটিংস।'],links:['Link Manager','Telegram, support, shop ও custom link পরিচালনার ড্রাফট।'],homepage:['Homepage Builder','হোমপেজের সেকশন ও ব্যানারের ড্রাফট।'],adult:['18+ Content','বয়স সতর্কতা ও কনটেন্ট visibility ড্রাফট।'],referrals:['Referral & Points','রেফারেল ও পয়েন্ট নিয়মের ড্রাফট।'],analytics:['Analytics','লোড করা লাইভ ডেটার সারাংশ ও analytics status।'],categories:['Categories Manager','ক্যাটাগরি ও display order-এর ড্রাফট।'],moderation:['Content Moderation','রিপোর্ট ও কনটেন্ট রিভিউয়ের ড্রাফট।'],notifications:['Notifications','ঘোষণা ও নোটিফিকেশন প্রস্তুত করো।'],seo:['SEO & Social','সার্চ ও সোশ্যাল প্রিভিউ মেটাডেটা।'],maintenance:['Site Controls','রক্ষণাবেক্ষণ ও নিরাপত্তা চেকলিস্ট।'],settings:['Settings & Logs','সংযোগ, diagnostics ও export।']};
+function showView(name,btn){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));$('view-'+name).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.view===name));$('pageTitle').textContent=titles[name][0];$('pageSub').textContent=titles[name][1];if(name==='users')loadUsers();if(name==='payments')loadPayments();if(name==='support')loadSupportStatus();if(name==='analytics')updateAnalytics()}
+const ADMIN_DRAFT_KEY='vvh_admin_panel_draft_v2';
+const draftGroups={
+ ads:['adsGlobal','adsDefault','adsPlacement','adsNetwork','adsPolicy','adsMax','adsGap'],
+ links:['linkWhatsAppLabel','linkWhatsAppUrl','linkWhatsAppPlacement','linkWhatsAppEnabled','linkTelegramLabel','linkTelegramUrl','linkTelegramPlacement','linkTelegramEnabled','linkCustomLabel','linkCustomUrl','linkCustomPlacement','linkCustomEnabled'],
+ homepage:['homeTrending','homeLatest','homeCategories','homeShop','homeReferral','homeTitle','homeSubtitle','homeBanner','homeAnnouncement'],
+ adult:['adultGate','adultHidden','adultConfirm','adultMessage'],
+ referrals:['refPoints','refMinUnlock','refDailyCap','refEnabled','refMax','refNotes'],
+ notifications:['noticeTitle','noticeBody','noticeAudience','noticePriority'],
+ seo:['seoTitle','seoDescription','seoCanonical','seoImage','seoRobots'],
+ maintenance:['maintMode','maintMessage','maintSupport','checkDbBackup','checkAdminRole','checkRls','checkRestore']
+};
+function readAdminDraft(){try{return JSON.parse(localStorage.getItem(ADMIN_DRAFT_KEY)||'{}')}catch(_){return {}}}
+function collectAdminDraft(){const out={version:2,updatedAt:new Date().toISOString(),notice:'Local draft only; not connected to live website settings.'};for(const [group,ids] of Object.entries(draftGroups)){out[group]={};for(const id of ids){const el=$(id);if(el)out[group][id]=el.type==='checkbox'?el.checked:el.value}}return out}
+function applyAdminDraft(){const data=readAdminDraft();for(const [group,ids] of Object.entries(draftGroups)){for(const id of ids){const el=$(id);if(!el||data[group]?.[id]===undefined)continue;if(el.type==='checkbox')el.checked=!!data[group][id];else el.value=data[group][id]}}}
+function saveAdminDraft(group){const draft=collectAdminDraft();try{localStorage.setItem(ADMIN_DRAFT_KEY,JSON.stringify(draft));const status=$('adsSaveStatus');if(status)status.textContent='Draft saved in this browser';toast('Draft saved in this browser only — live site unchanged.');log('Local settings draft saved',group||'all settings')}catch(e){toast('Could not save local draft: '+e.message)}}
+
+const CUSTOM_LINK_DRAFT_KEY='vvh_custom_link_draft_v1';
+function readCustomLinks(){try{return JSON.parse(localStorage.getItem(CUSTOM_LINK_DRAFT_KEY)||'[]')}catch(_){return []}}
+function saveCustomLinks(items){localStorage.setItem(CUSTOM_LINK_DRAFT_KEY,JSON.stringify(items));renderCustomLinkDraft()}
+function addCustomLinkDraft(){const label=$('linkCustomLabel').value.trim(),url=$('linkCustomUrl').value.trim();if(!label||!url){toast('Button name ও URL দুটোই দিতে হবে।');return}if(!/^https?:\/\//i.test(url)){toast('URL অবশ্যই https:// বা http:// দিয়ে শুরু হবে।');return}const items=readCustomLinks();items.push({id:Date.now(),label,url,placement:$('linkCustomPlacement').value,enabled:$('linkCustomEnabled').value==='true'});saveCustomLinks(items);$('linkCustomLabel').value='';$('linkCustomUrl').value='';toast('Custom button local draft-এ যোগ হয়েছে।')}
+function removeCustomLinkDraft(id){saveCustomLinks(readCustomLinks().filter(x=>x.id!==id));toast('Draft button removed.')}
+function renderCustomLinkDraft(){const box=$('customLinkDraftList');if(!box)return;const items=readCustomLinks();box.innerHTML=items.length?items.map(x=>`<div class="user-row"><span><b>${esc(x.label)}</b><div class="muted">${esc(x.url)} · ${esc(x.placement)} · ${x.enabled?'Enabled':'Disabled'}</div></span><button class="danger" onclick="removeCustomLinkDraft(${Number(x.id)})">Remove</button></div>`).join(''):'<p class="muted">এখনো custom button যোগ করা হয়নি।</p>'}
+function saveLinkManagerDraft(){saveAdminDraft('links');const status=$('linkSaveStatus');if(status)status.textContent='Saved in this browser only';toast('Link settings draft saved. Live site is not changed yet.');log('Link settings draft saved','WhatsApp, Telegram and custom buttons')}
+function exportAdminDraft(){const data=JSON.stringify(collectAdminDraft(),null,2);const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='viral-video-hub-admin-settings-draft.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('Settings draft JSON exported.')}
+const ADMIN_CATEGORY_KEY='vvh_admin_category_draft_v1', ADMIN_MOD_KEY='vvh_admin_moderation_draft_v1';
+function addCategoryDraft(){const name=$('catName')?.value.trim();if(!name){toast('Enter a category name first');return}let list=[];try{list=JSON.parse(localStorage.getItem(ADMIN_CATEGORY_KEY)||'[]')}catch(_){}list.push({name,icon:$('catIcon').value.trim(),order:Number($('catOrder').value||0),visible:$('catVisible').value==='true',createdAt:new Date().toISOString()});localStorage.setItem(ADMIN_CATEGORY_KEY,JSON.stringify(list));$('catName').value='';$('catIcon').value='';renderCategoryDraft();toast('Category added to local draft only.')}
+function renderCategoryDraft(){const el=$('categoryDraftList');if(!el)return;let list=[];try{list=JSON.parse(localStorage.getItem(ADMIN_CATEGORY_KEY)||'[]')}catch(_){}el.innerHTML=list.length?'<h3>Draft categories</h3>'+list.sort((a,b)=>a.order-b.order).map((c,i)=>'<div class="user-row"><span><b>'+escapeHtml(c.icon||'▦')+' '+escapeHtml(c.name)+'</b><div class="muted">Order '+c.order+' · '+(c.visible?'Visible':'Hidden')+'</div></span><button class="secondary" onclick="removeCategoryDraft('+i+')">Remove</button></div>').join(''):'<p class="muted">No draft categories yet.</p>'}
+function removeCategoryDraft(i){let list=[];try{list=JSON.parse(localStorage.getItem(ADMIN_CATEGORY_KEY)||'[]')}catch(_){}list.splice(i,1);localStorage.setItem(ADMIN_CATEGORY_KEY,JSON.stringify(list));renderCategoryDraft()}
+function addModerationDraft(){const item={video:$('modVideo').value.trim(),reason:$('modReason').value,decision:$('modDecision').value,notes:$('modNotes').value.trim(),createdAt:new Date().toISOString()};if(!item.video){toast('Enter a video ID or URL');return}let list=[];try{list=JSON.parse(localStorage.getItem(ADMIN_MOD_KEY)||'[]')}catch(_){}list.unshift(item);localStorage.setItem(ADMIN_MOD_KEY,JSON.stringify(list));renderModerationDraft();toast('Review note saved locally; no live content changed.')}
+function renderModerationDraft(){const el=$('moderationDraftList');if(!el)return;let list=[];try{list=JSON.parse(localStorage.getItem(ADMIN_MOD_KEY)||'[]')}catch(_){}el.innerHTML=list.length?'<h3>Local review notes</h3>'+list.map((m,i)=>'<div class="user-row"><span><b>'+escapeHtml(m.video)+'</b><div class="muted">'+escapeHtml(m.reason)+' · '+escapeHtml(m.decision)+'</div><div>'+escapeHtml(m.notes||'')+'</div></span><button class="secondary" onclick="removeModerationDraft('+i+')">Remove</button></div>').join(''):'<p class="muted">No review notes yet.</p>'}
+function removeModerationDraft(i){let list=[];try{list=JSON.parse(localStorage.getItem(ADMIN_MOD_KEY)||'[]')}catch(_){}list.splice(i,1);localStorage.setItem(ADMIN_MOD_KEY,JSON.stringify(list));renderModerationDraft()}
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function updateAnalytics(){if($('analyticsVideos'))$('analyticsVideos').textContent=videos.length.toLocaleString();if($('analyticsUsers'))$('analyticsUsers').textContent=users.length.toLocaleString();if($('analyticsTrending'))$('analyticsTrending').textContent=videos.filter(v=>v.is_trending).length.toLocaleString();if($('analyticsPoints'))$('analyticsPoints').textContent=users.reduce((n,u)=>n+Number(u.points||0),0).toLocaleString()}
 async function refreshAll(){await Promise.all([loadVideos(),loadUsers(),loadPayments(),loadSupportStatus()])}
 async function loadVideos(){const {data,error}=await sb.from('videos').select('*').order('created_at',{ascending:false}).limit(500);if(error){errorBox('ভিডিও লোড হয়নি: '+error.message);$('videoTable').innerHTML=`<tr><td colspan="6" class="empty">ভিডিও টেবিল পড়া যায়নি। RLS ও column/table permission পরীক্ষা করো।</td></tr>`;return}videos=data||[];$('statVideos').textContent=videos.length.toLocaleString();$('statTrending').textContent=videos.filter(v=>v.is_trending).length.toLocaleString();renderVideoTable();renderDashVideos();log('Videos refreshed',`${videos.length} video rows`)}
 function durationMins(v){if(v.unlock_minutes!==undefined&&v.unlock_minutes!==null&&Number(v.unlock_minutes)>0)return Number(v.unlock_minutes);return Math.max(1,Number(v.unlock_hours||1)*60)}
@@ -138,7 +341,7 @@ function renderUsers(){const q=($('userSearch')?.value||'').toLowerCase();const 
 async function loadPayments(){const box=$('paymentsBox');box.innerHTML='';const names=['usdt_payments','payments','payment_requests','transactions'];let found=false;for(const name of names){const {data,error}=await sb.from(name).select('*').limit(1);if(!error){box.innerHTML+=`<div class="user-row"><div><b>${esc(name)}</b><div class="muted">Table is readable · sample rows ${data?.length||0}</div></div><span class="status">Available</span></div>`;found=true}}if(!found)box.innerHTML='<div class="alert error">পরিচিত payment table পাওয়া যায়নি। তোমার প্রকৃত table name/schema দিলে payment approval panel নিরাপদভাবে যোগ করা যাবে।</div>'}
 async function loadSupportStatus(){const box=$('supportBox');box.innerHTML='';let ok=0;for(const name of ['support_conversations','support_messages']){const {error}=await sb.from(name).select('*').limit(1);if(!error){ok++;box.innerHTML+=`<div class="user-row"><b>${name}</b><span class="status">Available</span></div>`}else box.innerHTML+=`<div class="user-row"><b>${name}</b><span style="color:var(--red);font-size:11px">Not readable</span></div>`}if(ok===2)box.innerHTML+='<div class="notice" style="margin-top:15px">Support database tables পাওয়া গেছে। Admin reply interface-এর জন্য admin-side schema/RPC permission মিলিয়ে নিতে হবে।</div>'}
 function exportVideos(){const cols=['id','title','category','video_url','thumbnail_url','points_price','unlock_minutes','unlock_hours','is_trending'];const csv=[cols.join(','),...videos.map(v=>cols.map(k=>`"${String(v[k]??'').replace(/"/g,'""')}"`).join(','))].join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='viral-video-hub-videos.csv';a.click();URL.revokeObjectURL(a.href);toast('CSV export তৈরি হয়েছে।')}
-(async()=>{const {data:{session}}=await sb.auth.getSession();if(session?.user)await startApp();else log('Ready','Waiting for secure admin sign in')})();
+(async()=>{applyAdminDraft();renderCustomLinkDraft();const {data:{session}}=await sb.auth.getSession();if(session?.user)await startApp();else log('Ready','Waiting for secure admin sign in')})();
 </script>
 </body>
 </html>
