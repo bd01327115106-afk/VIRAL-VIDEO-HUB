@@ -25,6 +25,33 @@ th{background:#160e1c;color:#d6b8e7}td{border-bottom-color:#2b1b35}
 .pill,.secondary{background:#17101f;border-color:#4b2c5e}
 .tag{background:#281333;border-color:#70328a;color:#f0c8ff}
 @media(max-width:720px){.side{background:#0b0710}}
+
+/* Reference-matched dashboard polish: deep navy, electric purple/pink, compact panels */
+:root{--bg:#03051d;--panel:#080d2d;--panel2:#0c1038;--line:#28207e;--text:#f7f5ff;--muted:#b9b4df;--purple:#6326ff;--cyan:#e000ff;--green:#21e6b2;--gold:#ffc857}
+body{background:radial-gradient(ellipse at 52% -14%,#29065c 0,transparent 45%),radial-gradient(ellipse at 100% 40%,#11104b 0,transparent 42%),#03051d}
+.shell{grid-template-columns:258px minmax(0,1fr)}
+.side{background:linear-gradient(180deg,#050821,#03051a);border-right-color:#292078;padding:18px 13px;gap:20px}
+.brand{padding:0 9px 15px;border-bottom:1px solid #292078}
+.logo{width:45px;height:45px;border-radius:13px;background:linear-gradient(135deg,#6326ff,#f000ff);box-shadow:0 0 24px #8b2cff55}
+.nav button{border-radius:9px;padding:10px 11px;color:#c6c4ec}
+.nav button.active,.nav button:hover{background:linear-gradient(90deg,#4d20ff,#d400ff);border-color:#963dff;box-shadow:0 5px 18px #7b2cff35}
+main{padding:20px clamp(14px,2vw,28px) 30px}
+.top{padding-bottom:15px;border-bottom:1px solid #26206c;margin-bottom:18px}
+.top h1{font-size:28px}
+.card{background:linear-gradient(145deg,#0b1034,#050821);border-color:#30228e;border-radius:12px;box-shadow:0 10px 26px #0003;padding:16px}
+.stats{gap:12px}
+.stat-icon{border-radius:50%;width:42px;height:42px;background:linear-gradient(135deg,#5b20e8,#bc16f1);color:white}
+.stat-num{font-size:27px}
+.primary{background:linear-gradient(90deg,#6326ff,#e000ff);border-radius:8px}
+.secondary{background:#0b1034;border-color:#39259e}
+.tag{background:#170c48;border-color:#6930c9}
+table{border-collapse:collapse}
+th{background:#101044;color:#d9d4ff}
+td,th{border-bottom:1px solid #1c2057}
+input,select,textarea{background:#070b2a!important;border-color:#30258c!important;color:#fff!important}
+@media(max-width:1050px){.shell{grid-template-columns:220px minmax(0,1fr)}.stats{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.shell{grid-template-columns:1fr}.side{position:static}.nav{grid-template-columns:repeat(2,minmax(0,1fr))}.top{align-items:flex-start;flex-direction:column}.content-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
