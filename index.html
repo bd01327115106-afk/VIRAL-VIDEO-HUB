@@ -1245,7 +1245,9 @@ async function registerVideoView(videoId){
     const key="vv_last_view_"+videoId;
     const last=Number(localStorage.getItem(key)||0);
     if(Date.now()-last<55000) return;
-    const {data,error}=await supabaseClient.rpc("register_video_view",{p_video_id:String(videoId)});
+    const {data,error}=await 
+supabaseClient.rpc("register_video_view", { p_video_id: Number(videoId) })
+;
     if(error){console.warn("register_video_view failed:",error.message);return;}
     localStorage.setItem(key,String(Date.now()));
     updateVideoCounts(videoId,data);
