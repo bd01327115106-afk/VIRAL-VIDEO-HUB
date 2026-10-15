@@ -224,7 +224,34 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
   <div class="notice">
     <b>✈ Telegram Control</b><br>
     এখানে তোমার Telegram বটের নিয়ন্ত্রণের ব্যবস্থা থাকবে।
-  </div>
+  </div><div class="card" style="margin-top:16px">
+  <h2>📢 Channel Post Manager</h2>
+  <p>মেইন Telegram চ্যানেলের পোস্ট তৈরি করুন</p>
+
+  <label>ব্যানার ছবির URL</label>
+  <input id="channelBanner" type="url" placeholder="https://example.com/banner.jpg">
+
+  <label>পোস্টের লেখা</label>
+  <textarea id="channelCaption" rows="4" placeholder="🔥 VIRAL VIDEO&#10;নতুন ভিডিও দেখতে নিচে চাপ দিন"></textarea>
+
+  <h3>প্রথম বাটন</h3>
+  <label>বাটনের নাম</label>
+  <input id="channelBtn1Text" type="text" placeholder="ওয়েবসাইটে প্রবেশ করুন">
+  <label>প্রথম বাটনের লিংক</label>
+  <input id="channelBtn1Url" type="url" placeholder="https://example.com">
+
+  <h3>দ্বিতীয় বাটন</h3>
+  <label>বাটনের নাম</label>
+  <input id="channelBtn2Text" type="text" placeholder="আমার অন্য লিংক">
+  <label>দ্বিতীয় বাটনের লিংক</label>
+  <input id="channelBtn2Url" type="url" placeholder="https://t.me/example">
+
+  <label>মেইন চ্যানেলের Username বা Chat ID</label>
+  <input id="channelChatId" type="text" placeholder="@YourChannel">
+
+  <button type="button" onclick="saveChannelPostDraft()">Save Post Draft</button>
+  <p id="channelDraftStatus" class="hint">এখনো চ্যানেলে পোস্ট পাঠানো হয়নি।</p>
+</div>
   <div class="card">
     <h2>Telegram Bot Manager</h2>
     <p>Login Bot: @ViralVideoHubBDBot</p>
@@ -514,7 +541,21 @@ async function loadUsers(){const box=$('usersList');box.innerHTML='<div class="e
 function renderUsers(){const q=($('userSearch')?.value||'').toLowerCase();const list=users.filter(u=>String(u.id||'').toLowerCase().includes(q)||String(u.referral_code||'').toLowerCase().includes(q));$('usersList').innerHTML=list.length?list.map(u=>`<div class="user-row"><div><b>${esc(String(u.id).slice(0,8))}…</b><div class="muted">Referral: ${esc(u.referral_code||'—')} · Referrals: ${Number(u.referral_count||0)}</div></div><div style="text-align:right"><b style="color:#f0abfc">${Number(u.points||0).toLocaleString()} pts</b><div class="muted">Earned ${Number(u.total_referral_points||0).toLocaleString()}</div></div></div>`).join(''):'<div class="empty">কোনো ইউজার নেই।</div>'}
 async function loadPayments(){const box=$('paymentsBox');box.innerHTML='';const names=['usdt_payments','payments','payment_requests','transactions'];let found=false;for(const name of names){const {data,error}=await sb.from(name).select('*').limit(1);if(!error){box.innerHTML+=`<div class="user-row"><div><b>${esc(name)}</b><div class="muted">Table is readable · sample rows ${data?.length||0}</div></div><span class="status">Available</span></div>`;found=true}}if(!found)box.innerHTML='<div class="alert error">পরিচিত payment table পাওয়া যায়নি। তোমার প্রকৃত table name/schema দিলে payment approval panel নিরাপদভাবে যোগ করা যাবে।</div>'}
 async function loadSupportStatus(){const box=$('supportBox');box.innerHTML='';let ok=0;for(const name of ['support_conversations','support_messages']){const {error}=await sb.from(name).select('*').limit(1);if(!error){ok++;box.innerHTML+=`<div class="user-row"><b>${name}</b><span class="status">Available</span></div>`}else box.innerHTML+=`<div class="user-row"><b>${name}</b><span style="color:var(--red);font-size:11px">Not readable</span></div>`}if(ok===2)box.innerHTML+='<div class="notice" style="margin-top:15px">Support database tables পাওয়া গেছে। Admin reply interface-এর জন্য admin-side schema/RPC permission মিলিয়ে নিতে হবে।</div>'}
-function exportVideos(){const cols=['id','title','category','video_url','thumbnail_url','points_price','unlock_minutes','unlock_hours','is_trending'];const csv=[cols.join(','),...videos.map(v=>cols.map(k=>`"${String(v[k]??'').replace(/"/g,'""')}"`).join(','))].join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='viral-video-hub-videos.csv';a.click();URL.revokeObjectURL(a.href);toast('CSV export তৈরি হয়েছে।')}
+function exportVideos(){const cols=['id','title','category','video_url','thumbnail_url','points_price','unlock_minutes','unlock_hours','is_trending'];const csv=[cols.join(','),...videos.map(v=>cols.map(k=>`"${String(v[k]??'').replace(/"/g,'""')}"`).join(','))].join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='viral-video-hub-videos.csv';a.click();URL.revokeObjectURL(a.href);toast('CSV export তৈরি হয়েছে।')}function saveChannelPostDraft(){
+  const data = {
+    banner: document.getElementById('channelBanner').value.trim(),
+    caption: document.getElementById('channelCaption').value.trim(),
+    button1Text: document.getElementById('channelBtn1Text').value.trim(),
+    button1Url: document.getElementById('channelBtn1Url').value.trim(),
+    button2Text: document.getElementById('channelBtn2Text').value.trim(),
+    button2Url: document.getElementById('channelBtn2Url').value.trim(),
+    chatId: document.getElementById('channelChatId').value.trim()
+  };
+
+  localStorage.setItem('vvh_channel_post_draft', JSON.stringify(data));
+  document.getElementById('channelDraftStatus').textContent =
+    'ড্রাফট এই ব্রাউজারে সংরক্ষিত হয়েছে। এখনো চ্যানেলে পোস্ট পাঠানো হয়নি।';
+}
 (async()=>{applyAdminDraft();renderCustomLinkDraft();const {data:{session}}=await sb.auth.getSession();if(session?.user)await startApp();else log('Ready','Waiting for secure admin sign in')})();
 </script>
 </body>
