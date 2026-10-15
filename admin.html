@@ -250,6 +250,8 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
   <input id="channelChatId" type="text" placeholder="@YourChannel">
 
   <button type="button" onclick="saveChannelPostDraft()">Save Post Draft</button>
+<button type="button" onclick="sendChannelPost()">Send to Telegram Channel</button>
+<p id="channelSendStatus" class="hint">এখনো পোস্ট পাঠানো হয়নি।</p>
   <p id="channelDraftStatus" class="hint">এখনো চ্যানেলে পোস্ট পাঠানো হয়নি।</p>
 </div>
   <div class="card">
@@ -555,6 +557,50 @@ function exportVideos(){const cols=['id','title','category','video_url','thumbna
   localStorage.setItem('vvh_channel_post_draft', JSON.stringify(data));
   document.getElementById('channelDraftStatus').textContent =
     'ড্রাফট এই ব্রাউজারে সংরক্ষিত হয়েছে। এখনো চ্যানেলে পোস্ট পাঠানো হয়নি।';
+}
+async function sendChannelPost() {
+  const status = document.getElementById("channelSendStatus");
+  status.textContent = "পোস্ট পাঠানো হচ্ছে...";
+
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+
+    if (!session) {
+      status.textContent = "আগে Admin হিসেবে Login করুন।";
+      return;
+    }
+
+    const response = await fetch(
+      "https://pjpblyjejypzwwpxxgpf.supabase.co/functions/v1/telegram-channel-publisher",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer " + session.access_token,
+          "apikey": "আপনার_SUPABASE_ANON_KEY"
+        },
+        body: JSON.stringify({
+          banner: document.getElementById("channelBanner").value.trim(),
+          caption: document.getElementById("channelCaption").value.trim(),
+          button1Text: document.getElementById("channelBtn1Text").value.trim(),
+          button1Url: document.getElementById("channelBtn1Url").value.trim(),
+          button2Text: document.getElementById("channelBtn2Text").value.trim(),
+          button2Url: document.getElementById("channelBtn2Url").value.trim(),
+          chatId: document.getElementById("channelChatId").value.trim()
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "পোস্ট পাঠানো যায়নি।");
+    }
+
+    status.textContent = "সফল! Telegram চ্যানেলে পোস্ট পাঠানো হয়েছে।";
+  } catch (error) {
+    status.textContent = "সমস্যা: " + error.message;
+  }
 }
 (async()=>{applyAdminDraft();renderCustomLinkDraft();const {data:{session}}=await sb.auth.getSession();if(session?.user)await startApp();else log('Ready','Waiting for secure admin sign in')})();
 </script>
