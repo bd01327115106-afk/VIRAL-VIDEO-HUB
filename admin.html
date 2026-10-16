@@ -574,6 +574,59 @@ function exportVideos(){const cols=['id','title','category','video_url','thumbna
   document.getElementById('channelDraftStatus').textContent =
     'ড্রাফট এই ব্রাউজারে সংরক্ষিত হয়েছে। এখনো চ্যানেলে পোস্ট পাঠানো হয়নি।';
 }
+ 
+async function saveWatchSettings() {
+  const status = document.getElementById("watchSettingsStatus");
+  status.textContent = "সেটিংস সেভ হচ্ছে...";
+
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+
+    if (!session) {
+      status.textContent = "আগে Admin হিসেবে Login করুন।";
+      return;
+    }
+
+    const ttlMinutes = Number(
+      document.getElementById("watchTtlMinutes").value
+    );
+    const videoCaption =
+      document.getElementById("watchVideoCaption").value.trim();
+
+    if (!Number.isInteger(ttlMinutes) || ttlMinutes < 1 || ttlMinutes > 1440) {
+      status.textContent = "টাইমার ১ থেকে ১৪৪০ মিনিটের মধ্যে দিন।";
+      return;
+    }
+
+    const response = await fetch(
+      "https://pjpblyjejypzwwpxxgpf.supabase.co/functions/v1/telegram-channel-publisher",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${session.access_token}`,
+          "apikey": SUPABASE_KEY
+        },
+        body: JSON.stringify({
+          action: "save_watch_settings",
+          ttl_minutes: ttlMinutes,
+          video_caption: videoCaption
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "সেটিংস সেভ করা যায়নি।");
+    }
+
+    status.textContent = "সফল! ভিডিও বটের সেটিংস সেভ হয়েছে।";
+  } catch (error) {
+    status.textContent = "সমস্যা: " + error.message;
+  }
+}
+
 async function sendChannelPost() {
   const status = document.getElementById("channelSendStatus");
   status.textContent = "পোস্ট পাঠানো হচ্ছে...";
