@@ -266,6 +266,33 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
 
     <p class="hint">ভিডিওর নাম দেখাতে {title} লিখবে।</p>
 
+    <hr>
+    <h3>🔘 ভিডিওর নিচের ৪টি বাটন</h3>
+
+    <label>১ম বাটনের নাম</label>
+    <input id="watchButton1Text" type="text" value="💥 সাপোর্ট চ্যানেল ⏳">
+
+    <label>১ম বাটনের লিংক</label>
+    <input id="watchButton1Url" type="url" value="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/#support">
+
+    <label>২য় বাটনের নাম</label>
+    <input id="watchButton2Text" type="text" value="⏰ অফিসিয়াল চ্যানেল 🤣">
+
+    <label>২য় বাটনের লিংক</label>
+    <input id="watchButton2Url" type="url" value="https://t.me/VIRALVIDEOHUBBD">
+
+    <label>৩য় বাটনের নাম</label>
+    <input id="watchButton3Text" type="text" value="🔊 ফ্রিতে পয়েন্ট বাড়ানোর উপায় 🏷️">
+
+    <label>৩য় বাটনের লিংক</label>
+    <input id="watchButton3Url" type="url" value="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/#profile">
+
+    <label>৪র্থ বাটনের নাম</label>
+    <input id="watchButton4Text" type="text" value="🔞 আরো ভিডিও দেখুন 💥">
+
+    <label>৪র্থ বাটনের লিংক</label>
+    <input id="watchButton4Url" type="url" value="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/">
+
     <button type="button" onclick="saveWatchSettings()">Save Video Settings</button>
     <p id="watchSettingsStatus" class="hint">সেটিংস এখনো সেভ করা হয়নি।</p>
   </div>
@@ -575,6 +602,7 @@ function exportVideos(){const cols=['id','title','category','video_url','thumbna
     'ড্রাফট এই ব্রাউজারে সংরক্ষিত হয়েছে। এখনো চ্যানেলে পোস্ট পাঠানো হয়নি।';
 }
  
+
 async function saveWatchSettings() {
   const status = document.getElementById("watchSettingsStatus");
   status.textContent = "সেটিংস সেভ হচ্ছে...";
@@ -590,12 +618,40 @@ async function saveWatchSettings() {
     const ttlMinutes = Number(
       document.getElementById("watchTtlMinutes").value
     );
+
     const videoCaption =
       document.getElementById("watchVideoCaption").value.trim();
 
     if (!Number.isInteger(ttlMinutes) || ttlMinutes < 1 || ttlMinutes > 1440) {
       status.textContent = "টাইমার ১ থেকে ১৪৪০ মিনিটের মধ্যে দিন।";
       return;
+    }
+
+    const buttons = [];
+
+    for (let i = 1; i <= 4; i++) {
+      const text = document.getElementById(`watchButton${i}Text`).value.trim();
+      const url = document.getElementById(`watchButton${i}Url`).value.trim();
+
+      if (!text || !url) {
+        status.textContent = `${i} নম্বর বাটনের নাম ও লিংক পূরণ করুন।`;
+        return;
+      }
+
+      let parsedUrl;
+      try {
+        parsedUrl = new URL(url);
+      } catch {
+        status.textContent = `${i} নম্বর বাটনের লিংক সঠিক নয়।`;
+        return;
+      }
+
+      if (!["https:", "http:"].includes(parsedUrl.protocol)) {
+        status.textContent = `${i} নম্বর বাটনে সঠিক HTTP/HTTPS লিংক দিন।`;
+        return;
+      }
+
+      buttons.push({ text, url });
     }
 
     const response = await fetch(
@@ -610,7 +666,8 @@ async function saveWatchSettings() {
         body: JSON.stringify({
           action: "save_watch_settings",
           ttl_minutes: ttlMinutes,
-          video_caption: videoCaption
+          video_caption: videoCaption,
+          buttons
         })
       }
     );
@@ -621,11 +678,13 @@ async function saveWatchSettings() {
       throw new Error(result.error || "সেটিংস সেভ করা যায়নি।");
     }
 
-    status.textContent = "সফল! ভিডিও বটের সেটিংস সেভ হয়েছে।";
+    status.textContent =
+      "সফল! টাইমার, ক্যাপশন ও চারটি বাটনের সেটিংস সেভ হয়েছে।";
   } catch (error) {
     status.textContent = "সমস্যা: " + error.message;
   }
 }
+
 
 async function sendChannelPost() {
   const status = document.getElementById("channelSendStatus");
