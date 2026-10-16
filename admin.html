@@ -254,6 +254,22 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
 <p id="channelSendStatus" class="hint">এখনো পোস্ট পাঠানো হয়নি।</p>
   <p id="channelDraftStatus" class="hint">এখনো চ্যানেলে পোস্ট পাঠানো হয়নি।</p>
 </div>
+  <div class="card" style="margin-top:16px">
+    <h2>🎬 Video Bot Settings</h2>
+    <p>ভিডিও বটের টাইমার ও ভিডিওর নিচের লেখা নিয়ন্ত্রণ করুন।</p>
+
+    <label>ভিডিও ডিলিট টাইমার (মিনিট)</label>
+    <input id="watchTtlMinutes" type="number" min="1" max="1440" value="10" placeholder="10">
+
+    <label>ভিডিওর নিচের লেখা</label>
+    <textarea id="watchVideoCaption" rows="4" placeholder="🎬 {title}"></textarea>
+
+    <p class="hint">ভিডিওর নাম দেখাতে {title} লিখবে।</p>
+
+    <button type="button" onclick="saveWatchSettings()">Save Video Settings</button>
+    <p id="watchSettingsStatus" class="hint">সেটিংস এখনো সেভ করা হয়নি।</p>
+  </div>
+
   <div class="card">
     <h2>Telegram Bot Manager</h2>
     <p>Login Bot: @ViralVideoHubBDBot</p>
