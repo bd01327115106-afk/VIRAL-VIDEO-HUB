@@ -1601,7 +1601,7 @@ card.querySelector(".card-share").addEventListener("click", event => { event.sto
 videosDiv.appendChild(card);
 const durationLabel = card.querySelector(".duration");
 const videoSource = video.video_url;
-
+console.log("Video source:", videoSource);
 if (durationLabel && videoSource) {
   const tempVideo = document.createElement("video");
   tempVideo.preload = "metadata";
