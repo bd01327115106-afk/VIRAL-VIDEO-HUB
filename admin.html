@@ -445,19 +445,29 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
 <div class="field full"><label>Video URL (ঐচ্ছিক)</label><input id="vUrl" type="url" placeholder="https://…"></div>
 
 
+
 <div class="field full">
   <label>Thumbnail ছবি</label>
-  <input id="vThumb" type="url" placeholder="ছবির লিংক অথবা Gallery থেকে ছবি বেছে নিন">
+  <input id="vThumb" type="url"
+         placeholder="আপলোডের পর ছবির লিংক এখানে আসবে">
 
-  <input id="vThumbFile"
-         type="file"
+  <input id="vThumbFile" type="file"
          accept="image/*"
          style="margin-top:10px;width:100%;">
 
-  <img id="vThumbPreview"
-       alt="Thumbnail Preview"
-       style="display:none;width:100%;max-width:260px;margin-top:10px;border-radius:10px;">
+  <button type="button" id="vThumbUploadBtn"
+          class="primary" style="margin-top:10px;">
+    ছবি Upload করুন
+  </button>
+
+  <div id="vThumbUploadStatus"
+       style="margin-top:8px;"></div>
+
+  <img id="vThumbPreview" alt="Thumbnail Preview"
+       style="display:none;width:100%;max-width:260px;
+       margin-top:10px;border-radius:10px;">
 </div>
+
 
 
 <div class="field">
@@ -580,6 +590,87 @@ function renderDashVideos(){$('dashVideos').innerHTML=videos.slice(0,5).map(v=>`
 function openVideoForm(){if(!currentUser){toast('আগে admin login করো।');return} $('videoForm').reset();$('videoId').value='';$('vPrice').value='0';$('vTimeAmount').value='1';$('vTimeUnit').value='minutes';$('vTrending').value='false';$('formTitle').textContent='Add video';$('formMsg').innerHTML='';updateDurationPreview();$('videoModal').classList.remove('hidden')}
 function closeVideoForm(){$('videoModal').classList.add('hidden')}
 function setDuration(amount,unit){$('vTimeAmount').value=amount;$('vTimeUnit').value=unit;updateDurationPreview()}
+const thumbFile = $('vThumbFile');
+const thumbPreview = $('vThumbPreview');
+const thumbUploadBtn = $('vThumbUploadBtn');
+const thumbUploadStatus = $('vThumbUploadStatus');
+
+if (thumbFile && !thumbFile.dataset.ready) {
+  thumbFile.dataset.ready = '1';
+
+  thumbFile.addEventListener('change', () => {
+    const file = thumbFile.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      thumbUploadStatus.textContent = 'শুধু ছবির ফাইল নির্বাচন করুন।';
+      thumbFile.value = '';
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      thumbUploadStatus.textContent = 'ছবি ৫ MB-এর ছোট হতে হবে।';
+      thumbFile.value = '';
+      return;
+    }
+
+    thumbPreview.src = URL.createObjectURL(file);
+    thumbPreview.style.display = 'block';
+    thumbUploadStatus.textContent = 'ছবি নির্বাচন হয়েছে। এবার Upload চাপুন।';
+  });
+
+  thumbUploadBtn.addEventListener('click', async () => {
+    const file = thumbFile.files?.[0];
+
+    if (!file) {
+      thumbUploadStatus.textContent = 'আগে একটি ছবি নির্বাচন করুন।';
+      return;
+    }
+
+    thumbUploadBtn.disabled = true;
+    thumbUploadStatus.textContent = 'ছবি Upload হচ্ছে...';
+
+    try {
+      const { data: sessionData, error: sessionError } =
+        await sb.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      const token = sessionData.session?.access_token;
+      if (!token) throw new Error('আগে Admin login করুন।');
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch(
+        `${SUPABASE_URL}/functions/v1/imgbb-upload`,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'apikey': SUPABASE_KEY
+          },
+          body: formData
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success || !result.url) {
+        throw new Error(result.error || 'ছবি Upload করা যায়নি।');
+      }
+
+      $('vThumb').value = result.url;
+      thumbUploadStatus.textContent = 'ছবি Upload হয়েছে! এখন Save video চাপুন।';
+    } catch (error) {
+      thumbUploadStatus.textContent =
+        error.message || 'Upload ব্যর্থ হয়েছে।';
+    } finally {
+      thumbUploadBtn.disabled = false;
+    }
+  });
+}
+
 function updateDurationPreview(){let amount=Number($('vTimeAmount').value||0),unit=$('vTimeUnit').value;let mins=unit==='hours'?amount*60:amount;if(mins>1440){$('durationPreview').textContent='⚠️ সর্বোচ্চ ২৪ ঘণ্টা (১৪৪০ মিনিট)';return}let label=mins%60===0?(mins/60)+' hour'+(mins/60===1?'':'s'):mins+' minute'+(mins===1?'':'s');$('durationPreview').textContent=`⏱ ${label} · ${mins*60} seconds`}
 function editVideo(id){const v=videos.find(x=>String(x.id)===String(id));if(!v)return;openVideoForm();$('formTitle').textContent='Edit video';$('videoId').value=v.id;$('vTitle').value=v.title||'';$('vCategory').value=[...$('vCategory').options].some(o=>o.value===v.category)?v.category:'Other';$('vUrl').value=v.video_url||'';$('vThumb').value=v.thumbnail_url||v.thumbnail||'';$('vDuration').value = v.duration || '';$('vTelegramLink').value = v.telegram_message_id
   ? `https://t.me/c/${String(v.telegram_chat_id || '').replace(/^-100/, '')}/${v.telegram_message_id}`
