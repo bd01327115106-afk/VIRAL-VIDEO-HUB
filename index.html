@@ -1601,6 +1601,7 @@ card.querySelector(".card-share").addEventListener("click", event => { event.sto
 videosDiv.appendChild(card);
 const durationLabel = card.querySelector(".duration");
 const videoSource = video.video_url;
+console.log("All video data:", video);
 console.log("Video source:", videoSource);
 console.log("Video URL from database:", video.video_url);
 console.log("Actual video URL:", JSON.stringify(video.video_url));
