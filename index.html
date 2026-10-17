@@ -106,21 +106,7 @@ button,input{font:inherit}
 .video-thumb img{width:100%;height:100%;display:block;object-fit:cover;pointer-events:none}
 .video-thumb.no-thumb{background:linear-gradient(135deg,#24113b,#0b0910)}
 .play-icon{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:rgba(139,44,255,.9);display:flex;align-items:center;justify-content:center;color:#fff;font-size:23px;box-shadow:0 4px 20px #0008}
-.video-thumb .duration{
-  position:absolute;
-  right:9px;
-  bottom:8px;
-  z-index:5;
-  display:block;
-  background:rgba(0,0,0,.85);
-  color:#fff;
-  border-radius:5px;
-  padding:3px 6px;
-  font-weight:800;
-  font-size:12px;
-  line-height:1.4;
-  pointer-events:none;
-}
+
 .video-info{cursor:pointer}
 .video-stats{display:flex;gap:9px;align-items:center;flex-wrap:wrap;margin-top:10px;color:#ddd;font-size:12px}
 .video-age{margin-left:auto;color:#aaa}
@@ -1136,7 +1122,7 @@ async function openVideo(videoId){
     </div>
     <div class="details-content">
       <div class="details-player">
-        <video controls preload="metadata" poster="${escapeHtml(video.thumbnail_url || video.thumbnail || '')}"
+        <video preload="metadata" poster="${escapeHtml(video.thumbnail_url || video.thumbnail || '')}"
                src="${escapeHtml(video.video_url || '')}"
                ${unlocked ? '' : "controlsList='nodownload'"}></video>
       </div>
@@ -1589,7 +1575,6 @@ async function loadVideos(category = "All", button = null) {
     videosDiv.innerHTML = "";
 
     data.forEach(video => {
-const videoDuration = video.duration || "";
       const card = document.createElement("div");
       card.className = "video-card";
 
@@ -1614,30 +1599,7 @@ const videoDuration = video.duration || "";
 `;
 card.querySelector(".card-share").addEventListener("click", event => { event.stopPropagation(); shareVideo(video.id, video.title || "VIRAL VIDEO LINK"); });
 videosDiv.appendChild(card);
-const durationLabel = card.querySelector(".duration");
-const videoSource = video.video_url;
-console.log("All video data:", video);
-console.log("Video source:", videoSource);
-console.log("Video URL from database:", video.video_url);
-console.log("Actual video URL:", JSON.stringify(video.video_url));
-console.log("Thumbnail URL:", video.thumbnail_url);
-if (durationLabel && videoSource) {
-  const tempVideo = document.createElement("video");
-  tempVideo.preload = "metadata";
-  tempVideo.muted = true;
-tempVideo.playsInline = true;
-  tempVideo.onloadedmetadata = () => {
-    if (Number.isFinite(tempVideo.duration)) {
-      const minutes = Math.floor(tempVideo.duration / 60);
-      const seconds = Math.floor(tempVideo.duration % 60);
-      durationLabel.textContent = `${minutes}:${String(seconds).padStart(2, "0")}`;
-    }
-    tempVideo.removeAttribute("src");
-    tempVideo.load();
-  };
-  tempVideo.onerror = () => tempVideo.removeAttribute("src");
-  tempVideo.src = videoSource;
-}
+
     });
   }
 
