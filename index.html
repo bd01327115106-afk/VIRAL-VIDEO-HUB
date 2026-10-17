@@ -1560,7 +1560,7 @@ async function loadVideos(category = "All", button = null) {
     videosDiv.innerHTML = "";
 
     data.forEach(video => {
-
+const videoDuration = video.duration || "";
       const card = document.createElement("div");
       card.className = "video-card";
 
@@ -1570,7 +1570,7 @@ async function loadVideos(category = "All", button = null) {
          alt="${escapeHtml(video.title || "Video")}"
          onerror="this.style.display='none';this.parentElement.classList.add('no-thumb');">
     <span class="play-icon">▶</span>
-    <span class="duration">${escapeHtml(video.duration || "")}</span>
+  <span class="duration">${escapeHtml(videoDuration)}</span>
   </div>
 
   <div class="video-info" onclick="openVideo(${video.id})">
@@ -1585,6 +1585,24 @@ async function loadVideos(category = "All", button = null) {
 `;
 card.querySelector(".card-share").addEventListener("click", event => { event.stopPropagation(); shareVideo(video.id, video.title || "VIRAL VIDEO LINK"); });
 videosDiv.appendChild(card);
+const durationLabel = card.querySelector(".duration");
+const videoSource = video.video_url;
+
+if (durationLabel && videoSource) {
+  const tempVideo = document.createElement("video");
+  tempVideo.preload = "metadata";
+  tempVideo.onloadedmetadata = () => {
+    if (Number.isFinite(tempVideo.duration)) {
+      const minutes = Math.floor(tempVideo.duration / 60);
+      const seconds = Math.floor(tempVideo.duration % 60);
+      durationLabel.textContent = `${minutes}:${String(seconds).padStart(2, "0")}`;
+    }
+    tempVideo.removeAttribute("src");
+    tempVideo.load();
+  };
+  tempVideo.onerror = () => tempVideo.removeAttribute("src");
+  tempVideo.src = videoSource;
+}
     });
   }
 
