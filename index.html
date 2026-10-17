@@ -664,6 +664,19 @@ body.intro-lock{overflow:hidden}
 .video-details-page .unlock-points-button .coin-icon svg{fill:none!important;stroke:#fff!important}
 .video-details-page .more-video-icon svg{fill:#fff!important;stroke:#fff!important}
 
+
+/* Header live-support button, matching the supplied screenshot */
+.mainhead .support-header-btn{
+  flex:0 0 44px;width:44px;height:44px;border:0;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(145deg,#ffbd32,#ff9700);color:#17100a;
+  box-shadow:0 0 0 4px rgba(255,170,20,.12),0 4px 14px rgba(255,153,0,.25);
+  cursor:pointer;padding:0;
+}
+.mainhead .support-header-btn svg{width:23px;height:23px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.mainhead .support-header-btn:active{transform:scale(.96)}
+/* Support chat now lives in the header, so hide the old floating duplicate. */
+#supportFab{display:none!important}
 </style>
 </head>
 <body class="intro-lock">
@@ -699,7 +712,9 @@ body.intro-lock{overflow:hidden}
 <header class="mainhead">
   <button class="icon" onclick="openMenu()">☰</button>
   <div class="brand"><span class="v">VIRAL </span><span class="p">VIDEO LINK</span></div>
-  <button class="icon" onclick="focusSearch()">⌕</button>
+  <button class="support-header-btn" type="button" onclick="openSupportChat()" aria-label="Live Support" title="Live Support">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="12" width="4" height="7" rx="2"/><rect x="17" y="12" width="4" height="7" rx="2"/><path d="M17 19a5 5 0 0 1-5 3h-1"/></svg>
+  </button>
 </header>
 
 <main id="homePage" class="page active">
