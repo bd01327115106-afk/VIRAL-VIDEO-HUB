@@ -1603,6 +1603,7 @@ const durationLabel = card.querySelector(".duration");
 const videoSource = video.video_url;
 console.log("Video source:", videoSource);
 console.log("Video URL from database:", video.video_url);
+console.log("Actual video URL:", JSON.stringify(video.video_url));
 console.log("Thumbnail URL:", video.thumbnail_url);
 if (durationLabel && videoSource) {
   const tempVideo = document.createElement("video");
