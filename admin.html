@@ -444,10 +444,21 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
    
 <div class="field full"><label>Video URL (ঐচ্ছিক)</label><input id="vUrl" type="url" placeholder="https://…"></div>
 
+
 <div class="field full">
-  <label>Thumbnail URL</label>
-  <input id="vThumb" type="url" placeholder="https://...">
+  <label>Thumbnail ছবি</label>
+  <input id="vThumb" type="url" placeholder="ছবির লিংক অথবা Gallery থেকে ছবি বেছে নিন">
+
+  <input id="vThumbFile"
+         type="file"
+         accept="image/*"
+         style="margin-top:10px;width:100%;">
+
+  <img id="vThumbPreview"
+       alt="Thumbnail Preview"
+       style="display:none;width:100%;max-width:260px;margin-top:10px;border-radius:10px;">
 </div>
+
 
 <div class="field">
   <label>ভিডিওর সময় (Thumbnail Timer)</label>
@@ -467,7 +478,7 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
   <label>Points price</label>
   <input id="vPrice" type="number" min="0" step="1" value="0" required>
 </div>
-    <div class="field"><label>Duration label (optional)</label><input id="vDuration" maxlength="30" placeholder="e.g. 08:24"></div>
+    
     <div class="field full"><label>Unlock duration</label>
      <div class="duration-box">
       <div class="duration-controls"><input id="vTimeAmount" type="number" min="1" max="1440" value="1" required oninput="updateDurationPreview()"><select id="vTimeUnit" onchange="updateDurationPreview()"><option value="minutes">Minutes</option><option value="hours">Hours</option></select></div>
