@@ -1605,6 +1605,8 @@ const videoSource = video.video_url;
 if (durationLabel && videoSource) {
   const tempVideo = document.createElement("video");
   tempVideo.preload = "metadata";
+  tempVideo.muted = true;
+tempVideo.playsInline = true;
   tempVideo.onloadedmetadata = () => {
     if (Number.isFinite(tempVideo.duration)) {
       const minutes = Math.floor(tempVideo.duration / 60);
