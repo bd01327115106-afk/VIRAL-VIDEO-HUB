@@ -594,6 +594,27 @@ const thumbFile = $('vThumbFile');
 const thumbPreview = $('vThumbPreview');
 const thumbUploadBtn = $('vThumbUploadBtn');
 const thumbUploadStatus = $('vThumbUploadStatus');
+ const thumbUrlInput = $('vThumb');
+
+thumbUrlInput.addEventListener('input', () => {
+  const url = thumbUrlInput.value.trim();
+
+  if (url) {
+    thumbPreview.src = url;
+    thumbPreview.style.display = 'block';
+  } else {
+    thumbPreview.removeAttribute('src');
+    thumbPreview.style.display = 'none';
+  }
+});
+
+thumbPreview.addEventListener('error', () => {
+  thumbPreview.style.display = 'none';
+});
+
+thumbPreview.addEventListener('load', () => {
+  thumbPreview.style.display = 'block';
+});
 
 if (thumbFile && !thumbFile.dataset.ready) {
   thumbFile.dataset.ready = '1';
@@ -661,6 +682,8 @@ if (thumbFile && !thumbFile.dataset.ready) {
       }
 
       $('vThumb').value = result.url;
+     thumbPreview.src = result.url;
+thumbPreview.style.display = 'block';
       thumbUploadStatus.textContent = 'ছবি Upload হয়েছে! এখন Save video চাপুন।';
     } catch (error) {
       thumbUploadStatus.textContent =
