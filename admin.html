@@ -695,7 +695,16 @@ thumbPreview.style.display = 'block';
 }
 
 function updateDurationPreview(){let amount=Number($('vTimeAmount').value||0),unit=$('vTimeUnit').value;let mins=unit==='hours'?amount*60:amount;if(mins>1440){$('durationPreview').textContent='⚠️ সর্বোচ্চ ২৪ ঘণ্টা (১৪৪০ মিনিট)';return}let label=mins%60===0?(mins/60)+' hour'+(mins/60===1?'':'s'):mins+' minute'+(mins===1?'':'s');$('durationPreview').textContent=`⏱ ${label} · ${mins*60} seconds`}
-function editVideo(id){const v=videos.find(x=>String(x.id)===String(id));if(!v)return;openVideoForm();$('formTitle').textContent='Edit video';$('videoId').value=v.id;$('vTitle').value=v.title||'';$('vCategory').value=[...$('vCategory').options].some(o=>o.value===v.category)?v.category:'Other';$('vUrl').value=v.video_url||'';$('vThumb').value=v.thumbnail_url||v.thumbnail||'';$('vDuration').value = v.duration || '';$('vTelegramLink').value = v.telegram_message_id
+function editVideo(id){const v=videos.find(x=>String(x.id)===String(id));if(!v)return;openVideoForm();$('formTitle').textContent='Edit video';$('videoId').value=v.id;$('vTitle').value=v.title||'';$('vCategory').value=[...$('vCategory').options].some(o=>o.value===v.category)?v.category:'Other';$('vUrl').value=v.video_url||'';$('vThumb').value=v.thumbnail_url||v.thumbnail||'';const preview = $('vThumbPreview');
+const thumbUrl = $('vThumb').value.trim();
+
+if (thumbUrl) {
+  preview.src = thumbUrl;
+  preview.style.display = 'block';
+} else {
+  preview.removeAttribute('src');
+  preview.style.display = 'none';
+}$('vDuration').value = v.duration || '';$('vTelegramLink').value = v.telegram_message_id
   ? `https://t.me/c/${String(v.telegram_chat_id || '').replace(/^-100/, '')}/${v.telegram_message_id}`
   : '';$('vPrice').value=Number(v.points_price||0);$('vDuration').value=v.duration||'';$('vTrending').value=String(!!v.is_trending);let mins=durationMins(v);if(mins%60===0){$('vTimeAmount').value=mins/60;$('vTimeUnit').value='hours'}else{$('vTimeAmount').value=mins;$('vTimeUnit').value='minutes'}updateDurationPreview()}
 async function saveVideo(e){e.preventDefault();const btn=$('saveVideoBtn');btn.disabled=true;btn.textContent='Saving…';$('formMsg').innerHTML='';try{const title=$('vTitle').value.trim(),url=$('vUrl').value.trim(),price=Number($('vPrice').value),amount=Number($('vTimeAmount').value),unit=$('vTimeUnit').value,mins=unit==='hours'?amount*60:amount;if (!title) throw Error('ভিডিওর Title দিতে হবে।');if(!Number.isInteger(price)||price<0)throw Error('Points price শূন্য বা ধনাত্মক পূর্ণসংখ্যা হতে হবে।');if(!Number.isInteger(amount)||amount<1||mins>1440)throw Error('সময় ১ মিনিট থেকে ২৪ ঘণ্টার মধ্যে দিন।');const payload={title,category:$('vCategory').value.trim()||'Other',video_url:url,points_price:price,unlock_hours:Math.max(1,Math.ceil(mins/60)),unlock_minutes:mins,is_trending:$('vTrending').value==='true'};const tgLink = $('vTelegramLink').value.trim();
