@@ -1115,11 +1115,65 @@ async function setVideoUnlock(videoId, hours, source='ads'){
   return expiresAt;
 }
 
-async function getRequiredAdsForVideo(video){
-  const raw = video?.required_ads ?? video?.ads_required ?? video?.unlock_ads ?? video?.ads_to_unlock ?? 3;
-  const n = Number(raw);
-  return Number.isFinite(n) && n > 0 ? Math.min(20, Math.floor(n)) : 3;
+
+let liveAdSettings = null;
+
+async function getRequiredAdsForVideo(video) {
+  try {
+    if (!liveAdSettings) {
+      const { data, error } = await supabaseClient
+        .from('ad_settings')
+        .select('settings')
+        .eq('id', 'global')
+        .maybeSingle();
+
+      if (!error && data?.settings) {
+        liveAdSettings = data.settings;
+      }
+    }
+
+    const settings = liveAdSettings;
+    const globalEnabled = settings?.ads?.adsGlobal;
+
+    if (settings && globalEnabled === false) {
+      return 0;
+    }
+
+    const configuredDefault = Number(settings?.ads?.adsDefault);
+    const videoValue =
+      video?.required_ads ??
+      video?.ads_required ??
+      video?.unlock_ads ??
+      video?.ads_to_unlock;
+
+    const raw =
+      settings?.ads?.adsPolicy === 'global'
+        ? configuredDefault
+        : (videoValue ?? configuredDefault ?? 3);
+
+    const n = Number(raw);
+
+    if (n === 0) return 0;
+
+    return Number.isFinite(n) && n > 0
+      ? Math.min(20, Math.floor(n))
+      : 3;
+  } catch (error) {
+    console.warn('Ad settings load failed:', error);
+    const raw =
+      video?.required_ads ??
+      video?.ads_required ??
+      video?.unlock_ads ??
+      video?.ads_to_unlock ??
+      3;
+
+    const n = Number(raw);
+    return Number.isFinite(n) && n > 0
+      ? Math.min(20, Math.floor(n))
+      : 3;
+  }
 }
+
 
 async function getCurrentPointsBalance(){
   try{
