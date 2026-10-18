@@ -192,7 +192,7 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
    <p class="hint">বিজ্ঞাপন নেটওয়ার্কের নীতিমালা, consent ও ভিডিও প্লেয়ারের সমর্থন অনুযায়ী সেটিংস বাস্তবায়ন করতে হবে।</p>
   </div>
  </div>
- <div style="margin-top:15px" class="card"><div class="section-head"><div><h2>Ad configuration</h2><p>বর্তমান ড্রাফট ব্রাউজারে সংরক্ষণ বা JSON হিসেবে এক্সপোর্ট করো</p></div></div><button class="primary" onclick="saveAdminDraft('ads')">Save local draft</button> <button class="secondary" onclick="exportAdminDraft()">Export settings JSON</button><span id="adsSaveStatus" class="muted" style="margin-left:10px"></span></div>
+ <div style="margin-top:15px" class="card"><div class="section-head"><div><h2>Ad configuration</h2><p>বর্তমান ড্রাফট ব্রাউজারে সংরক্ষণ বা JSON হিসেবে এক্সপোর্ট করো</p></div></div><button class="primary" <button class="primary" onclick="publishAdSettings()">Save settings to Supabase</button> <button class="secondary" onclick="exportAdminDraft()">Export settings JSON</button><span id="adsSaveStatus" class="muted" style="margin-left:10px"></span></div>
 </section>
 <section id="view-links" class="view">
  <div class="notice"><b>Link Manager · Configurable draft</b><br>এখানে WhatsApp, Telegram এবং যেকোনো কাস্টম বাটনের নাম, URL, অবস্থান ও চালু/বন্ধ অবস্থা সাজাতে পারবে। এই সংস্করণে Save করলে এই ব্রাউজারে draft সংরক্ষণ হয়; লাইভ ওয়েবসাইটে কার্যকর করতে একই settings database এবং index.html-এর সঙ্গে যুক্ত করতে হবে।</div>
@@ -438,6 +438,36 @@ function readAdminDraft(){try{return JSON.parse(localStorage.getItem(ADMIN_DRAFT
 function collectAdminDraft(){const out={version:2,updatedAt:new Date().toISOString(),notice:'Local draft only; not connected to live website settings.'};for(const [group,ids] of Object.entries(draftGroups)){out[group]={};for(const id of ids){const el=$(id);if(el)out[group][id]=el.type==='checkbox'?el.checked:el.value}}return out}
 function applyAdminDraft(){const data=readAdminDraft();for(const [group,ids] of Object.entries(draftGroups)){for(const id of ids){const el=$(id);if(!el||data[group]?.[id]===undefined)continue;if(el.type==='checkbox')el.checked=!!data[group][id];else el.value=data[group][id]}}}
 function saveAdminDraft(group){const draft=collectAdminDraft();try{localStorage.setItem(ADMIN_DRAFT_KEY,JSON.stringify(draft));const status=$('adsSaveStatus');if(status)status.textContent='Draft saved in this browser';toast('Draft saved in this browser only — live site unchanged.');log('Local settings draft saved',group||'all settings')}catch(e){toast('Could not save local draft: '+e.message)}}
+ 
+async function publishAdSettings() {
+  const status = $('adsSaveStatus');
+
+  try {
+    if (status) status.textContent = 'Supabase-এ সেভ হচ্ছে...';
+
+    const settings = collectAdminDraft();
+
+    const { data, error } = await sb
+      .from('ad_settings')
+      .upsert({
+        id: 'global',
+        settings,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'id' });
+
+    if (error) throw error;
+
+    if (status) {
+      status.textContent = 'সেটিংস Supabase-এ সেভ হয়েছে।';
+    }
+
+    toast('সেটিংস Supabase-এ সেভ হয়েছে।');
+  } catch (e) {
+    if (status) status.textContent = 'সমস্যা: ' + e.message;
+    toast('সেভ করা যায়নি: ' + e.message);
+  }
+}
+
 
 const CUSTOM_LINK_DRAFT_KEY='vvh_custom_link_draft_v1';
 function readCustomLinks(){try{return JSON.parse(localStorage.getItem(CUSTOM_LINK_DRAFT_KEY)||'[]')}catch(_){return []}}
