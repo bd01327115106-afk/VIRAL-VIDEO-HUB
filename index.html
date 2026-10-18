@@ -7,8 +7,28 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://sad.adsgram.ai/js/sad.min.js"></script>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
 <style>
 *{box-sizing:border-box}
+  
+.video-thumb {
+  position: relative;
+}
+
+.thumbnail-duration {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  background: rgba(0, 0, 0, 0.85);
+  color: #fff;
+  padding: 4px 7px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  z-index: 2;
+}
+
 html,body{margin:0;background:#030304;color:#fff;font-family:Arial,"Noto Sans Bengali",sans-serif}
 body{min-height:100vh;overflow-x:hidden}
 button,input{font:inherit}
@@ -1586,6 +1606,11 @@ async function loadVideos(category = "All", button = null) {
          alt="${escapeHtml(video.title || "Video")}"
          onerror="this.style.display='none';this.parentElement.classList.add('no-thumb');">
     <span class="play-icon">▶</span>
+    
+<span class="thumbnail-duration">
+  ${escapeHtml(video.duration || '')}
+</span>
+
  
   </div>
 
