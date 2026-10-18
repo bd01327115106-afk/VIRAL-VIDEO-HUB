@@ -1212,8 +1212,16 @@ async function openVideo(videoId){
     <div class="details-topbar">
       <button type="button" onclick="document.getElementById('videoDetails').remove()" aria-label="ফিরে যান">‹</button>
       <b>VIRAL <span>VIDEO LINK</span></b>
-      <button type="button" class="details-share-top" aria-label="Share video"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3" fill="currentColor" stroke="none"/><circle cx="6" cy="12" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="19" r="3" fill="currentColor" stroke="none"/><path d="M8.7 10.7 15.3 6.3M8.7 13.3l6.6 4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
-    </div>
+    
+<button type="button" class="details-share-top" aria-label="Share video" onclick="shareVideoToTelegram('${encodeURIComponent(String(video.id))}')">
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="18" cy="5" r="3" fill="currentColor" stroke="none"/>
+    <circle cx="6" cy="12" r="3" fill="currentColor" stroke="none"/>
+    <circle cx="18" cy="19" r="3" fill="currentColor" stroke="none"/>
+    <path d="M8.7 10.7 15.3 6.3M8.7 13.3l6.6 4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/>
+  </svg>
+</button>
+
    <div class="details-content">
   <div class="details-player">
     <video preload="metadata" poster="${escapeHtml(video.thumbnail_url || video.thumbnail || '')}"
@@ -1699,13 +1707,32 @@ async function loadVideos(category = "All", button = null) {
     </div>
   </div>
 `;
-card.querySelector(".card-share").addEventListener("click", event => { event.stopPropagation(); shareVideo(video.id, video.title || "VIRAL VIDEO LINK"); });
+
+card.querySelector(".card-share").addEventListener("click", event => {
+  event.stopPropagation();
+  shareVideoToTelegram(video.id);
+});
+
 videosDiv.appendChild(card);
 
     });
   }
 
-  
+ 
+function shareVideoToTelegram(videoId) {
+  const appUrl =
+    "https://t.me/ViralVideoHubBDBot?startapp=video_" +
+    encodeURIComponent(String(videoId));
+
+  const shareUrl =
+    "https://t.me/share/url?url=" +
+    encodeURIComponent(appUrl) +
+    "&text=" +
+    encodeURIComponent("ভিডিওটি Telegram Mini App-এ দেখুন");
+
+  window.location.href = shareUrl;
+}
+ 
 function likeVideo(btn){
   btn.classList.toggle("liked");
   const label=btn.querySelector("small");
