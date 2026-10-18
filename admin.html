@@ -733,7 +733,8 @@ if (id) {
 } else {
   result = await sb.from('videos').insert(payload);
 }
-
+console.log('Saved duration payload:', payload.duration);
+console.log('Save result:', result);
 if (result.error) throw result.error;
 toast(`Saved: ${title} · ${mins} min`);log(id?'Video updated':'Video created',`${title}; duration ${mins} minutes`);closeVideoForm();await loadVideos()}catch(err){$('formMsg').innerHTML=`<div class="alert error">${esc(err.message||String(err))}<br><span class="hint">যদি unlock_minutes column নেই, Supabase-এ নিচের SQL চালাও। Thumbnail/duration column না থাকলে schema অনুযায়ী যোগ করো বা field বাদ দাও।</span></div>`;errorBox(err.message||String(err))}finally{btn.disabled=false;btn.textContent='Save video'}}
 async function deleteVideo(id){const v=videos.find(x=>String(x.id)===String(id));if(!v||!confirm(`"${v.title}" ভিডিওটি মুছে ফেলবে? এটি স্থায়ীভাবে মুছতে পারে।`))return;const {error}=await sb.from('videos').delete().eq('id',id).select('id').maybeSingle();if(error){errorBox('Delete হয়নি: '+error.message);return}toast('ভিডিও delete request পাঠানো হয়েছে।');log('Video delete requested',v.title);await loadVideos()}
