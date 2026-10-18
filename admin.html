@@ -119,6 +119,7 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
  <button data-view="support" onclick="showView('support',this)"><span class="ico">◌</span> Support</button>
  <button data-view="ads" onclick="showView('ads',this)"><span class="ico">▣</span> Ads Manager</button>
  <button data-view="links" onclick="showView('links',this)"><span class="ico">↗</span> Link Manager</button>
+<button data-view="telegram" onclick="showView('telegram',this)"><span class="ico">✈</span> Telegram Control</button>
  <button data-view="homepage" onclick="showView('homepage',this)"><span class="ico">⌂</span> Homepage</button>
  <button data-view="adult" onclick="showView('adult',this)"><span class="ico">18+</span> 18+ Content</button>
  <button data-view="referrals" onclick="showView('referrals',this)"><span class="ico">♧</span> Referral & Points</button>
@@ -128,7 +129,6 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
  <button data-view="notifications" onclick="showView('notifications',this)"><span class="ico">♧</span> Notifications</button>
  <button data-view="seo" onclick="showView('seo',this)"><span class="ico">⌕</span> SEO & Social</button>
  <button data-view="maintenance" onclick="showView('maintenance',this)"><span class="ico">⚒</span> Site Controls</button>
- <button data-view="telegram" onclick="showView('telegram',this)"><span class="ico">✈</span> Telegram Control</button>
  <button data-view="settings" onclick="showView('settings',this)"><span class="ico">⚙</span> Settings & Logs</button>
  </nav></div>
  <div class="side-foot brand-promo"><div class="promo-crown">♛</div><b>Viral Video <span>Link</span></b><small>Make Your Content Viral</small><div class="promo-play">▶</div><button type="button" class="primary promo-live" onclick="showView('dashboard',document.querySelector('[data-view=dashboard]'))">Go Live</button><small class="session-status"><span class="dot"></span> <span id="sessionEmail">Supabase connected</span></small></div>
@@ -177,8 +177,7 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
 <section id="view-payments" class="view"><div class="card"><div class="section-head"><div><h2>Payments</h2><p>পেমেন্টের টেবিল schema যাচাই করে লোড করা হবে</p></div><button class="secondary" onclick="loadPayments()">↻ Refresh</button></div><div id="paymentsBox" class="empty">Checking available payment tables…</div><p class="hint">USDT transaction যাচাই না করে points যোগ করা যাবে না। এই প্যানেল নিজে থেকে payment verify বা funds transfer করে না।</p></div></section>
 <section id="view-support" class="view"><div class="card"><div class="section-head"><div><h2>Support center</h2><p>Support tables-এর সংযোগ যাচাই</p></div><button class="secondary" onclick="loadSupportStatus()">↻ Refresh</button></div><div id="supportBox" class="empty">Checking support tables…</div><p class="hint">তোমার website-এ support_conversations এবং support_messages থাকলে status এখানে দেখাবে। Live reply UI-এর জন্য বর্তমান support schema/SQL মিলিয়ে নিতে হবে।</p></div></section>
 <section id="view-ads" class="view">
- <div class="notice"><b>Ads Manager · Draft controls</b><br>এখানে সেটিংস সাজিয়ে রাখা যাবে। এই কন্ট্রোলগুলো এখনো বিজ্ঞাপন নেটওয়ার্ক বা লাইভ ওয়েবসাইটে যুক্ত নয়; তাই এগুলো পরিবর্তন করলেই বাস্তবে বিজ্ঞাপন চালু/বন্ধ হবে না।</div>
- <div class="grid content-grid">
+ <div class="notice"><b>Ads Manager · Draft controls</b><br>এখানে সেটিংস সাজিয়ে রাখা যাবে। এই কন্ট্রোলগুলো এখনো বিজ্ঞাপন নেটওয়ার্ক বা লাইভ ওয়েবসাইটে যুক্ত নয়; তাই এগুলো পরিবর্তন করলেই বাস্তবে বিজ্ঞাপন চালু/বন্ধ হবে না।</div><div class="grid content-grid">
   <div class="card"><div class="section-head"><div><h2>Global advertisement controls</h2><p>সব ভিডিওর বিজ্ঞাপন-সংক্রান্ত ডিফল্ট</p></div><span class="tag">DRAFT</span></div>
    <label class="user-row"><span><b>Enable ads globally</b><div class="muted">সাইটজুড়ে বিজ্ঞাপন চালু করার ডিফল্ট</div></span><input id="adsGlobal" type="checkbox" style="width:22px;height:22px"></label>
    <div class="field"><label>Default ads per video</label><select id="adsDefault"><option>0</option><option>1</option><option selected>2</option><option>3</option><option>4</option><option>5</option></select></div>
@@ -220,6 +219,90 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
  </div>
  <div class="card" style="margin-top:15px"><div class="section-head"><div><h2>Save & export</h2><p>Save local draft অথবা JSON export</p></div></div><button class="primary" onclick="saveLinkManagerDraft()">Save link settings</button> <button class="secondary" onclick="exportAdminDraft()">Export settings JSON</button> <span id="linkSaveStatus" class="muted" style="margin-left:10px"></span></div>
 </section>
+<section id="view-telegram" class="view">
+  <div class="notice">
+    <b>✈ Telegram Control</b><br>
+    এখানে তোমার Telegram বটের নিয়ন্ত্রণের ব্যবস্থা থাকবে।
+  </div><div class="card" style="margin-top:16px">
+  <h2>📢 Channel Post Manager</h2>
+  <p>মেইন Telegram চ্যানেলের পোস্ট তৈরি করুন</p>
+
+  <label>ব্যানার ছবির URL</label>
+  <input id="channelBanner" type="url" placeholder="https://example.com/banner.jpg">
+
+  <label>পোস্টের লেখা</label>
+  <textarea id="channelCaption" rows="4" placeholder="🔥 VIRAL VIDEO&#10;নতুন ভিডিও দেখতে নিচে চাপ দিন"></textarea>
+
+  <h3>প্রথম বাটন</h3>
+  <label>বাটনের নাম</label>
+  <input id="channelBtn1Text" type="text" placeholder="ওয়েবসাইটে প্রবেশ করুন">
+  <label>প্রথম বাটনের লিংক</label>
+  <input id="channelBtn1Url" type="url" placeholder="https://example.com">
+
+  <h3>দ্বিতীয় বাটন</h3>
+  <label>বাটনের নাম</label>
+  <input id="channelBtn2Text" type="text" placeholder="আমার অন্য লিংক">
+  <label>দ্বিতীয় বাটনের লিংক</label>
+  <input id="channelBtn2Url" type="url" placeholder="https://t.me/example">
+
+  <label>মেইন চ্যানেলের Username বা Chat ID</label>
+  <input id="channelChatId" type="text" placeholder="@YourChannel">
+
+  <button type="button" onclick="saveChannelPostDraft()">Save Post Draft</button>
+<button type="button" onclick="sendChannelPost()">Send to Telegram Channel</button>
+<p id="channelSendStatus" class="hint">এখনো পোস্ট পাঠানো হয়নি।</p>
+  <p id="channelDraftStatus" class="hint">এখনো চ্যানেলে পোস্ট পাঠানো হয়নি।</p>
+</div>
+  <div class="card" style="margin-top:16px">
+    <h2>🎬 Video Bot Settings</h2>
+    <p>ভিডিও বটের টাইমার ও ভিডিওর নিচের লেখা নিয়ন্ত্রণ করুন।</p>
+
+    <label>ভিডিও ডিলিট টাইমার (মিনিট)</label>
+    <input id="watchTtlMinutes" type="number" min="1" max="1440" value="10" placeholder="10">
+
+    <label>ভিডিওর নিচের লেখা</label>
+    <textarea id="watchVideoCaption" rows="4" placeholder="🎬 {title}"></textarea>
+
+    <p class="hint">ভিডিওর নাম দেখাতে {title} লিখবে।</p>
+
+    <hr>
+    <h3>🔘 ভিডিওর নিচের ৪টি বাটন</h3>
+
+    <label>১ম বাটনের নাম</label>
+    <input id="watchButton1Text" type="text" value="💥 সাপোর্ট চ্যানেল ⏳">
+
+    <label>১ম বাটনের লিংক</label>
+    <input id="watchButton1Url" type="url" value="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/#support">
+
+    <label>২য় বাটনের নাম</label>
+    <input id="watchButton2Text" type="text" value="⏰ অফিসিয়াল চ্যানেল 🤣">
+
+    <label>২য় বাটনের লিংক</label>
+    <input id="watchButton2Url" type="url" value="https://t.me/VIRALVIDEOHUBBD">
+
+    <label>৩য় বাটনের নাম</label>
+    <input id="watchButton3Text" type="text" value="🔊 ফ্রিতে পয়েন্ট বাড়ানোর উপায় 🏷️">
+
+    <label>৩য় বাটনের লিংক</label>
+    <input id="watchButton3Url" type="url" value="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/#profile">
+
+    <label>৪র্থ বাটনের নাম</label>
+    <input id="watchButton4Text" type="text" value="🔞 আরো ভিডিও দেখুন 💥">
+
+    <label>৪র্থ বাটনের লিংক</label>
+    <input id="watchButton4Url" type="url" value="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/">
+
+    <button type="button" onclick="saveWatchSettings()">Save Video Settings</button>
+    <p id="watchSettingsStatus" class="hint">সেটিংস এখনো সেভ করা হয়নি।</p>
+  </div>
+
+  <div class="card">
+    <h2>Telegram Bot Manager</h2>
+    <p>Login Bot: @ViralVideoHubBDBot</p>
+    <p>Video Bot: @AllVideosGrabbdbot</p>
+  </div>
+</section>
+
 <section id="view-homepage" class="view">
  <div class="notice"><b>Homepage Builder · Draft</b><br>এই প্যানেলে হোমপেজের সেকশন ও ব্যানারের পরিকল্পনা সাজানো যাবে। লাইভ হোমপেজ বদলাতে পরে এই সেটিংসকে index.html/ডেটাবেসের সঙ্গে যুক্ত করতে হবে।</div>
  <div class="grid content-grid">
@@ -335,27 +418,6 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
  </div>
  <div class="card" style="margin-top:15px"><button class="primary" onclick="saveAdminDraft('maintenance')">Save local draft</button> <button class="secondary" onclick="exportAdminDraft()">Export settings JSON</button></div>
 </section>
-<section id="view-telegram" class="view">
- <div class="notice"><b>✈ Telegram Control</b><br>চ্যানেল পোস্ট এবং ভিডিও বটের সেটিংস এখানে পরিচালনা করো। Bot token বা service-role key এই HTML-এ বসাবে না।</div>
- <div class="card"><h2>📢 Channel Post Manager</h2><p class="muted">মেইন Telegram চ্যানেলে ছবি, লেখা ও দুটি বাটন পাঠাও।</p>
-  <div class="field"><label>ব্যানার ছবির URL (ঐচ্ছিক)</label><input id="channelBanner" type="url" placeholder="https://example.com/banner.jpg"></div>
-  <div class="field"><label>পোস্টের লেখা</label><textarea id="channelCaption" rows="4" placeholder="🔥 VIRAL VIDEO HUB&#10;নতুন ভিডিও দেখতে নিচে চাপ দিন"></textarea></div>
-  <div class="form-grid"><div class="field"><label>প্রথম বাটনের নাম</label><input id="channelBtn1Text" placeholder="ওয়েবসাইটে প্রবেশ করুন"></div><div class="field"><label>প্রথম বাটনের লিংক</label><input id="channelBtn1Url" type="url" placeholder="https://example.com"></div><div class="field"><label>দ্বিতীয় বাটনের নাম</label><input id="channelBtn2Text" placeholder="অফিসিয়াল চ্যানেল"></div><div class="field"><label>দ্বিতীয় বাটনের লিংক</label><input id="channelBtn2Url" type="url" placeholder="https://t.me/example"></div></div>
-  <div class="field"><label>মেইন চ্যানেলের Username বা Chat ID</label><input id="channelChatId" placeholder="@YourChannel"></div>
-  <button class="secondary" type="button" onclick="saveChannelPostDraft()">Save Post Draft</button> <button class="primary" type="button" onclick="sendChannelPost()">Send to Telegram Channel</button><p id="channelSendStatus" class="hint">এখনো পোস্ট পাঠানো হয়নি।</p><p id="channelDraftStatus" class="hint">ড্রাফট এখনো সেভ হয়নি।</p>
- </div>
- <div class="card" style="margin-top:15px"><h2>🎬 Video Bot Settings</h2><p class="muted">ভিডিও পাঠানোর পর মুছে ফেলার সময় এবং ভিডিওর নিচের চারটি বাটন।</p>
-  <div class="field"><label>ভিডিও ডিলিট টাইমার (মিনিট)</label><input id="watchTtlMinutes" type="number" min="1" max="1440" value="10"></div>
-  <div class="field"><label>ভিডিওর নিচের লেখা</label><textarea id="watchVideoCaption" rows="3" placeholder="🎬 {title}"></textarea><div class="hint">ভিডিওর নাম দেখাতে {title} লিখবে।</div></div>
-  <div class="form-grid">
-   <div class="field"><label>১ম বাটনের নাম</label><input id="watchButton1Text" value="💥 সাপোর্ট চ্যানেল ⏳"></div><div class="field"><label>১ম বাটনের লিংক</label><input id="watchButton1Url" type="url" value="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/#support"></div>
-   <div class="field"><label>২য় বাটনের নাম</label><input id="watchButton2Text" value="⏰ অফিসিয়াল চ্যানেল 🤣"></div><div class="field"><label>২য় বাটনের লিংক</label><input id="watchButton2Url" type="url" value="https://t.me/VIRALVIDEOHUBBD"></div>
-   <div class="field"><label>৩য় বাটনের নাম</label><input id="watchButton3Text" value="🔊 ফ্রিতে পয়েন্ট বাড়ানোর উপায় 🏷️"></div><div class="field"><label>৩য় বাটনের লিংক</label><input id="watchButton3Url" type="url" value="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/#profile"></div>
-   <div class="field"><label>৪র্থ বাটনের নাম</label><input id="watchButton4Text" value="🔞 আরো ভিডিও দেখুন 💥"></div><div class="field"><label>৪র্থ বাটনের লিংক</label><input id="watchButton4Url" type="url" value="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/"></div>
-  </div><button class="primary" type="button" onclick="saveWatchSettings()">Save Video Settings</button><p id="watchSettingsStatus" class="hint">সেটিংস এখনো সেভ করা হয়নি।</p>
- </div>
- <div class="card" style="margin-top:15px"><h2>Telegram Bot Manager</h2><p>Login Bot: @ViralVideoHubBDBot</p><p>Video Bot: @AllVideosGrabbdbot</p><p class="hint">দুই বটের token আলাদা রাখবে। Token কেবল Supabase Edge Function Secrets-এ থাকবে।</p></div>
-</section>
 <section id="view-settings" class="view">
  <div class="card"><div class="section-head"><div><h2>Project connection</h2><p>এই HTML-এ থাকা Supabase configuration</p></div><span class="tag">CLIENT KEY ONLY</span></div>
  <div class="notice">কখনোই এখানে Supabase service_role/secret key বসাবে না। শুধু publishable/anon key ব্যবহার করো এবং database-এ Row Level Security (RLS) চালু রাখো।</div>
@@ -378,12 +440,54 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
     <div class="field"><label>ভিডিও ক্যাটাগরি</label><select id="vCategory" required>
      <option value="বাংলা">বাংলা</option><option value="ইংলিশ">ইংলিশ</option><option value="ভাইরাল ভিডিও">ভাইরাল ভিডিও</option><option value="টেলিগ্রাম">টেলিগ্রাম</option><option value="টিকটক">টিকটক</option><option value="জাপানি">জাপানি</option><option value="ফানি">ফানি</option><option value="মিউজিক">মিউজিক</option><option value="শর্টস">শর্টস</option><option value="কমেডি">কমেডি</option><option value="নিউজ">নিউজ</option><option value="ট্রেন্ডিং">ট্রেন্ডিং</option><option value="Other">অন্যান্য</option>
     </select></div>
-    <div class="field full"><label>Video URL *</label><input id="vUrl" type="url" placeholder="সরাসরি MP4 URL (ঐচ্ছিক, Telegram link থাকলে খালি রাখো)"></div>
-    <div class="field full"><label>Thumbnail URL (ঐচ্ছিক)</label><input id="vThumb" type="url" placeholder="ছবির URL এখানে দিতে পারো"></div>
-    <div class="field full"><label>অথবা ফোন/কম্পিউটার থেকে ছবি আপলোড করো</label><input id="vThumbFile" type="file" accept="image/*" onchange="previewThumbnailFile(this)" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--panel2);color:var(--text)"><div class="hint">JPG, PNG বা WebP ছবি বেছে নাও। ছবি আপলোড হলে Thumbnail URL স্বয়ংক্রিয়ভাবে বসবে।</div><img id="vThumbPreview" alt="Thumbnail preview" style="display:none;max-width:180px;max-height:130px;object-fit:cover;border-radius:12px;margin-top:10px;border:1px solid var(--line)"></div>
-    <div class="field"><label>Points price</label><input id="vPrice" type="number" min="0" step="1" value="0" required></div>
-    <div class="field"><label>Duration label (optional)</label><input id="vDuration" maxlength="30" placeholder="e.g. 08:24"></div>
-    <div class="field full"><label>Telegram Private Channel Message Link (optional)</label><input id="vTelegramLink" type="url" placeholder="https://t.me/c/CHANNEL_ID/MESSAGE_ID"></div>
+   
+<div class="field full"><label>Video URL (ঐচ্ছিক)</label><input id="vUrl" type="url" placeholder="https://…"></div>
+
+
+
+<div class="field full">
+  <label>Thumbnail ছবি</label>
+  <input id="vThumb" type="url"
+         placeholder="আপলোডের পর ছবির লিংক এখানে আসবে">
+
+  <input id="vThumbFile" type="file"
+         accept="image/*"
+         style="margin-top:10px;width:100%;">
+
+  <button type="button" id="vThumbUploadBtn"
+          class="primary" style="margin-top:10px;">
+    ছবি Upload করুন
+  </button>
+
+  <div id="vThumbUploadStatus"
+       style="margin-top:8px;"></div>
+
+  <img id="vThumbPreview" alt="Thumbnail Preview"
+       style="display:none;width:100%;max-width:260px;
+       margin-top:10px;border-radius:10px;">
+</div>
+
+
+
+<div class="field">
+  <label>ভিডিওর সময় (Thumbnail Timer)</label>
+  <input id="vDuration" type="text"
+         placeholder="যেমন 29:24"
+         maxlength="8"
+         pattern="[0-9]{1,3}:[0-5][0-9]"
+         title="সময় লিখুন, যেমন 29:24">
+</div>
+
+<div class="field full">
+  <label>Telegram Private Channel Message Link</label>
+  <input id="vTelegramLink" type="url" placeholder="https://t.me/c/CHANNEL_ID/MESSAGE_ID">
+</div>
+
+<div class="field">
+  <label>Points price</label>
+  <input id="vPrice" type="number" min="0" step="1" value="0" required>
+</div>
+    
     <div class="field full"><label>Unlock duration</label>
      <div class="duration-box">
       <div class="duration-controls"><input id="vTimeAmount" type="number" min="1" max="1440" value="1" required oninput="updateDurationPreview()"><select id="vTimeUnit" onchange="updateDurationPreview()"><option value="minutes">Minutes</option><option value="hours">Hours</option></select></div>
@@ -398,13 +502,6 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
   </form>
  </div>
 </div>
-<div id="videoPreviewModal" class="hidden" style="position:fixed;inset:0;background:#030611e8;backdrop-filter:blur(8px);z-index:40;display:grid;place-items:center;padding:14px;overflow:auto">
- <div class="card" style="width:min(850px,100%);max-height:94vh;overflow:auto;background:#101629">
-  <div class="section-head"><div><h2 id="previewVideoTitle">ভিডিও প্রিভিউ</h2><p id="previewVideoMeta">গ্যালারি প্রিভিউ</p></div><button class="secondary" onclick="closeVideoPreview()">✕ বন্ধ</button></div>
-  <div id="previewVideoBody" style="background:#050407;border-radius:14px;min-height:160px;display:grid;place-items:center;padding:10px"><div class="empty">ভিডিও প্রিভিউ লোড হচ্ছে…</div></div>
-  <p class="hint">সরাসরি MP4 URL থাকলে এখানে চালানো যাবে। Private Telegram channel-এর ভিডিও সরাসরি ওয়েব প্লেয়ারে চলে না; সে ক্ষেত্রে Telegram message link খুলো।</p>
- </div>
-</div>
 <div id="toast" class="toast hidden" role="status"></div>
 <script>
 const SUPABASE_URL='https://pjpblyjejypzwwpxxgpf.supabase.co';
@@ -414,14 +511,33 @@ let videos=[],users=[],currentUser=null,logs=[];
 const $=id=>document.getElementById(id);
 function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function log(title,detail){logs.unshift({title,detail,time:new Date().toLocaleTimeString()});logs=logs.slice(0,12);renderLogs()}
-function renderLogs(){$('logs').innerHTML=logs.map(x=>`<div class="activity-row"><div class="activity-icon">•</div><div><b>${esc(x.title)}</b><small>${esc(x.detail)} · ${esc(x.time)}</small></div></div>`).join('')}
-function toast(msg){$('toast').textContent=msg;$('toast').classList.remove('hidden');setTimeout(()=>$('toast').classList.add('hidden'),3200)}
-function errorBox(msg){$('globalMsg').innerHTML=`<div class="alert error">${esc(msg)}</div>`;log('Database / action error',msg)}
-async function signIn(){const email=$('loginEmail').value.trim(),password=$('loginPassword').value; $('loginMsg').innerHTML='';if(!email||!password){$('loginMsg').innerHTML='<div class="alert error">Email এবং password দিন।</div>';return}const {data,error}=await sb.auth.signInWithPassword({email,password});if(error){$('loginMsg').innerHTML=`<div class="alert error">${esc(error.message)}</div>`;return}currentUser=data.user;await startApp()}
+function renderLogs(){$('logs').innerHTML=logs.map(x=><div class="activity-row"><div class="activity-icon">•</div><div><b>${esc(x.title)}</b><small>${esc(x.detail)} · ${esc(x.time)}</small></div></div>).join('')}
+function toast(msg) {
+  let el = document.getElementById('toast');
+
+  if (!el) {
+    el = document.createElement('div');
+    el.id = 'toast';
+    document.body.appendChild(el);
+  }
+
+  el.textContent = msg;
+  el.style.cssText =
+    'position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#222;color:#fff;padding:12px 18px;border-radius:10px;z-index:99999;color:white;';
+
+  setTimeout(() => {
+    if (el && el.parentNode) {
+      el.parentNode.removeChild(el);
+    }
+  }, 3200);
+}
+function errorBox(msg){$('globalMsg').innerHTML=<div class="alert error">${esc(msg)}</div>;log('Database / action e
+rror',msg)}
+async function signIn(){const email=$('loginEmail').value.trim(),password=$('loginPassword').value; $('loginMsg').innerHTML='';if(!email||!password){$('loginMsg').innerHTML='<div class="alert error">Email এবং password দিন।</div>';return}const {data,error}=await sb.auth.signInWithPassword({email,password});if(error){$('loginMsg').innerHTML=<div class="alert error">${esc(error.message)}</div>;return}currentUser=data.user;await startApp()}
 async function signOut(){await sb.auth.signOut();currentUser=null;$('app').classList.add('hidden');$('loginScreen').classList.remove('hidden')}
 async function startApp(){const {data:{user}}=await sb.auth.getUser();if(!user)return;currentUser=user;$('loginScreen').classList.add('hidden');$('app').classList.remove('hidden');$('sessionEmail').textContent=user.email||user.id;$('cfgSession').value=user.email||user.id;log('Signed in',user.email||user.id);await refreshAll()}
 sb.auth.onAuthStateChange((_event,session)=>{if(session?.user){currentUser=session.user;$('loginScreen').classList.add('hidden');$('app').classList.remove('hidden')}});
-const titles={dashboard:['Overview','তোমার প্ল্যাটফর্মের সার্বিক অবস্থা এক নজরে।'],videos:['Video Management','ভিডিও, পয়েন্ট মূল্য ও unlock timer পরিচালনা করো।'],users:['Users & Points','রেজিস্টার্ড ইউজার ও পয়েন্ট ব্যালেন্স দেখো।'],payments:['Payments','পেমেন্ট টেবিলের status যাচাই করো।'],support:['Support Center','সাপোর্ট টেবিল সংযোগ যাচাই করো।'],ads:['Ads Manager','বিজ্ঞাপনের নিয়ম ও প্রতি ভিডিওর ড্রাফট সেটিংস।'],links:['Link Manager','Telegram, support, shop ও custom link পরিচালনার ড্রাফট।'],homepage:['Homepage Builder','হোমপেজের সেকশন ও ব্যানারের ড্রাফট।'],adult:['18+ Content','বয়স সতর্কতা ও কনটেন্ট visibility ড্রাফট।'],referrals:['Referral & Points','রেফারেল ও পয়েন্ট নিয়মের ড্রাফট।'],analytics:['Analytics','লোড করা লাইভ ডেটার সারাংশ ও analytics status।'],categories:['Categories Manager','ক্যাটাগরি ও display order-এর ড্রাফট।'],moderation:['Content Moderation','রিপোর্ট ও কনটেন্ট রিভিউয়ের ড্রাফট।'],notifications:['Notifications','ঘোষণা ও নোটিফিকেশন প্রস্তুত করো।'],seo:['SEO & Social','সার্চ ও সোশ্যাল প্রিভিউ মেটাডেটা।'],maintenance:['Site Controls','রক্ষণাবেক্ষণ ও নিরাপত্তা চেকলিস্ট।'],settings:['Settings & Logs','সংযোগ, diagnostics ও export।'],telegram:['Telegram Control','চ্যানেল পোস্ট ও ভিডিও বটের সেটিংস।']};
+const titles={dashboard:['Overview','তোমার প্ল্যাটফর্মের সার্বিক অবস্থা এক নজরে।'],videos:['Video Management','ভিডিও, পয়েন্ট মূল্য ও unlock timer পরিচালনা করো।'],users:['Users & Points','রেজিস্টার্ড ইউজার ও পয়েন্ট ব্যালেন্স দেখো।'],payments:['Payments','পেমেন্ট টেবিলের status যাচাই করো।'],support:['Support Center','সাপোর্ট টেবিল সংযোগ যাচাই করো।'],ads:['Ads Manager','বিজ্ঞাপনের নিয়ম ও প্রতি ভিডিওর ড্রাফট সেটিংস।'],links:['Link Manager','Telegram, support, shop ও custom link পরিচালনার ড্রাফট।'],telegram:['Telegram Control','Telegram bot status and controls.'],homepage:['Homepage Builder','হোমপেজের সেকশন ও ব্যানারের ড্রাফট।'],adult:['18+ Content','বয়স সতর্কতা ও কনটেন্ট visibility ড্রাফট।'],referrals:['Referral & Points','রেফারেল ও পয়েন্ট নিয়মের ড্রাফট।'],analytics:['Analytics','লোড করা লাইভ ডেটার সারাংশ ও analytics status।'],categories:['Categories Manager','ক্যাটাগরি ও display order-এর ড্রাফট।'],moderation:['Content Moderation','রিপোর্ট ও কনটেন্ট রিভিউয়ের ড্রাফট।'],notifications:['Notifications','ঘোষণা ও নোটিফিকেশন প্রস্তুত করো।'],seo:['SEO & Social','সার্চ ও সোশ্যাল প্রিভিউ মেটাডেটা।'],maintenance:['Site Controls','রক্ষণাবেক্ষণ ও নিরাপত্তা চেকলিস্ট।'],settings:['Settings & Logs','সংযোগ, diagnostics ও export।']};
 function showView(name,btn){document.querySelectorAll('.view').forEach(x=>x.classList.remove('active'));$('view-'+name).classList.add('active');document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x.dataset.view===name));$('pageTitle').textContent=titles[name][0];$('pageSub').textContent=titles[name][1];if(name==='users')loadUsers();if(name==='payments')loadPayments();if(name==='support')loadSupportStatus();if(name==='analytics')updateAnalytics()}
 const ADMIN_DRAFT_KEY='vvh_admin_panel_draft_v2';
 const draftGroups={
@@ -444,7 +560,7 @@ function readCustomLinks(){try{return JSON.parse(localStorage.getItem(CUSTOM_LIN
 function saveCustomLinks(items){localStorage.setItem(CUSTOM_LINK_DRAFT_KEY,JSON.stringify(items));renderCustomLinkDraft()}
 function addCustomLinkDraft(){const label=$('linkCustomLabel').value.trim(),url=$('linkCustomUrl').value.trim();if(!label||!url){toast('Button name ও URL দুটোই দিতে হবে।');return}if(!/^https?:\/\//i.test(url)){toast('URL অবশ্যই https:// বা http:// দিয়ে শুরু হবে।');return}const items=readCustomLinks();items.push({id:Date.now(),label,url,placement:$('linkCustomPlacement').value,enabled:$('linkCustomEnabled').value==='true'});saveCustomLinks(items);$('linkCustomLabel').value='';$('linkCustomUrl').value='';toast('Custom button local draft-এ যোগ হয়েছে।')}
 function removeCustomLinkDraft(id){saveCustomLinks(readCustomLinks().filter(x=>x.id!==id));toast('Draft button removed.')}
-function renderCustomLinkDraft(){const box=$('customLinkDraftList');if(!box)return;const items=readCustomLinks();box.innerHTML=items.length?items.map(x=>`<div class="user-row"><span><b>${esc(x.label)}</b><div class="muted">${esc(x.url)} · ${esc(x.placement)} · ${x.enabled?'Enabled':'Disabled'}</div></span><button class="danger" onclick="removeCustomLinkDraft(${Number(x.id)})">Remove</button></div>`).join(''):'<p class="muted">এখনো custom button যোগ করা হয়নি।</p>'}
+function renderCustomLinkDraft(){const box=$('customLinkDraftList');if(!box)return;const items=readCustomLinks();box.innerHTML=items.length?items.map(x=><div class="user-row"><span><b>${esc(x.label)}</b><div class="muted">${esc(x.url)} · ${esc(x.placement)} · ${x.enabled?'Enabled':'Disabled'}</div></span><button class="danger" onclick="removeCustomLinkDraft(${Number(x.id)})">Remove</button></div>).join(''):'<p class="muted">এখনো custom button যোগ করা হয়নি।</p>'}
 function saveLinkManagerDraft(){saveAdminDraft('links');const status=$('linkSaveStatus');if(status)status.textContent='Saved in this browser only';toast('Link settings draft saved. Live site is not changed yet.');log('Link settings draft saved','WhatsApp, Telegram and custom buttons')}
 function exportAdminDraft(){const data=JSON.stringify(collectAdminDraft(),null,2);const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type:'application/json'}));a.download='viral-video-hub-admin-settings-draft.json';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);toast('Settings draft JSON exported.')}
 const ADMIN_CATEGORY_KEY='vvh_admin_category_draft_v1', ADMIN_MOD_KEY='vvh_admin_moderation_draft_v1';
@@ -456,34 +572,322 @@ function renderModerationDraft(){const el=$('moderationDraftList');if(!el)return
 function removeModerationDraft(i){let list=[];try{list=JSON.parse(localStorage.getItem(ADMIN_MOD_KEY)||'[]')}catch(_){}list.splice(i,1);localStorage.setItem(ADMIN_MOD_KEY,JSON.stringify(list));renderModerationDraft()}
 function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function updateAnalytics(){if($('analyticsVideos'))$('analyticsVideos').textContent=videos.length.toLocaleString();if($('analyticsUsers'))$('analyticsUsers').textContent=users.length.toLocaleString();if($('analyticsTrending'))$('analyticsTrending').textContent=videos.filter(v=>v.is_trending).length.toLocaleString();if($('analyticsPoints'))$('analyticsPoints').textContent=users.reduce((n,u)=>n+Number(u.points||0),0).toLocaleString()}
-function saveChannelPostDraft(){const data={banner:$('channelBanner').value.trim(),caption:$('channelCaption').value.trim(),button1Text:$('channelBtn1Text').value.trim(),button1Url:$('channelBtn1Url').value.trim(),button2Text:$('channelBtn2Text').value.trim(),button2Url:$('channelBtn2Url').value.trim(),chatId:$('channelChatId').value.trim()};localStorage.setItem('vvh_channel_post_draft',JSON.stringify(data));$('channelDraftStatus').textContent='ড্রাফট এই ব্রাউজারে সংরক্ষিত হয়েছে; এখনো চ্যানেলে পাঠানো হয়নি।'}
-function loadChannelPostDraft(){try{const d=JSON.parse(localStorage.getItem('vvh_channel_post_draft')||'{}');for(const [key,id] of Object.entries({banner:'channelBanner',caption:'channelCaption',button1Text:'channelBtn1Text',button1Url:'channelBtn1Url',button2Text:'channelBtn2Text',button2Url:'channelBtn2Url',chatId:'channelChatId'})){if(d[key]!==undefined&&$(id))$(id).value=d[key]}}catch(_){}}
-async function telegramPublisherRequest(body){const {data:{session}}=await sb.auth.getSession();if(!session)throw Error('আগে Admin হিসেবে Login করুন।');const response=await fetch(`${SUPABASE_URL}/functions/v1/telegram-channel-publisher`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${session.access_token}`,'apikey':SUPABASE_KEY},body:JSON.stringify(body)});let result;try{result=await response.json()}catch(_){throw Error('Edge Function থেকে সঠিক JSON উত্তর আসেনি।')}if(!response.ok||!result.success)throw Error(result.error||`Request failed (${response.status})`);return result}
-async function saveWatchSettings(){const status=$('watchSettingsStatus');status.textContent='সেটিংস সেভ হচ্ছে...';try{const ttl=Number($('watchTtlMinutes').value);if(!Number.isInteger(ttl)||ttl<1||ttl>1440)throw Error('টাইমার ১ থেকে ১৪৪০ মিনিটের মধ্যে দিন।');const buttons=[];for(let i=1;i<=4;i++){const text=$(`watchButton${i}Text`).value.trim(),url=$(`watchButton${i}Url`).value.trim();if(!text||!url)throw Error(`${i} নম্বর বাটনের নাম ও লিংক পূরণ করুন।`);let u;try{u=new URL(url)}catch(_){throw Error(`${i} নম্বর বাটনের URL সঠিক নয়।`)}if(!['https:','http:'].includes(u.protocol))throw Error(`${i} নম্বর বাটনে HTTP/HTTPS লিংক দিন।`);buttons.push({text,url})}await telegramPublisherRequest({action:'save_watch_settings',ttl_minutes:ttl,video_caption:$('watchVideoCaption').value.trim(),buttons});status.textContent='সফল! টাইমার, ক্যাপশন ও চারটি বাটনের সেটিংস সেভ হয়েছে।'}catch(e){status.textContent='সমস্যা: '+e.message}}
-async function sendChannelPost(){const status=$('channelSendStatus');status.textContent='পোস্ট পাঠানো হচ্ছে...';try{const data={banner:$('channelBanner').value.trim(),caption:$('channelCaption').value.trim(),button1Text:$('channelBtn1Text').value.trim(),button1Url:$('channelBtn1Url').value.trim(),button2Text:$('channelBtn2Text').value.trim(),button2Url:$('channelBtn2Url').value.trim(),chatId:$('channelChatId').value.trim()};if(!data.caption&&!data.banner)throw Error('পোস্টের লেখা অথবা ব্যানার ছবির URL দিন।');if(!data.chatId)throw Error('মেইন চ্যানেলের Username বা Chat ID দিন।');if((data.button1Text&&!data.button1Url)||(!data.button1Text&&data.button1Url)||(data.button2Text&&!data.button2Url)||(!data.button2Text&&data.button2Url))throw Error('প্রতিটি বাটনের নাম ও লিংক দুটোই দিতে হবে।');await telegramPublisherRequest(data);status.textContent='সফল! Telegram চ্যানেলে পোস্ট পাঠানো হয়েছে।'}catch(e){status.textContent='সমস্যা: '+e.message}}
 async function refreshAll(){await Promise.all([loadVideos(),loadUsers(),loadPayments(),loadSupportStatus()])}
-async function loadVideos(){const {data,error}=await sb.from('videos').select('*').order('created_at',{ascending:false}).limit(500);if(error){errorBox('ভিডিও লোড হয়নি: '+error.message);$('videoTable').innerHTML=`<tr><td colspan="6" class="empty">ভিডিও টেবিল পড়া যায়নি। RLS ও column/table permission পরীক্ষা করো।</td></tr>`;return}videos=data||[];$('statVideos').textContent=videos.length.toLocaleString();$('statTrending').textContent=videos.filter(v=>v.is_trending).length.toLocaleString();renderVideoTable();renderDashVideos();log('Videos refreshed',`${videos.length} video rows`)}
+async function loadVideos(){const {data,error}=await sb.from('videos').select('*').order('created_at',{ascending:false}).limit(500);if(error){errorBox('ভিডিও লোড হয়নি: '+error.message);$('videoTable').innerHTML=<tr><td colspan="6" class="empty">ভিডিও টেবিল পড়া যায়নি। RLS ও column/table permission পরীক্ষা করো।</td></tr>;return}videos=data||[];$
+const statVideos = $('statVideos');
+if (statVideos) {
+  statVideos.textContent = videos.length.toLocaleString();
+}
+
+const statTrending = $('statTrending');
+if (statTrending) {
+  statTrending.textContent = videos.filter(v => v.is_trending).length.toLocaleString();
+}renderVideoTable();renderDashVideos();log('Videos refreshed',${videos.length} video rows)}
 function durationMins(v){if(v.unlock_minutes!==undefined&&v.unlock_minutes!==null&&Number(v.unlock_minutes)>0)return Number(v.unlock_minutes);return Math.max(1,Number(v.unlock_hours||1)*60)}
 function durationLabel(v){let m=durationMins(v);return m%60===0?(m/60)+' hr':m+' min'}
-function renderVideoTable(){const q=($('videoSearch')?.value||'').toLowerCase();const list=videos.filter(v=>(v.title||'').toLowerCase().includes(q)||(v.category||'').toLowerCase().includes(q));$('videoTable').innerHTML=list.length?list.map(v=>`<tr><td><div class="video-cell"><div class="thumb-wrap" style="width:54px;height:42px;flex:0 0 54px;border-radius:8px;overflow:hidden;background:#21132d;display:grid;place-items:center"><img class="thumb" style="width:54px;height:42px;object-fit:cover" src="${esc(v.thumbnail_url||v.thumbnail||'')}" alt="Thumbnail" onerror="this.style.display='none';this.parentElement.innerHTML='<span title="No thumbnail">🎬</span>'"></div><div><b>${esc(v.title||'Untitled')}</b><div class="muted">ID: ${esc(v.id)}</div></div></div></td><td>${esc(v.category||'Other')}</td><td>${Number(v.points_price||0).toLocaleString()}</td><td><span class="tag">${esc(durationLabel(v))}</span></td><td>${v.is_trending?'<span class="status">Trending</span>':'—'}</td><td><div class="actions"><button class="smallbtn" onclick="previewVideo('${esc(String(v.id))}')">▶ Preview</button><button class="smallbtn" onclick="editVideo('${esc(String(v.id))}')">Edit</button><button class="danger" onclick="deleteVideo('${esc(String(v.id))}')">Delete</button></div></td></tr>`).join(''):'<tr><td colspan="6" class="empty">কোনো ভিডিও পাওয়া যায়নি।</td></tr>'}
-function renderDashVideos(){$('dashVideos').innerHTML=videos.slice(0,5).map(v=>`<div class="activity-row"><img class="thumb" src="${esc(v.thumbnail_url||v.thumbnail||'')}" onerror="this.style.visibility='hidden'"><div style="flex:1;min-width:0"><b>${esc(v.title||'Untitled')}</b><small>${esc(v.category||'Other')} · ${Number(v.points_price||0)} points · ${esc(durationLabel(v))}</small></div><span class="tag">${v.is_trending?'Trending':'Active'}</span></div>`).join('')||'<div class="empty">এখনও ভিডিও নেই।</div>'}
-function closeVideoPreview(){const modal=$('videoPreviewModal');if(!modal)return;const body=$('previewVideoBody');if(body)body.innerHTML='';modal.classList.add('hidden')}
-function previewVideo(id){const v=videos.find(x=>String(x.id)===String(id));if(!v)return;$('previewVideoTitle').textContent=v.title||'ভিডিও প্রিভিউ';$('previewVideoMeta').textContent=(v.category||'Other')+' · '+durationLabel(v);const body=$('previewVideoBody');body.innerHTML='';if(v.video_url){const url=String(v.video_url);if(/\.(mp4|webm|ogg)(?:$|[?#])/i.test(url)){const player=document.createElement('video');player.controls=true;player.playsInline=true;player.preload='metadata';player.style.cssText='width:100%;max-height:70vh;border-radius:10px;background:#000';player.src=url;body.appendChild(player);player.addEventListener('error',()=>{body.innerHTML='<div class="empty">ভিডিওটি চালানো যাচ্ছে না। URL সরাসরি MP4/WebM কিনা এবং ফাইল public-accessible কিনা পরীক্ষা করো।</div>'})}else{const note=document.createElement('div');note.className='empty';note.textContent='এই URL সরাসরি ভিডিও ফাইল নয়। লিংকটি আলাদা ট্যাবে খোলো:';const a=document.createElement('a');a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='ভিডিও লিংক খুলুন';a.style.cssText='display:block;margin:12px;color:#d6b8ff';note.appendChild(a);body.appendChild(note)}}else if(v.telegram_chat_id&&v.telegram_message_id){const note=document.createElement('div');note.className='empty';note.textContent='এই ভিডিওটি Private Telegram channel-এ আছে। ওয়েব প্লেয়ারে দেখা যাবে না।';const a=document.createElement('a');a.href=`https://t.me/c/${String(v.telegram_chat_id).replace(/^-100/,'')}/${v.telegram_message_id}`;a.target='_blank';a.rel='noopener noreferrer';a.textContent='Telegram message খুলুন';a.style.cssText='display:block;margin:12px;color:#d6b8ff';note.appendChild(a);body.appendChild(note)}else{const img=v.thumbnail_url||v.thumbnail;if(img){const image=document.createElement('img');image.src=img;image.alt='Video thumbnail';image.style.cssText='max-width:100%;max-height:65vh;object-fit:contain';body.appendChild(image)}else body.innerHTML='<div class="empty">ভিডিও URL বা থাম্বনেইল নেই। Edit করে যোগ করো।</div>'}$('videoPreviewModal').classList.remove('hidden')}
+function renderVideoTable(){const q=($('videoSearch')?.value||'').toLowerCase();const list=videos.filter(v=>(v.title||'').toLowerCase().includes(q)||(v.category||'').toLowerCase().includes(q));$('videoTable').innerHTML=list.length?list.map(v=><tr><td><div class="video-cell"><img class="thumb" src="${esc(v.thumbnail_url||v.thumbnail||'')}" onerror="this.style.visibility='hidden'"><div><b>${esc(v.title||'Untitled')}</b><div class="muted">ID: ${esc(v.id)}</div></div></div></td><td>${esc(v.category||'Other')}</td><td>${Number(v.points_price||0).toLocaleString()}</td><td><span class="tag">${esc(durationLabel(v))}</span></td><td>${v.is_trending?'<span class="status">Trending</span>':'—'}</td><td><div class="actions"><button class="smallbtn" onclick="editVideo('${esc(String(v.id))}')">Edit</button><button class="danger" onclick="deleteVideo('${esc(String(v.id))}')">Delete</button></div></td></tr>).join(''):'<tr><td colspan="6" class="empty">কোনো ভিডিও পাওয়া যায়নি।</td></tr>'}
+function renderDashVideos(){$('dashVideos').innerHTML=videos.slice(0,5).map(v=><div class="activity-row"><img class="thumb" src="${esc(v.thumbnail_url||v.thumbnail||'')}" onerror="this.style.visibility='hidden'"><div style="flex:1;min-width:0"><b>${esc(v.title||'Untitled')}</b><small>${esc(v.category||'Other')} · ${Number(v.points_price||0)} points · ${esc(durationLabel(v))}</small></div><span class="tag">${v.is_trending?'Trending':'Active'}</span></div>).join('')||'<div class="empty">এখনও ভিডিও নেই।</div>'}
 function openVideoForm(){if(!currentUser){toast('আগে admin login করো।');return} $('videoForm').reset();$('videoId').value='';$('vPrice').value='0';$('vTimeAmount').value='1';$('vTimeUnit').value='minutes';$('vTrending').value='false';$('formTitle').textContent='Add video';$('formMsg').innerHTML='';updateDurationPreview();$('videoModal').classList.remove('hidden')}
 function closeVideoForm(){$('videoModal').classList.add('hidden')}
 function setDuration(amount,unit){$('vTimeAmount').value=amount;$('vTimeUnit').value=unit;updateDurationPreview()}
-function updateDurationPreview(){let amount=Number($('vTimeAmount').value||0),unit=$('vTimeUnit').value;let mins=unit==='hours'?amount*60:amount;if(mins>1440){$('durationPreview').textContent='⚠️ সর্বোচ্চ ২৪ ঘণ্টা (১৪৪০ মিনিট)';return}let label=mins%60===0?(mins/60)+' hour'+(mins/60===1?'':'s'):mins+' minute'+(mins===1?'':'s');$('durationPreview').textContent=`⏱ ${label} · ${mins*60} seconds`}
-function previewThumbnailFile(input){const file=input?.files?.[0],preview=$('vThumbPreview');if(!file){if(preview){preview.style.display='none';preview.removeAttribute('src')}return}if(!file.type.startsWith('image/')){input.value='';toast('ছবি ফাইল বেছে নাও।');return}if(file.size>8*1024*1024){input.value='';toast('ছবির সাইজ ৮ MB-এর কম হতে হবে।');return}const reader=new FileReader();reader.onload=()=>{preview.src=reader.result;preview.style.display='block'};reader.readAsDataURL(file)}
-async function uploadVideoThumbnail(file){if(!file)return $('vThumb').value.trim()||null;if(!file.type.startsWith('image/'))throw Error('Thumbnail-এর জন্য image ফাইল বেছে নাও।');if(file.size>8*1024*1024)throw Error('ছবির সাইজ ৮ MB-এর কম হতে হবে।');const ext=(file.name.split('.').pop()||'jpg').toLowerCase().replace(/[^a-z0-9]/g,'')||'jpg';const path='thumbnails/'+Date.now()+'-'+Math.random().toString(36).slice(2,10)+'.'+ext;const {data,error}=await sb.storage.from('videos').upload(path,file,{cacheControl:'3600',upsert:false,contentType:file.type});if(error)throw Error('ছবি আপলোড হয়নি: '+error.message+'। Supabase Storage-এর videos bucket ও upload policy পরীক্ষা করো।');const {data:{publicUrl}}=sb.storage.from('videos').getPublicUrl(path);$('vThumb').value=publicUrl;return publicUrl}
-function editVideo(id){const v=videos.find(x=>String(x.id)===String(id));if(!v)return;openVideoForm();$('formTitle').textContent='Edit video';$('videoId').value=v.id;$('vTitle').value=v.title||'';$('vCategory').value=[...$('vCategory').options].some(o=>o.value===v.category)?v.category:'Other';$('vUrl').value=v.video_url||'';$('vThumb').value=v.thumbnail_url||v.thumbnail||'';if($('vThumbFile'))$('vThumbFile').value='';if($('vThumbPreview')){if($('vThumb').value){$('vThumbPreview').src=$('vThumb').value;$('vThumbPreview').style.display='block'}else{$('vThumbPreview').removeAttribute('src');$('vThumbPreview').style.display='none'}}$('vPrice').value=Number(v.points_price||0);$('vDuration').value=v.duration||'';$('vTelegramLink').value=(v.telegram_chat_id&&v.telegram_message_id)?`https://t.me/c/${String(v.telegram_chat_id).replace(/^-100/,'')}/${v.telegram_message_id}`:'';$('vTrending').value=String(!!v.is_trending);let mins=durationMins(v);if(mins%60===0){$('vTimeAmount').value=mins/60;$('vTimeUnit').value='hours'}else{$('vTimeAmount').value=mins;$('vTimeUnit').value='minutes'}updateDurationPreview()}
-async function saveVideo(e){e.preventDefault();const btn=$('saveVideoBtn');btn.disabled=true;btn.textContent='Saving…';$('formMsg').innerHTML='';try{const title=$('vTitle').value.trim(),url=$('vUrl').value.trim(),price=Number($('vPrice').value),amount=Number($('vTimeAmount').value),unit=$('vTimeUnit').value,mins=unit==='hours'?amount*60:amount;const tgLink=$('vTelegramLink')?.value.trim()||'';if(!title||(!url&&!tgLink))throw Error('Title এবং Video URL অথবা Telegram channel message link দিতে হবে।');if(!Number.isInteger(price)||price<0)throw Error('Points price শূন্য বা ধনাত্মক পূর্ণসংখ্যা হতে হবে।');if(!Number.isInteger(amount)||amount<1||mins>1440)throw Error('সময় ১ মিনিট থেকে ২৪ ঘণ্টার মধ্যে দিন।');const payload={title,category:$('vCategory').value.trim()||'Other',video_url:url||null,points_price:price,unlock_hours:Math.max(1,Math.ceil(mins/60)),unlock_minutes:mins,is_trending:$('vTrending').value==='true'};if(tgLink){const match=tgLink.match(/^https?:\/\/t\.me\/c\/(\d+)\/(\d+)\/?(?:\?.*)?$/i);if(!match)throw Error('Telegram link format: https://t.me/c/1234567890/25');payload.telegram_chat_id='-100'+match[1];payload.telegram_message_id=Number(match[2])}else{payload.telegram_chat_id=null;payload.telegram_message_id=null}const pickedThumb=$('vThumbFile')?.files?.[0]||null;const thumb=await uploadVideoThumbnail(pickedThumb);payload.thumbnail_url=thumb||null;const dur=$('vDuration').value.trim();if(dur)payload.duration=dur;const id=$('videoId').value;let result;if(id){result=await sb.from('videos').update(payload).eq('id',id).select('*').maybeSingle()}else{result=await sb.from('videos').insert(payload).select('*').maybeSingle()}if(result.error)throw result.error;if(!result.data)throw Error('কোনো row save হয়নি। Admin RLS policy/row permission পরীক্ষা করো।');toast(`Saved: ${title} · ${mins} min`);log(id?'Video updated':'Video created',`${title}; duration ${mins} minutes`);closeVideoForm();await loadVideos()}catch(err){$('formMsg').innerHTML=`<div class="alert error">${esc(err.message||String(err))}<br><span class="hint">যদি unlock_minutes column নেই, Supabase-এ নিচের SQL চালাও। Thumbnail/duration column না থাকলে schema অনুযায়ী যোগ করো বা field বাদ দাও।</span></div>`;errorBox(err.message||String(err))}finally{btn.disabled=false;btn.textContent='Save video'}}
-async function deleteVideo(id){const v=videos.find(x=>String(x.id)===String(id));if(!v||!confirm(`"${v.title}" ভিডিওটি মুছে ফেলবে? এটি স্থায়ীভাবে মুছতে পারে।`))return;const {error}=await sb.from('videos').delete().eq('id',id).select('id').maybeSingle();if(error){errorBox('Delete হয়নি: '+error.message);return}toast('ভিডিও delete request পাঠানো হয়েছে।');log('Video delete requested',v.title);await loadVideos()}
-async function loadUsers(){const box=$('usersList');box.innerHTML='<div class="empty">Loading users…</div>';const {data,error}=await sb.from('profiles').select('id,points,referral_code,referral_count,total_referral_points').order('points',{ascending:false}).limit(300);if(error){box.innerHTML=`<div class="alert error">${esc(error.message)}<br>Profiles select permission/RLS পরীক্ষা করো।</div>`;$('statUsers').textContent='—';$('statPoints').textContent='—';return}users=data||[];$('statUsers').textContent=users.length.toLocaleString();$('statPoints').textContent=users.reduce((a,u)=>a+Number(u.points||0),0).toLocaleString();renderUsers()}
-function renderUsers(){const q=($('userSearch')?.value||'').toLowerCase();const list=users.filter(u=>String(u.id||'').toLowerCase().includes(q)||String(u.referral_code||'').toLowerCase().includes(q));$('usersList').innerHTML=list.length?list.map(u=>`<div class="user-row"><div><b>${esc(String(u.id).slice(0,8))}…</b><div class="muted">Referral: ${esc(u.referral_code||'—')} · Referrals: ${Number(u.referral_count||0)}</div></div><div style="text-align:right"><b style="color:#f0abfc">${Number(u.points||0).toLocaleString()} pts</b><div class="muted">Earned ${Number(u.total_referral_points||0).toLocaleString()}</div></div></div>`).join(''):'<div class="empty">কোনো ইউজার নেই।</div>'}
-async function loadPayments(){const box=$('paymentsBox');box.innerHTML='';const names=['usdt_payments','payments','payment_requests','transactions'];let found=false;for(const name of names){const {data,error}=await sb.from(name).select('*').limit(1);if(!error){box.innerHTML+=`<div class="user-row"><div><b>${esc(name)}</b><div class="muted">Table is readable · sample rows ${data?.length||0}</div></div><span class="status">Available</span></div>`;found=true}}if(!found)box.innerHTML='<div class="alert error">পরিচিত payment table পাওয়া যায়নি। তোমার প্রকৃত table name/schema দিলে payment approval panel নিরাপদভাবে যোগ করা যাবে।</div>'}
-async function loadSupportStatus(){const box=$('supportBox');box.innerHTML='';let ok=0;for(const name of ['support_conversations','support_messages']){const {error}=await sb.from(name).select('*').limit(1);if(!error){ok++;box.innerHTML+=`<div class="user-row"><b>${name}</b><span class="status">Available</span></div>`}else box.innerHTML+=`<div class="user-row"><b>${name}</b><span style="color:var(--red);font-size:11px">Not readable</span></div>`}if(ok===2)box.innerHTML+='<div class="notice" style="margin-top:15px">Support database tables পাওয়া গেছে। Admin reply interface-এর জন্য admin-side schema/RPC permission মিলিয়ে নিতে হবে।</div>'}
-function exportVideos(){const cols=['id','title','category','video_url','thumbnail_url','points_price','unlock_minutes','unlock_hours','is_trending'];const csv=[cols.join(','),...videos.map(v=>cols.map(k=>`"${String(v[k]??'').replace(/"/g,'""')}"`).join(','))].join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='viral-video-hub-videos.csv';a.click();URL.revokeObjectURL(a.href);toast('CSV export তৈরি হয়েছে।')}
-(async()=>{applyAdminDraft();renderCustomLinkDraft();loadChannelPostDraft();const {data:{session}}=await sb.auth.getSession();if(session?.user)await startApp();else log('Ready','Waiting for secure admin sign in')})();
+const thumbFile = $('vThumbFile');
+const thumbPreview = $('vThumbPreview');
+const thumbUploadBtn = $('vThumbUploadBtn');
+const thumbUploadStatus = $('vThumbUploadStatus');
+ const thumbUrlInput = $('vThumb');
+
+thumbUrlInput.addEventListener('input', () => {
+  const url = thumbUrlInput.value.trim();
+
+  if (url) {
+    thumbPreview.src = url;
+    thumbPreview.style.display = 'block';
+  } else {
+    thumbPreview.removeAttribute('src');
+    thumbPreview.style.display = 'none';
+  }
+});
+
+thumbPreview.addEventListener('error', () => {
+  thumbPreview.style.display = 'none';
+});
+
+thumbPreview.addEventListener('load', () => {
+  thumbPreview.style.display = 'block';
+});
+
+if (thumbFile && !thumbFile.dataset.ready) {
+  thumbFile.dataset.ready = '1';
+
+  thumbFile.addEventListener('change', () => {
+    const file = thumbFile.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      thumbUploadStatus.textContent = 'শুধু ছবির ফাইল নির্বাচন করুন।';
+      thumbFile.value = '';
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      thumbUploadStatus.textContent = 'ছবি ৫ MB-এর ছোট হতে হবে।';
+      thumbFile.value = '';
+      return;
+    }
+
+    thumbPreview.src = URL.createObjectURL(file);
+    thumbPreview.style.display = 'block';
+    thumbUploadStatus.textContent = 'ছবি নির্বাচন হয়েছে। এবার Upload চাপুন।';
+  });
+
+  thumbUploadBtn.addEventListener('click', async () => {
+    const file = thumbFile.files?.[0];
+
+    if (!file) {
+      thumbUploadStatus.textContent = 'আগে একটি ছবি নির্বাচন করুন।';
+      return;
+    }
+
+    thumbUploadBtn.disabled = true;
+    thumbUploadStatus.textContent = 'ছবি Upload হচ্ছে...';
+
+    try {
+      const { data: sessionData, error: sessionError } =
+        await sb.auth.getSession();
+
+      if (sessionError) throw sessionError;
+
+      const token = sessionData.session?.access_token;
+      if (!token) throw new Error('আগে Admin login করুন।');
+
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const response = await fetch(
+        ${SUPABASE_URL}/functions/v1/imgbb-upload,
+        {
+          method: 'POST',
+          headers: {
+            'Authorization': Bearer ${token},
+            'apikey': SUPABASE_KEY
+          },
+          body: formData
+        }
+      );
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success || !result.url) {
+        throw new Error(result.error || 'ছবি Upload করা যায়নি।');
+      }
+
+      $('vThumb').value = result.url;
+     thumbPreview.src = result.url;
+thumbPreview.style.display = 'block';
+      thumbUploadStatus.textContent = 'ছবি Upload হয়েছে! এখন Save video চাপুন।';
+    } catch (error) {
+      thumbUploadStatus.textContent =
+        error.message || 'Upload ব্যর্থ হয়েছে।';
+    } finally {
+      thumbUploadBtn.disabled = false;
+    }
+  });
+}
+
+function updateDurationPreview(){let amount=Number($('vTimeAmount').value||0),unit=$('vTimeUnit').value;let mins=unit==='hours'?amount*60:amount;if(mins>1440){$('durationPreview').textContent='⚠️ সর্বোচ্চ ২৪ ঘণ্টা (১৪৪০ মিনিট)';return}let label=mins%60===0?(mins/60)+' hour'+(mins/60===1?'':'s'):mins+' minute'+(mins===1?'':'s');$('durationPreview').textContent=⏱ ${label} · ${mins*60} seconds}
+function editVideo(id){const v=videos.find(x=>String(x.id)===String(id));if(!v)return;openVideoForm();$('formTitle').textContent='Edit video';$('videoId').value=v.id;$('vTitle').value=v.title||'';$('vCategory').value=[...$('vCategory').options].some(o=>o.value===v.category)?v.category:'Other';$('vUrl').value=v.video_url||'';$('vThumb').value=v.thumbnail_url||v.thumbnail||'';const preview = $('vThumbPreview');
+const thumbUrl = $('vThumb').value.trim();
+
+if (thumbUrl) {
+  preview.src = thumbUrl;
+  preview.style.display = 'block';
+} else {
+  preview.removeAttribute('src');
+  preview.style.display = 'none';
+}$('vDuration').value = v.duration || '';$('vTelegramLink').value = v.telegram_message_id
+  ? https://t.me/c/${String(v.telegram_chat_id || '').replace(/^-100/, '')}/${v.telegram_message_id}
+  : '';$('vPrice').value=Number(v.points_price||0);$('vDuration').value=v.duration||'';$('vTrending').value=String(!!v.is_trending);let mins=durationMins(v);if(mins%60===0){$('vTimeAmount').value=mins/60;$('vTimeUnit').value='hours'}else{$('vTimeAmount').value=mins;$('vTimeUnit').value='minutes'}updateDurationPreview()}
+async function saveVideo(e){e.preventDefault();const btn=$('saveVideoBtn');btn.disabled=true;btn.textContent='Saving…';$('formMsg').innerHTML='';try{const title=$('vTitle').value.trim(),url=$('vUrl').value.trim(),price=Number($('vPrice').value),amount=Number($('vTimeAmount').value),unit=$('vTimeUnit').value,mins=unit==='hours'?amount*60:amount;if (!title) throw Error('ভিডিওর Title দিতে হবে।');if(!Number.isInteger(price)||price<0)throw Error('Points price শূন্য বা ধনাত্মক পূর্ণসংখ্যা হতে হবে।');if(!Number.isInteger(amount)||amount<1||mins>1440)throw Error('সময় ১ মিনিট থেকে ২৪ ঘণ্টার মধ্যে দিন।');const payload={title,category:$('vCategory').value.trim()||'Other',video_url:url,points_price:price,unlock_hours:Math.max(1,Math.ceil(mins/60)),unlock_minutes:mins,is_trending:$('vTrending').value==='true'};const tgLink = $('vTelegramLink').value.trim();
+
+payload.telegram_chat_id = null;
+payload.telegram_message_id = null;
+
+if (tgLink) {
+  const match = tgLink.match(
+    /^https?:\/\/t\.me\/c\/(\d+)\/(\d+)\/?(?:\?.*)?$/i
+  );
+
+  if (!match) {
+    throw Error(
+      'Telegram Private Channel-এর সম্পূর্ণ Message Link দিন। উদাহরণ: https://t.me/c/1234567890/25'
+    );
+  }
+
+  payload.telegram_chat_id = '-100' + match[1];
+  payload.telegram_message_id = Number(match[2]);
+}const thumb=$('vThumb').value.trim();if(thumb)payload.thumbnail_url=thumb;else payload.thumbnail_url=null;const dur=$('vDuration').value.trim();alert('Thumbnail Timer value: ' + $('vDuration').value);payload.duration = dur || null;const id=$('videoId').value;
+let result;
+
+if (id) {
+  result = await sb.from('videos').update(payload).eq('id', id).select('id, title, duration');
+} else {
+  result = await sb.from('videos').insert(payload).select('id, title, duration');
+}
+console.log('Video save result:', result);
+console.log('Saved duration payload:', payload.duration);
+console.log('Save result:', result);
+if (result.error) throw result.error;
+toast(Saved: ${title} · ${mins} min);log(id?'Video updated':'Video created',${title}; duration ${mins} minutes);closeVideoForm();await loadVideos()}catch(err){$('formMsg').innerHTML=<div class="alert error">${esc(err.message||String(err))}<br><span class="hint">যদি unlock_minutes column নেই, Supabase-এ নিচের SQL চালাও। Thumbnail/duration column না থাকলে schema অনুযায়ী যোগ করো বা field বাদ দাও।</span></div>;errorBox(err.message||String(err))}finally{btn.disabled=false;btn.textContent='Save video'}}
+async function deleteVideo(id){const v=videos.find(x=>String(x.id)===String(id));if(!v||!confirm("${v.title}" ভিডিওটি মুছে ফেলবে? এটি স্থায়ীভাবে মুছতে পারে।))return;const {error}=await sb.from('videos').delete().eq('id',id).select('id').maybeSingle();if(error){errorBox('Delete হয়নি: '+error.message);return}toast('ভিডিও delete request পাঠানো হয়েছে।');log('Video delete requested',v.title);await loadVideos()}
+async function loadUsers(){const box=$('usersList');box.innerHTML='<div class="empty">Loading users…</div>';const {data,error}=await sb.from('profiles').select('id,points,referral_code,referral_count,total_referral_points').order('points',{ascending:false}).limit(300);if(error){box.innerHTML=<div class="alert error">${esc(error.message)}<br>Profiles select permission/RLS পরীক্ষা করো।</div>;$('statUsers').textContent='—';$('statPoints').textContent='—';return}users=data||[];$('statUsers').textContent=users.length.toLocaleString();$('statPoints').textContent=users.reduce((a,u)=>a+Number(u.points||0),0).toLocaleString();renderUsers()}
+function renderUsers(){const q=($('userSearch')?.value||'').toLowerCase();const list=users.filter(u=>String(u.id||'').toLowerCase().includes(q)||String(u.referral_code||'').toLowerCase().includes(q));$('usersList').innerHTML=list.length?list.map(u=><div class="user-row"><div><b>${esc(String(u.id).slice(0,8))}…</b><div class="muted">Referral: ${esc(u.referral_code||'—')} · Referrals: ${Number(u.referral_count||0)}</div></div><div style="text-align:right"><b style="color:#f0abfc">${Number(u.points||0).toLocaleString()} pts</b><div class="muted">Earned ${Number(u.total_referral_points||0).toLocaleString()}</div></div></div>).join(''):'<div class="empty">কোনো ইউজার নেই।</div>'}
+async function loadPayments(){const box=$('paymentsBox');box.innerHTML='';const names=['usdt_payments','payments','payment_requests','transactions'];let found=false;for(const name of names){const {data,error}=await sb.from(name).select('*').limit(1);if(!error){box.innerHTML+=<div class="user-row"><div><b>${esc(name)}</b><div class="muted">Table is readable · sample rows ${data?.length||0}</div></div><span class="status">Available</span></div>;found=true}}if(!found)box.innerHTML='<div class="alert error">পরিচিত payment table পাওয়া যায়নি। তোমার প্রকৃত table name/schema দিলে payment approval panel নিরাপদভাবে যোগ করা যাবে।</div>'}
+async function loadSupportStatus(){const box=$('supportBox');box.innerHTML='';let ok=0;for(const name of ['support_conversations','support_messages']){const {error}=await sb.from(name).select('*').limit(1);if(!error){ok++;box.innerHTML+=<div class="user-row"><b>${name}</b><span class="status">Available</span></div>}else box.innerHTML+=<div class="user-row"><b>${name}</b><span style="color:var(--red);font-size:11px">Not readable</span></div>}if(ok===2)box.innerHTML+='<div class="notice" style="margin-top:15px">Support database tables পাওয়া গেছে। Admin reply interface-এর জন্য admin-side schema/RPC permission মিলিয়ে নিতে হবে।</div>'}
+function exportVideos(){const cols=['id','title','category','video_url','thumbnail_url','points_price','unlock_minutes','unlock_hours','is_trending'];const csv=[cols.join(','),...videos.map(v=>cols.map(k=>"${String(v[k]??'').replace(/"/g,'""')}").join(','))].join('\r\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([csv],{type:'text/csv;charset=utf-8;'}));a.download='viral-video-hub-videos.csv';a.click();URL.revokeObjectURL(a.href);toast('CSV export তৈরি হয়েছে।')}function saveChannelPostDraft(){
+  const data = {
+    banner: document.getElementById('channelBanner').value.trim(),
+    caption: document.getElementById('channelCaption').value.trim(),
+    button1Text: document.getElementById('channelBtn1Text').value.trim(),
+    button1Url: document.getElementById('channelBtn1Url').value.trim(),
+    button2Text: document.getElementById('channelBtn2Text').value.trim(),
+    button2Url: document.getElementById('channelBtn2Url').value.trim(),
+    chatId: document.getElementById('channelChatId').value.trim()
+  };
+
+  localStorage.setItem('vvh_channel_post_draft', JSON.stringify(data));
+  document.getElementById('channelDraftStatus').textContent =
+    'ড্রাফট এই ব্রাউজারে সংরক্ষিত হয়েছে। এখনো চ্যানেলে পোস্ট পাঠানো হয়নি।';
+}
+ 
+
+async function saveWatchSettings() {
+  const status = document.getElementById("watchSettingsStatus");
+  status.textContent = "সেটিংস সেভ হচ্ছে...";
+
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+
+    if (!session) {
+      status.textContent = "আগে Admin হিসেবে Login করুন।";
+      return;
+    }
+
+    const ttlMinutes = Number(
+      document.getElementById("watchTtlMinutes").value
+    );
+
+    const videoCaption =
+      document.getElementById("watchVideoCaption").value.trim();
+
+    if (!Number.isInteger(ttlMinutes) || ttlMinutes < 1 || ttlMinutes > 1440) {
+      status.textContent = "টাইমার ১ থেকে ১৪৪০ মিনিটের মধ্যে দিন।";
+      return;
+    }
+
+    const buttons = [];
+
+    for (let i = 1; i <= 4; i++) {
+      const text = document.getElementById(watchButton${i}Text).value.trim();
+      const url = document.getElementById(watchButton${i}Url).value.trim();
+
+      if (!text || !url) {
+        status.textContent = ${i} নম্বর বাটনের নাম ও লিংক পূরণ করুন।;
+        return;
+      }
+
+      let parsedUrl;
+      try {
+        parsedUrl = new URL(url);
+      } catch {
+        status.textContent = ${i} নম্বর বাটনের লিংক সঠিক নয়।;
+        return;
+      }
+
+      if (!["https:", "http:"].includes(parsedUrl.protocol)) {
+        status.textContent = ${i} নম্বর বাটনে সঠিক HTTP/HTTPS লিংক দিন।;
+        return;
+      }
+
+      buttons.push({ text, url });
+    }
+
+    const response = await fetch(
+      "https://pjpblyjejypzwwpxxgpf.supabase.co/functions/v1/telegram-channel-publisher",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": Bearer ${session.access_token},
+          "apikey": SUPABASE_KEY
+        },
+        body: JSON.stringify({
+          action: "save_watch_settings",
+          ttl_minutes: ttlMinutes,
+          video_caption: videoCaption,
+          buttons
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "সেটিংস সেভ করা যায়নি।");
+    }
+
+    status.textContent =
+      "সফল! টাইমার, ক্যাপশন ও চারটি বাটনের সেটিংস সেভ হয়েছে।";
+  } catch (error) {
+    status.textContent = "সমস্যা: " + error.message;
+  }
+}
+
+
+async function sendChannelPost() {
+  const status = document.getElementById("channelSendStatus");
+  status.textContent = "পোস্ট পাঠানো হচ্ছে...";
+
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+
+    if (!session) {
+      status.textContent = "আগে Admin হিসেবে Login করুন।";
+      return;
+    }
+
+    const response = await fetch(
+      "https://pjpblyjejypzwwpxxgpf.supabase.co/functions/v1/telegram-channel-publisher",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": Bearer ${session.access_token},
+          "apikey": SUPABASE_KEY
+        },
+        body: JSON.stringify({
+          banner: document.getElementById("channelBanner").value.trim(),
+          caption: document.getElementById("channelCaption").value.trim(),
+          button1Text: document.getElementById("channelBtn1Text").value.trim(),
+          button1Url: document.getElementById("channelBtn1Url").value.trim(),
+          button2Text: document.getElementById("channelBtn2Text").value.trim(),
+          button2Url: document.getElementById("channelBtn2Url").value.trim(),
+          chatId: document.getElementById("channelChatId").value.trim()
+        })
+      }
+    );
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+      throw new Error(result.error || "পোস্ট পাঠানো যায়নি।");
+    }
+
+    status.textContent = "সফল! Telegram চ্যানেলে পোস্ট পাঠানো হয়েছে।";
+  } catch (error) {
+    status.textContent = "সমস্যা: " + error.message;
+  }
+}
+(async()=>{applyAdminDraft();renderCustomLinkDraft();const {data:{session}}=await sb.auth.getSession();if(session?.user)await startApp();else log('Ready','Waiting for secure admin sign in')})();
 </script>
 </body>
 </html>
