@@ -729,10 +729,11 @@ if (tgLink) {
 let result;
 
 if (id) {
-  result = await sb.from('videos').update(payload).eq('id', id);
+  result = await sb.from('videos').update(payload).eq('id', id).select('id, title, duration');
 } else {
-  result = await sb.from('videos').insert(payload);
+  result = await sb.from('videos').insert(payload).select('id, title, duration');
 }
+console.log('Video save result:', result);
 console.log('Saved duration payload:', payload.duration);
 console.log('Save result:', result);
 if (result.error) throw result.error;
