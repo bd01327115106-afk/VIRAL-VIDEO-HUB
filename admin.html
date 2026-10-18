@@ -725,7 +725,7 @@ if (tgLink) {
 
   payload.telegram_chat_id = '-100' + match[1];
   payload.telegram_message_id = Number(match[2]);
-}const thumb=$('vThumb').value.trim();if(thumb)payload.thumbnail_url=thumb;else payload.thumbnail_url=null;const dur=$('vDuration').value.trim();payload.duration = dur || null;const id=$('videoId').value;
+}const thumb=$('vThumb').value.trim();if(thumb)payload.thumbnail_url=thumb;else payload.thumbnail_url=null;const dur=$('vDuration').value.trim();alert('Thumbnail Timer value: ' + $('vDuration').value);payload.duration = dur || null;const id=$('videoId').value;
 let result;
 
 if (id) {
