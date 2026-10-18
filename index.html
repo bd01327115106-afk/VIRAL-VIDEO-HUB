@@ -1701,67 +1701,134 @@ async function hasPurchasedVideo(videoId){
   return false;
 }
 
-async function watchUnlockAd(videoId){
+
+async function watchUnlockAd(videoId) {
   let button = document.getElementById('watchUnlockButton_' + videoId);
+
+  const resetButton = () => {
+    button = document.getElementById('watchUnlockButton_' + videoId);
+    if (button) {
+      button.disabled = false;
+      button.textContent = '🔒　ভিডিও আনলক';
+    }
+  };
+
   try {
-    let requiredAds = Number(localStorage.getItem('videoAdsRequired_' + videoId) || 0);
-    if(!requiredAds){
-      const {data:video}=await supabaseClient.from('videos').select('*').eq('id',videoId).single();
+    let requiredAds = Number(
+      localStorage.getItem('videoAdsRequired_' + videoId) || 0
+    );
+
+    if (!requiredAds) {
+      const { data: video } = await supabaseClient
+        .from('videos')
+        .select('*')
+        .eq('id', videoId)
+        .single();
+
       requiredAds = await getRequiredAdsForVideo(video);
-      localStorage.setItem('videoAdsRequired_' + videoId, String(requiredAds));
+
+      if (!requiredAds || requiredAds < 1) {
+        alert('বিজ্ঞাপনের সংখ্যা নির্ধারণ করা যায়নি।');
+        return;
+      }
+
+      localStorage.setItem(
+        'videoAdsRequired_' + videoId,
+        String(requiredAds)
+      );
     }
-    if (!window.Adsgram || typeof window.Adsgram.init !== 'function') {
-      alert('❌ AdsGram SDK লোড হয়নি।');
+
+    if (typeof window.show_12063217 !== 'function') {
+      alert('❌ Monetag SDK লোড হয়নি। পেজ রিফ্রেশ করে আবার চেষ্টা করুন।');
       return;
     }
-    if (!AdController) AdController = window.Adsgram.init({ blockId: '52665' });
-    if (!AdController || typeof AdController.show !== 'function') {
-      alert('❌ AdsGram ad controller পাওয়া যায়নি।');
+
+    if (button) {
+      button.disabled = true;
+      button.textContent = 'বিজ্ঞাপন লোড হচ্ছে...';
+    }
+
+    const event = await window.show_12063217();
+
+    if (event?.reward_event_type !== 'valued') {
+      resetButton();
+      alert('বিজ্ঞাপন থেকে পুরস্কার নিশ্চিত হয়নি। বিজ্ঞাপনটি আবার চেষ্টা করুন।');
       return;
     }
-    if (button) { button.disabled = true; button.textContent = 'বিজ্ঞাপন লোড হচ্ছে...'; }
-    const result = await AdController.show();
-    const completed = !result || result.done !== false;
-    if (!completed) {
-      const now = Math.min(requiredAds, Number(localStorage.getItem('videoAds_' + videoId) || 0));
-      if (button) { button.disabled = false; button.textContent = '🔒　ভিডিও আনলক'; }
-      return;
-    }
+
     const key = 'videoAds_' + videoId;
-    const current = Math.min(requiredAds, Number(localStorage.getItem(key) || 0));
+    const current = Math.min(
+      requiredAds,
+      Number(localStorage.getItem(key) || 0)
+    );
     const next = Math.min(requiredAds, current + 1);
+
     localStorage.setItem(key, String(next));
+
     if (next >= requiredAds) {
-      const {data:video}=await supabaseClient.from('videos').select('*').eq('id',videoId).single();
-      const expiresAt = await setVideoUnlock(videoId, Number(video?.unlock_hours || 1), 'ads');
-      alert(`✅ ${requiredAds}টি বিজ্ঞাপন সম্পূর্ণ হয়েছে। ${Number(video?.unlock_hours || 1)} ঘণ্টার জন্য কনটেন্ট আনলক হয়েছে!`);
+      const { data: video, error } = await supabaseClient
+        .from('videos')
+        .select('*')
+        .eq('id', videoId)
+        .single();
+
+      if (error || !video) {
+        resetButton();
+        alert('ভিডিওর তথ্য পাওয়া যায়নি। আবার চেষ্টা করুন।');
+        return;
+      }
+
+      const hours = Number(video.unlock_hours || 1);
+      const expiresAt = await setVideoUnlock(videoId, hours, 'ads');
+
+      alert(
+        `✅ ${requiredAds}টি বিজ্ঞাপন সম্পূর্ণ হয়েছে। ${hours} ঘণ্টার জন্য কনটেন্ট আনলক হয়েছে!`
+      );
+
       await openVideo(videoId);
-      setTimeout(()=>startUnlockCountdown(videoId, expiresAt), 400);
+      setTimeout(() => startUnlockCountdown(videoId, expiresAt), 400);
       return;
     }
+
     const remainEl = document.getElementById('detailsRemain');
     const progressEl = document.getElementById('detailsProgress');
     const hintEl = document.getElementById('unlockHint');
     const balanceEl = document.getElementById('unlockBalance');
-    const {data:{user}} = await supabaseClient.auth.getUser();
-    if(user){
-      const {data:profile}=await supabaseClient.from('profiles').select('points').eq('id',user.id).single();
-      if(balanceEl) balanceEl.textContent=Number(profile?.points||0).toLocaleString();
-    }
-    if (remainEl) remainEl.textContent = String(requiredAds-next);
-    if (progressEl) progressEl.style.width = `${(next/requiredAds)*100}%`;
     const progressLabel = document.getElementById('detailsProgressLabel');
+
+    const { data: { user } } = await supabaseClient.auth.getUser();
+
+    if (user) {
+      const { data: profile } = await supabaseClient
+        .from('profiles')
+        .select('points')
+        .eq('id', user.id)
+        .single();
+
+      if (balanceEl) {
+        balanceEl.textContent = Number(profile?.points || 0).toLocaleString();
+      }
+    }
+
+    if (remainEl) remainEl.textContent = String(requiredAds - next);
+    if (progressEl) progressEl.style.width = `${(next / requiredAds) * 100}%`;
     if (progressLabel) progressLabel.textContent = `${next}/${requiredAds}`;
-    if (hintEl) hintEl.textContent = `${requiredAds-next}টি বিজ্ঞাপন বাকি — অথবা পয়েন্ট ব্যবহার করুন।`;
-    button = document.getElementById('watchUnlockButton_' + videoId);
-    if (button) { button.disabled = false; button.textContent = '🔒　ভিডিও আনলক'; }
+    if (hintEl) {
+      hintEl.textContent = `${requiredAds - next}টি বিজ্ঞাপন বাকি — অথবা পয়েন্ট ব্যবহার করুন।`;
+    }
+
+    resetButton();
+
   } catch (error) {
-    console.error('AdsGram error:', error);
-    button = document.getElementById('watchUnlockButton_' + videoId);
-    if (button) { button.disabled = false; button.textContent = '🔒　ভিডিও আনলক'; }
-    alert('❌ বিজ্ঞাপন দেখানো যায়নি।\n' + (error?.description || error?.message || 'AdsGram error'));
+    console.error('Monetag error:', error);
+    resetButton();
+    alert(
+      '❌ বিজ্ঞাপন দেখানো যায়নি।\n' +
+      (error?.description || error?.message || 'Monetag error')
+    );
   }
 }
+
 
 async function unlockVideo(videoId){
   let requiredAds = Number(localStorage.getItem('videoAdsRequired_' + videoId) || 0);
