@@ -29,14 +29,23 @@
   z-index: 2;
 }
 
+.details-player {
+  position: relative;
+}
+
 .details-duration {
-  width: 100%;
-  text-align: right;
-  color: #ffffff;
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  z-index: 5;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.85);
+  padding: 4px 7px;
+  border-radius: 5px;
   font-size: 12px;
   font-weight: 700;
-  padding: 4px 8px;
-  background: #030304;
+  line-height: 1.2;
+  pointer-events: none;
 }
 
 html,body{margin:0;background:#030304;color:#fff;font-family:Arial,"Noto Sans Bengali",sans-serif}
@@ -1150,13 +1159,13 @@ async function openVideo(videoId){
       <b>VIRAL <span>VIDEO LINK</span></b>
       <button type="button" class="details-share-top" aria-label="Share video"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3" fill="currentColor" stroke="none"/><circle cx="6" cy="12" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="19" r="3" fill="currentColor" stroke="none"/><path d="M8.7 10.7 15.3 6.3M8.7 13.3l6.6 4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
     </div>
-    <div class="details-content">
+   <div class="details-content">
+  <div class="details-player">
+    <video preload="metadata" poster="${escapeHtml(video.thumbnail_url || video.thumbnail || '')}"
+           src="${escapeHtml(video.video_url || '')}"
+           ${unlocked ? '' : "controlsList='nodownload'"}></video>
     ${video.duration ? `<div class="details-duration">${escapeHtml(video.duration)}</div>` : ''}
-      <div class="details-player">
-        <video preload="metadata" poster="${escapeHtml(video.thumbnail_url || video.thumbnail || '')}"
-               src="${escapeHtml(video.video_url || '')}"
-               ${unlocked ? '' : "controlsList='nodownload'"}></video>
-      </div>
+  </div>
 
       <div class="details-meta">
         <button type="button" id="likeBtn_${video.id}" class="video-action like" aria-pressed="false" onclick="toggleLike(${video.id})"><svg class="stat-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.8a5.5 5.5 0 0 0-7.8 0L12 5.9l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.3 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg><span class="stat-count" id="likeCount_${video.id}">${Number(video.likes || 0).toLocaleString()}</span><small>লাইক</small></button>
