@@ -10,14 +10,14 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-
-/* Animated glowing ring on video thumbnails */
+/* থাম্বনেইল লোড হওয়ার সময় গোল রিং */
 .video-thumb {
   position: relative;
 }
 
 .video-thumb::after {
   content: "";
+  display: none;
   position: absolute;
   width: 32px;
   height: 32px;
@@ -34,11 +34,18 @@
   z-index: 5;
 }
 
+/* ছবি লোড হওয়ার সময় রিং দেখাবে */
+.video-thumb.is-loading::after {
+  display: block;
+}
+
+/* রিং ঘুরবে */
 @keyframes vvhSpin {
   to {
     transform: translate(-50%, -50%) rotate(360deg);
   }
 }
+
 
 *{box-sizing:border-box}
   
@@ -2223,6 +2230,60 @@ async function startEarnAdDemo(reward=2){
 }
 
 document.addEventListener('DOMContentLoaded', syncEarnDemoStats);
+</script>
+
+<script>
+(function () {
+  function setupThumbnail(box) {
+    if (box.dataset.ringReady) return;
+
+    const img = box.querySelector("img");
+    if (!img) return;
+
+    box.dataset.ringReady = "1";
+
+    function finishLoading() {
+      box.classList.remove("is-loading");
+    }
+
+    if (img.complete) {
+      finishLoading();
+      return;
+    }
+
+    box.classList.add("is-loading");
+    img.addEventListener("load", finishLoading, { once: true });
+    img.addEventListener("error", finishLoading, { once: true });
+  }
+
+  function scan(root) {
+    if (root.nodeType !== 1) return;
+
+    if (root.matches(".video-thumb")) setupThumbnail(root);
+    root.querySelectorAll(".video-thumb").forEach(setupThumbnail);
+  }
+
+  function init() {
+    document.querySelectorAll(".video-thumb").forEach(setupThumbnail);
+
+    const observer = new MutationObserver(function (changes) {
+      changes.forEach(function (change) {
+        change.addedNodes.forEach(scan);
+      });
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", init, { once: true });
+  } else {
+    init();
+  }
+})();
 </script>
 
 </body>
