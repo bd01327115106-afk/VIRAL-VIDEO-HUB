@@ -767,6 +767,37 @@ body.intro-lock{overflow:hidden}
 }
 
 
+/* ভেতরের ভিডিও আইকনের চারপাশে ঘূর্ণায়মান রিং */
+#startupSplash .splash-play {
+  position: relative;
+}
+
+#startupSplash .splash-play::after {
+  content: "";
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  left: 50%;
+  top: 50%;
+  margin: -22px 0 0 -22px;
+  box-sizing: border-box;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-left-color: #ff45d0;
+  border-bottom-color: #9b5cff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(255, 69, 208, 0.35);
+  animation: splashInnerSpin 1.2s linear infinite;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@keyframes splashInnerSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
 </style>
 </head>
 <body class="intro-lock">
