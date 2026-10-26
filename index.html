@@ -740,6 +740,44 @@ body.intro-lock{overflow:hidden}
 .mainhead .support-header-btn:active{transform:scale(.96)}
 /* Support chat now lives in the header, so hide the old floating duplicate. */
 #supportFab{display:none!important}
+  
+/* Mini App খোলার সময় পুরো স্ক্রিনের লোডিং */
+#app-loading-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #030304;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+}
+
+#app-loading-screen.is-hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.app-loading-ring {
+  width: 48px;
+  height: 48px;
+  border: 4px solid rgba(255, 255, 255, 0.20);
+  border-top-color: #ff45d0;
+  border-right-color: #9b5cff;
+  border-radius: 50%;
+  box-shadow: 0 0 16px rgba(255, 69, 208, 0.35);
+  animation: appLoadingSpin 0.8s linear infinite;
+}
+
+@keyframes appLoadingSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 </style>
 </head>
 <body class="intro-lock">
