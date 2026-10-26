@@ -10,43 +10,6 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-/* থাম্বনেইল লোড হওয়ার সময় গোল রিং */
-.video-thumb {
-  position: relative;
-}
-
-.video-thumb::after {
-  content: "";
-  display: none;
-  position: absolute;
-  width: 32px;
-  height: 32px;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  border: 3px solid rgba(255, 255, 255, 0.25);
-  border-top-color: #ff45d0;
-  border-right-color: #9b5cff;
-  border-radius: 50%;
-  box-shadow: 0 0 12px rgba(255, 69, 208, 0.45);
-  animation: vvhSpin 1s linear infinite;
-  pointer-events: none;
-  z-index: 5;
-}
-
-/* ছবি লোড হওয়ার সময় রিং দেখাবে */
-.video-thumb.is-loading::after {
-  display: block;
-}
-
-/* রিং ঘুরবে */
-@keyframes vvhSpin {
-  to {
-    transform: translate(-50%, -50%) rotate(360deg);
-  }
-}
-
-
 *{box-sizing:border-box}
   
 .video-thumb {
@@ -537,6 +500,29 @@ body.intro-lock{overflow:hidden}
 .quick-actions.open .quick-actions-toggle svg{transform:rotate(180deg)}
 @media(max-width:420px){.quick-actions{right:8px;bottom:153px}.quick-action{width:52px;height:52px}}
 
+/* PRO MAX: admin-managed three-button floating control. The toggle mirrors to the other side. */
+.quick-actions{width:42px;height:64px;top:75%;bottom:auto;transform:translateY(-50%);right:12px;left:auto;max-width:calc(100vw - 16px);}
+.quick-actions-toggle{z-index:2;touch-action:manipulation;flex:0 0 42px;}
+.quick-actions-menu{gap:clamp(5px,2vw,9px);max-width:calc(100vw - 70px);flex-wrap:nowrap;align-items:center;}
+.quick-actions-menu>.quick-action{flex:0 0 54px;min-width:44px;min-height:44px;padding:0;touch-action:manipulation;transition:filter .16s ease,box-shadow .16s ease;}
+.quick-actions[data-side="left"] .quick-actions-toggle svg{transform:rotate(180deg)}
+.quick-actions[data-side="left"].open .quick-actions-toggle svg{transform:rotate(0deg)}
+.quick-actions[data-side="right"] .quick-actions-toggle svg{transform:rotate(0deg)}
+.quick-actions[data-side="right"].open .quick-actions-toggle svg{transform:rotate(180deg)}
+.quick-actions[data-side="left"] .quick-actions-menu{flex-direction:row-reverse}
+.quick-actions[data-side="right"] .quick-actions-menu{flex-direction:row}
+@keyframes vvhQuickPulse{0%,100%{scale:1;filter:brightness(1)}50%{scale:1.06;filter:brightness(1.17)}}
+@keyframes vvhQuickBounce{0%,100%{translate:0 0}50%{translate:0 -5px}}
+@keyframes vvhQuickFloat{0%,100%{translate:0 0}50%{translate:0 -3px}}
+@keyframes vvhQuickShine{0%,100%{filter:brightness(1)}50%{filter:brightness(1.25)}}
+.quick-action.vvh-quick-anim-pulse,.quick-actions-toggle.vvh-quick-anim-pulse{animation:vvhQuickPulse 1.7s ease-in-out infinite}
+.quick-action.vvh-quick-anim-bounce,.quick-actions-toggle.vvh-quick-anim-bounce{animation:vvhQuickBounce 1.35s ease-in-out infinite}
+.quick-action.vvh-quick-anim-float,.quick-actions-toggle.vvh-quick-anim-float{animation:vvhQuickFloat 2s ease-in-out infinite}
+.quick-action.vvh-quick-anim-shine,.quick-actions-toggle.vvh-quick-anim-shine{animation:vvhQuickShine 1.6s ease-in-out infinite}
+@media(max-width:420px){.quick-actions{width:42px;right:8px;left:auto}.quick-actions-menu>.quick-action{width:50px;height:50px;flex-basis:50px}.quick-actions-toggle{width:42px;height:62px}}
+@media(prefers-reduced-motion:reduce){.quick-action.vvh-quick-anim-pulse,.quick-action.vvh-quick-anim-bounce,.quick-action.vvh-quick-anim-float,.quick-action.vvh-quick-anim-shine,.quick-actions-toggle.vvh-quick-anim-pulse,.quick-actions-toggle.vvh-quick-anim-bounce,.quick-actions-toggle.vvh-quick-anim-float,.quick-actions-toggle.vvh-quick-anim-shine{animation:none!important}}
+
+
 
 /* Earnings screen inspired by the two supplied references */
 #earnPage .earn-hub{margin:0 0 14px;padding:0 0 8px}
@@ -740,63 +726,124 @@ body.intro-lock{overflow:hidden}
 .mainhead .support-header-btn:active{transform:scale(.96)}
 /* Support chat now lives in the header, so hide the old floating duplicate. */
 #supportFab{display:none!important}
-  
 
-/* শুধু শুরুতে ভিডিও আইকনের চারপাশে ঘূর্ণায়মান রিং */
-#startupSplash .splash-orbit {
-  position: relative;
+/* Pro Max live-control variables. Values are loaded from public.vvh_site_settings. */
+:root{--vvh-accent-a:#8b2cff;--vvh-accent-b:#ff2d91;--vvh-ring-color:#b52cff;--vvh-ring-inner-color:#ff2d91;--vvh-ring-size:150px;--vvh-ring-speed:1.8s;--vvh-splash-time:1650ms}
+@keyframes vvhRingSpin{to{transform:rotate(325deg)}}
+@keyframes vvhRingSpinReverse{to{transform:rotate(-318deg)}}
+.splash-orbit::before{border-top-color:var(--vvh-ring-color)!important;border-right-color:var(--vvh-accent-a)!important;animation:vvhRingSpin var(--vvh-ring-speed) linear infinite}
+.splash-orbit::after{border-top-color:#fff!important;border-right-color:var(--vvh-accent-b)!important;animation:vvhRingSpinReverse calc(var(--vvh-ring-speed) * 1.18) linear infinite}
+.categories button.active,.hero-card.active{background:linear-gradient(90deg,var(--vvh-accent-a),var(--vvh-accent-b))!important}
+.mainhead{border-bottom-color:var(--vvh-accent-b)}
+.vvh-maintenance-overlay{position:fixed;inset:0;z-index:100000;background:#050407;color:#fff;display:none;align-items:center;justify-content:center;padding:24px;text-align:center}
+.vvh-maintenance-overlay.active{display:flex}
+.vvh-maintenance-card{width:min(100%,500px);border:1px solid #693783;border-radius:24px;padding:30px;background:linear-gradient(145deg,#21102f,#100b16);box-shadow:0 15px 55px #000a}
+.vvh-maintenance-card h1{margin:0 0 12px;font-size:26px}
+.vvh-maintenance-card p{line-height:1.7;color:#ded5e8;overflow-wrap:anywhere}
+@media(prefers-reduced-motion:reduce){.splash-orbit::before,.splash-orbit::after{animation:none!important}}
+
+
+/* Admin-controlled home sections */
+.vvh-shop-promo{display:flex;align-items:center;gap:12px;margin:15px 10px;padding:14px;border:1px solid #4a2564;border-radius:17px;background:linear-gradient(110deg,#191022,#100b17);box-shadow:0 8px 24px #0004;color:#fff}
+.vvh-shop-promo[hidden]{display:none!important}
+.vvh-shop-icon{display:grid;place-items:center;flex:0 0 43px;width:43px;height:43px;border-radius:13px;background:linear-gradient(135deg,#8b2cff,#ff2d91);font-size:23px}
+.vvh-shop-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:3px}.vvh-shop-copy b{font-size:14px}.vvh-shop-copy small{font-size:11px;line-height:1.45;color:#c7bfd3}
+.vvh-shop-promo button{border:0;border-radius:11px;padding:10px 12px;background:linear-gradient(90deg,#8b2cff,#ff2d91);font-weight:850;color:#fff;white-space:nowrap}
+#homePage .hero.vvh-banner-image{background-position:center;background-size:cover;background-repeat:no-repeat;border-radius:16px}
+@media(max-width:390px){.vvh-shop-promo{flex-wrap:wrap}.vvh-shop-copy{min-width:calc(100% - 60px)}.vvh-shop-promo button{width:100%}}
+
+
+.vvh-age-notice{position:fixed;left:12px;right:12px;top:12px;z-index:100001;display:flex;align-items:flex-start;gap:12px;padding:13px 14px;border:1px solid #6b3c88;border-radius:14px;background:#120a1deF;color:#fff;box-shadow:0 12px 36px #0008;font-size:13px;line-height:1.5}
+.vvh-age-notice span{flex:1}.vvh-age-notice button{border:1px solid #71438c;border-radius:8px;background:#251032;color:#fff;padding:6px 10px;font-weight:800}
+
+
+/* Pro Max search overlay */
+.mainhead .search-header-btn{flex:0 0 40px;width:40px;height:40px;border:1px solid #493058;border-radius:13px;background:#17101f;color:#fff;font-size:29px;line-height:1;display:grid;place-items:center;cursor:pointer;margin-right:8px}
+.mainhead .search-header-btn:active{transform:scale(.96)}
+.mainhead .brand{min-width:0;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.vvh-search-overlay{position:fixed;inset:0;z-index:100004;background:#030108d9;backdrop-filter:blur(12px);display:flex;align-items:flex-start;justify-content:center;padding:10vh 14px 20px}
+.vvh-search-panel{width:min(100%,620px);max-height:80vh;overflow:auto;border:1px solid #663581;border-radius:22px;background:linear-gradient(150deg,#1b1026,#0b0910);box-shadow:0 24px 70px #000b;padding:16px}
+.vvh-search-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}.vvh-search-head h2{font-size:17px;margin:0;flex:1}.vvh-search-head button{border:1px solid #523061;border-radius:10px;background:#21152a;color:#fff;font-size:22px;width:38px;height:38px}
+.vvh-search-input{width:100%;padding:14px 15px;border:1px solid #5b3370;border-radius:13px;background:#100b16;color:#fff;font-size:15px;outline:none}.vvh-search-input:focus{border-color:#d12eff;box-shadow:0 0 0 3px #bf40ff20}
+.vvh-search-results{display:grid;gap:8px;margin-top:12px}.vvh-search-result{width:100%;display:flex;align-items:center;gap:11px;text-align:left;border:1px solid #382443;border-radius:13px;padding:8px;background:#120d18;color:#fff;cursor:pointer}.vvh-search-result img{width:76px;height:54px;object-fit:cover;border-radius:9px;background:#24172e;flex:0 0 76px}.vvh-search-result span{display:flex;min-width:0;flex-direction:column;gap:5px}.vvh-search-result b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.vvh-search-result small{color:#bcaec9}
+.vvh-payment-wallet{margin:12px 0 16px;padding:14px;border:1px solid #5c3670;border-radius:15px;background:#140d1d;color:#fff}.vvh-payment-wallet[hidden]{display:none!important}.vvh-payment-wallet p{margin:5px 0;line-height:1.5;color:#d9cde2;font-size:12px}.vvh-wallet-address{overflow-wrap:anywhere;display:block;background:#08060c;padding:10px;border:1px dashed #7a4d91;border-radius:10px;margin-top:8px;color:#f4d7ff;font-size:12px}.vvh-payment-wallet button{margin-top:9px;border:0;border-radius:10px;padding:9px 12px;background:linear-gradient(90deg,#8b2cff,#ff2d91);color:#fff;font-weight:800}
+
+
+.vvh-placement-links{display:flex;align-items:center;justify-content:flex-start;gap:7px;flex-wrap:wrap;margin:10px 0}
+.vvh-placement-link{display:inline-flex;align-items:center;justify-content:center;gap:6px;max-width:100%;overflow-wrap:anywhere;text-decoration:none!important;color:#fff!important;background:linear-gradient(100deg,#6422a7,#b62c8c);border:1px solid #8145a6;border-radius:11px;padding:8px 11px;font-size:12px;font-weight:850;line-height:1.3}
+.vvh-header-links{margin:0 8px 0 auto;gap:5px;flex-wrap:nowrap;min-width:0}.vvh-header-links .vvh-placement-link{padding:7px 8px;font-size:10px;max-width:86px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+.vvh-footer-links{justify-content:center;padding:0 10px 10px}.vvh-video-links{padding:12px 0;border-top:1px solid #382443;margin-top:14px}.vvh-shop-links{padding:0 12px 12px}.vvh-floating-links{position:fixed;right:12px;bottom:112px;z-index:39;display:grid;gap:7px;justify-items:end;max-width:52vw}.vvh-floating-links .vvh-placement-link{box-shadow:0 6px 18px #0007;border-radius:999px;max-width:100%}
+@media(max-width:390px){.vvh-header-links .vvh-placement-link{max-width:48px;padding:7px 6px}.vvh-header-links .vvh-placement-link span{display:none}.vvh-header-links{margin-left:2px}}
+
+
+/* PRO MAX live spinner + floating 18+ settings */
+.splash-orbit{width:var(--vvh-ring-size,150px)!important;height:var(--vvh-ring-size,150px)!important}
+.splash-orbit::after{border-top-color:var(--vvh-ring-inner-color,#ff2d91)!important}
+@keyframes vvhAgePulse{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+@keyframes vvhAgeBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.quick-action.age.vvh-age-pulse{animation:vvhAgePulse 1.5s ease-in-out infinite}
+.quick-action.age.vvh-age-bounce{animation:vvhAgeBounce 1.2s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){.quick-action.age.vvh-age-pulse,.quick-action.age.vvh-age-bounce{animation:none!important}}
+</style>
+
+<style id="vvh-telegram-only-preview-style">
+.telegram-only-preview{position:relative;min-height:205px;aspect-ratio:16/9;background:#08060b;display:grid;place-items:center;overflow:hidden}
+.telegram-preview-poster{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.62;filter:saturate(.86)}
+.telegram-preview-overlay{position:relative;z-index:2;width:min(84%,320px);padding:20px 16px;border:1px solid #80509b;border-radius:18px;background:#05040bdc;box-shadow:0 14px 40px #0009;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center;backdrop-filter:blur(8px)}
+.telegram-preview-lock{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#842aff,#ff3295);font-size:22px}
+.telegram-preview-overlay b{font-size:16px;line-height:1.4;color:#fff}.telegram-preview-overlay small{color:#e2d2ed;font-size:12px;line-height:1.5}
+.telegram-only-preview.no-thumb .telegram-preview-poster{display:none}
+@media(max-width:420px){.telegram-only-preview{min-height:190px}.telegram-preview-overlay{padding:16px 12px}}
+</style>
+
+
+<style id="vvh-component-theme-style">
+:root{
+ --vvh-ui-page-bg:#030304;--vvh-ui-app-bg:#030304;--vvh-ui-header-bg:#08070b;--vvh-ui-header-border:#c32dff;
+ --vvh-ui-body-text:#fff;--vvh-ui-title-text:#fff;--vvh-ui-muted-text:#c7bfd3;--vvh-ui-hero-bg:#100c15;--vvh-ui-video-card-bg:#100c15;--vvh-ui-card-border:#54206f;
+ --vvh-ui-category-bg:#24152f;--vvh-ui-category-text:#d6a4ff;--vvh-ui-category-border:#4c2b5a;--vvh-ui-category-active-a:#8b2cff;--vvh-ui-category-active-b:#ff2d91;
+ --vvh-ui-timer-bg:#050505;--vvh-ui-timer-text:#fff;--vvh-ui-button-a:#8b2cff;--vvh-ui-button-b:#ff2d91;--vvh-ui-button-text:#fff;--vvh-ui-support-bg:#ffbd32;--vvh-ui-support-text:#17100a;
+ --vvh-ui-announcement-bg:#171109;--vvh-ui-announcement-text:#f5c64d;--vvh-ui-unlock-bg:#171109;--vvh-ui-unlock-border:#75501b;
+ --vvh-ui-profile-bg:#21102f;--vvh-ui-profile-border:#522067;--vvh-ui-avatar-bg:#271536;--vvh-ui-avatar-border:#a92fff;--vvh-ui-points-bg:#17101f;--vvh-ui-points-border:#55306b;
+ --vvh-ui-bottom-bg:#0d0c0f;--vvh-ui-bottom-text:#aaa;--vvh-ui-bottom-active-bg:#171021;--vvh-ui-bottom-active-text:#fff;--vvh-ui-input-bg:#111116;--vvh-ui-input-border:#39323f;--vvh-ui-loader-sub-text:#d7d7d7;--vvh-ui-adult-button-bg:#e60000;--vvh-ui-adult-button-text:#fff;--vvh-ui-adult-button-border:#e60000;--vvh-ui-age-gate-bg:#030304;--vvh-ui-age-gate-card-bg:#171010;--vvh-ui-age-gate-border:#8c5f13;--vvh-ui-age-gate-text:#d0d0d0;--vvh-ui-age-gate-accent:#ffd447;
 }
-
-#startupSplash .splash-orbit::after {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  border: 3px solid rgba(255, 255, 255, 0.20);
-  border-top-color: #ff45d0;
-  border-right-color: #9b5cff;
-  border-radius: 50%;
-  box-shadow: 0 0 14px rgba(255, 69, 208, 0.35);
-  animation: splashOrbitSpin 0.8s linear infinite;
-  pointer-events: none;
-}
-
-@keyframes splashOrbitSpin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-
-/* ভেতরের ভিডিও আইকনের চারপাশে ঘূর্ণায়মান রিং */
-#startupSplash .splash-play {
-  position: relative;
-}
-
-#startupSplash .splash-play::after {
-  content: "";
-  position: absolute;
-  width: 44px;
-  height: 44px;
-  left: 50%;
-  top: 50%;
-  margin: -22px 0 0 -22px;
-  box-sizing: border-box;
-  border: 2px solid rgba(255, 255, 255, 0.2);
-  border-left-color: #ff45d0;
-  border-bottom-color: #9b5cff;
-  border-radius: 50%;
-  box-shadow: 0 0 10px rgba(255, 69, 208, 0.35);
-  animation: splashInnerSpin 1.2s linear infinite;
-  pointer-events: none;
-  z-index: 2;
-}
-
-@keyframes splashInnerSpin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
+html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-body-text,#fff)!important}
+.app{background:var(--vvh-ui-app-bg,#030304)!important;color:var(--vvh-ui-body-text,#fff)!important}
+.topbar,.mainhead,.details-topbar,.purchase-page-head{background:var(--vvh-ui-header-bg,#08070b)!important;color:var(--vvh-ui-body-text,#fff)!important}
+.mainhead,.details-topbar{border-bottom-color:var(--vvh-ui-header-border,#c32dff)!important}
+.hero-card:not(.active){background:var(--vvh-ui-hero-bg,#100c15)!important;border-color:var(--vvh-ui-card-border,#54206f)!important;color:var(--vvh-ui-body-text,#fff)!important}
+.hero-card.active{background:linear-gradient(90deg,var(--vvh-ui-category-active-a,#8b2cff),var(--vvh-ui-category-active-b,#ff2d91))!important;color:var(--vvh-ui-button-text,#fff)!important}
+.categories button,#categoryBar button{background:var(--vvh-ui-category-bg,#24152f)!important;color:var(--vvh-ui-category-text,#d6a4ff)!important;border-color:var(--vvh-ui-category-border,#4c2b5a)!important}
+.categories button.active,#categoryBar button.active{background:linear-gradient(90deg,var(--vvh-ui-category-active-a,#8b2cff),var(--vvh-ui-category-active-b,#ff2d91))!important;border-color:transparent!important;color:var(--vvh-ui-button-text,#fff)!important}
+.video-card{background:var(--vvh-ui-video-card-bg,#100c15)!important;border-color:var(--vvh-ui-card-border,#54206f)!important}
+.video-info{color:var(--vvh-ui-body-text,#fff)!important}
+.video-title,.section-title,.profile-name,.overview-title{color:var(--vvh-ui-title-text,#fff)!important}
+.video-category{background:var(--vvh-ui-category-bg,#24152f)!important;color:var(--vvh-ui-category-text,#d6a4ff)!important;border:1px solid var(--vvh-ui-category-border,#4c2b5a)!important}
+.thumbnail-duration,.details-duration{background:var(--vvh-ui-timer-bg,#050505)!important;color:var(--vvh-ui-timer-text,#fff)!important;border-color:var(--vvh-ui-category-active-b,#ff2d91)!important}
+.unlock-btn,.small-action,.twobtn button,.earnbox .go,.auth-modal .auth-box button:not(.close-auth),.custom-purchase-btn,.vvh-payment-wallet button{background:linear-gradient(90deg,var(--vvh-ui-button-a,#8b2cff),var(--vvh-ui-button-b,#ff2d91))!important;color:var(--vvh-ui-button-text,#fff)!important}
+.mainhead .support-header-btn{background:var(--vvh-ui-support-bg,#ffbd32)!important;color:var(--vvh-ui-support-text,#17100a)!important}
+.profile-head{background:var(--vvh-ui-profile-bg,#21102f)!important;border-color:var(--vvh-ui-profile-border,#522067)!important}
+.avatar{background:var(--vvh-ui-avatar-bg,#271536)!important;border-color:var(--vvh-ui-avatar-border,#a92fff)!important}
+.points-box,.overview .box{background:var(--vvh-ui-points-bg,#17101f)!important;border-color:var(--vvh-ui-points-border,#55306b)!important}
+.bottom{background:var(--vvh-ui-bottom-bg,#0d0c0f)!important;border-top-color:var(--vvh-ui-card-border,#54206f)!important}
+.bottom button{color:var(--vvh-ui-bottom-text,#aaa)!important}
+.bottom button.active{background:var(--vvh-ui-bottom-active-bg,#171021)!important;color:var(--vvh-ui-bottom-active-text,#fff)!important}
+#publicAnnouncement{background:var(--vvh-ui-announcement-bg,#171109)!important;color:var(--vvh-ui-announcement-text,#f5c64d)!important;border-color:var(--vvh-ui-unlock-border,#75501b)!important}
+.unlock-panel{background:var(--vvh-ui-unlock-bg,#171109)!important;border-color:var(--vvh-ui-unlock-border,#75501b)!important}
+.auth input,.auth-modal .auth-box input,#referralLink,.custom-amount-card input,.custom-pay input{background:var(--vvh-ui-input-bg,#111116)!important;border-color:var(--vvh-ui-input-border,#39323f)!important;color:var(--vvh-ui-body-text,#fff)!important}
+.splash-sub{color:var(--vvh-ui-loader-sub-text,#d7d7d7)!important}
+.profile .referral-box,.referral-box,.earnbox,.refbox{background:var(--vvh-ui-points-bg,#17101f)!important;border-color:var(--vvh-ui-points-border,#55306b)!important}
+.video-action{background:linear-gradient(90deg,var(--vvh-ui-button-a,#8b2cff),var(--vvh-ui-button-b,#ff2d91))!important;color:var(--vvh-ui-button-text,#fff)!important;border-color:var(--vvh-ui-card-border,#54206f)!important}
+.muted,.hint,.handle,.auth-status,.video-info small,.muted-text{color:var(--vvh-ui-muted-text,#c7bfd3)!important}
+.hero{background:var(--vvh-ui-hero-bg,#100c15)!important}
+.age-gate{background:var(--vvh-ui-age-gate-bg,#030304)!important}
+.age-card{background:var(--vvh-ui-age-gate-card-bg,#171010)!important;border-color:var(--vvh-ui-age-gate-border,#8c5f13)!important;color:var(--vvh-ui-body-text,#fff)!important}
+.age-card .age-copy{color:var(--vvh-ui-age-gate-text,#d0d0d0)!important}
+.age-icon{background:radial-gradient(circle at 50% 35%,var(--vvh-ui-age-gate-accent,#ffd447),var(--vvh-ui-age-gate-card-bg,#171010) 70%)!important;border-color:var(--vvh-ui-age-gate-border,#8c5f13)!important;color:var(--vvh-ui-age-gate-accent,#ffd447)!important}
+.age-rule{background:var(--vvh-ui-age-gate-card-bg,#171010)!important;border-color:var(--vvh-ui-card-border,#54206f)!important;color:var(--vvh-ui-body-text,#fff)!important}
+.age-rule .mark{background:var(--vvh-ui-age-gate-accent,#ffd447)!important;color:#111!important}
+.age-yes{background:linear-gradient(145deg,var(--vvh-ui-age-gate-accent,#ffd447),var(--vvh-ui-support-bg,#ffbd32))!important;color:#111!important}
+.age-no{background:var(--vvh-ui-input-bg,#111116)!important;border-color:var(--vvh-ui-input-border,#39323f)!important;color:var(--vvh-ui-body-text,#fff)!important}
 
 </style>
 </head>
@@ -804,8 +851,8 @@ body.intro-lock{overflow:hidden}
 <div class="startup-splash" id="startupSplash" aria-label="Loading">
   <div class="splash-inner">
     <div class="splash-orbit"><div class="splash-play">▶</div></div>
-   <div class="splash-brand">VIRAL <span class="purple">VIDEO HUB LINK</span></div>
-    <div class="splash-sub">অভিজ্ঞতা লোড হচ্ছে</div>
+    <div class="splash-brand" id="splashBrand">VIRAL <span class="purple">VIDEO LINK</span></div>
+    <div class="splash-sub" id="splashSub">অভিজ্ঞতা লোড হচ্ছে</div>
     <div class="splash-progress"><span></span></div>
     <div class="splash-dots"><i></i><i></i><i></i></div>
   </div>
@@ -829,10 +876,11 @@ body.intro-lock{overflow:hidden}
 
 
 <div class="app">
-<div class="topbar"><button onclick="openMenu()">‹</button><span>VIRAL VIDEO HUB LINK</span><button>⋯</button></div>
+<div class="topbar"><button onclick="openMenu()">‹</button><span>VIRAL VIDEO LINK</span><button>⋯</button></div>
 <header class="mainhead">
   <button class="icon" onclick="openMenu()">☰</button>
-  <div class="brand"><span class="v">VIRAL </span><span class="p">VIDEO HUB LINK</span></div>
+  <div class="brand" id="siteBrand"><span class="v">VIRAL </span><span class="p">VIDEO LINK</span></div>
+  <button class="search-header-btn" type="button" onclick="focusSearch()" aria-label="ভিডিও খুঁজুন" title="ভিডিও খুঁজুন">⌕</button>
   <button class="support-header-btn" type="button" onclick="openSupportChat()" aria-label="Live Support" title="Live Support">
     <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="12" width="4" height="7" rx="2"/><rect x="17" y="12" width="4" height="7" rx="2"/><path d="M17 19a5 5 0 0 1-5 3h-1"/></svg>
   </button>
@@ -840,25 +888,17 @@ body.intro-lock{overflow:hidden}
 
 <main id="homePage" class="page active">
 <section class="hero"><div class="hero-grid"><button type="button" class="hero-card active" onclick="selectHeroTab('All', this)"><b>সব ভিডিও</b><small>নতুন পোস্ট আগে</small></button><button type="button" class="hero-card" onclick="selectHeroTab('Trending', this)"><b>ট্রেন্ডিং</b><small>সবচেয়ে বেশি দেখা আগে</small></button></div></section>
-<div class="categories" id="categoryBar">
-<button class="active" onclick="loadVideos('All',this)">সব ভিডিও</button>
-<button onclick="loadVideos('Trending',this)">ট্রেন্ডিং</button>
-<button onclick="loadVideos('Bangla',this)">বাংলা</button>
-<button onclick="loadVideos('English',this)">ইংলিশ</button>
-<button onclick="loadVideos('TikTok',this)">টিকটক</button>
-<button onclick="loadVideos('Japanese',this)">জাপানি</button>
-<button onclick="loadVideos('Funny',this)">ফানি</button>
-<button onclick="loadVideos('Music',this)">মিউজিক</button>
-<button onclick="loadVideos('Shorts',this)">শর্টস</button>
-<button onclick="loadVideos('Viral',this)">ভাইরাল ভিডিও</button>
-<button onclick="loadVideos('Drama',this)">ড্রামা</button>
-<button onclick="loadVideos('Comedy',this)">কমেডি</button>
-<button onclick="loadVideos('Sports',this)">স্পোর্টস</button>
-<button onclick="loadVideos('News',this)">নিউজ</button>
+<div class="categories" id="categoryBar" aria-label="ভিডিও ক্যাটাগরি">
+  <button class="active" type="button" data-category="All">সব ভিডিও</button>
 </div>
 <div class="latest-heading"><h2 class="section-title">Latest Videos</h2><button class="video-guide-btn" type="button" onclick="openMenu()">▶ ভিডিও দেখার নিয়ম</button></div>
-<div class="notice">🔔 নতুন ভিডিও নিয়মিত দেখুন — ক্যাটাগরি বেছে ভিডিও খুঁজুন ✨</div>
+<div class="notice" id="publicAnnouncement">🔔 নতুন ভিডিও নিয়মিত দেখুন — ক্যাটাগরি বেছে ভিডিও খুঁজুন ✨</div>
 <div id="videos"><div class="message">ভিডিও লোড হচ্ছে...</div></div>
+<section id="vvhShopPromo" class="vvh-shop-promo" hidden aria-label="Premium points shop">
+  <div class="vvh-shop-icon" aria-hidden="true">💎</div>
+  <div class="vvh-shop-copy"><b id="vvhShopPromoTitle">পয়েন্ট প্যাকেজ দেখুন</b><small id="vvhShopPromoText">আপনার পছন্দের প্যাকেজ বেছে নিয়ে ভিডিও আনলক করুন।</small></div>
+  <button type="button" onclick="openPurchasePage()">প্যাকেজ দেখুন ↗</button>
+</section>
 </main>
 
 <main id="profilePage" class="page">
@@ -866,7 +906,7 @@ body.intro-lock{overflow:hidden}
 <div class="profile-head"><div class="avatar" id="profileAvatar">👤</div><div><div class="profile-name">PRINCES OWNER</div><div class="handle">@PrimesupportbdT</div><button class="small-action" id="accountActionBtn" onclick="openAuth()">🔐 Login / Sign Up</button><div class="auth-status" id="profileAuthStatus">লগইন করা হয়নি</div></div></div>
 <div class="overview-title">ওভারভিউ</div>
 <div class="overview"><div class="box">🪙<div class="num" id="profilePoints">0</div>Points</div><div class="box">👥<div class="num" id="profileReferralCount">0</div>মোট রেফারেল</div></div>
-<h3>রেফারেল সিস্টেম</h3><div class="refbox">
+<h3 id="vvhReferralHeading">রেফারেল সিস্টেম</h3><div class="refbox" id="vvhReferralBox">
 <div class="row"><span>🎁 প্রতি রেফারেলে</span><b>রিওয়ার্ড</b></div><div class="row"><span>👤 জয়েন বোনাস</span><b>সক্রিয়</b></div><div class="row"><span>🎫 রেফারেল কোড</span><b id="profileReferralCode">Loading...</b></div>
 <h3>আপনার রেফারেল লিংক</h3><div class="refcode" id="profileReferralLink">লোড হচ্ছে...</div><div class="twobtn"><button onclick="copyReferral()">📋 লিংক কপি</button><button onclick="shareReferral()">↗ শেয়ার</button></div></div>
 <h3>কিভাবে কাজ করে</h3><div class="earnbox"><div class="row reference-how-row"><span><i class="reference-mini-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.2"/><path d="M5.5 19c.5-3.2 2.7-5 6.5-5s6 1.8 6.5 5"/></svg></i><span>বন্ধু আপনার কোড দিয়ে<br>জয়েন করলে</span></span><b>রিওয়ার্ড যোগ<br>হবে</b></div><div class="row reference-how-row"><span><i class="reference-mini-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M13.5 2.8 5.8 13h5l-.5 8.2L18.4 10h-5.1z"/></svg></i><span>আরো আয়</span></span><b>বিজ্ঞাপন দেখে আয় করুন</b></div><div class="profile-shortcuts"><button type="button" onclick="openMenu()"><span class="shortcut-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.8v14.4L19 12z" fill="currentColor" stroke="none"/></svg></span> টিউটোরিয়াল<br>দেখুন</button><button type="button" onclick="openPurchasePage()"><span class="shortcut-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.2 10.1a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 1.9-1.4L21 8H6"/><circle cx="9.5" cy="19" r="1.3"/><circle cx="17.5" cy="19" r="1.3"/></svg></span> পয়েন্ট<br>কিনুন</button></div></div>
@@ -934,9 +974,16 @@ body.intro-lock{overflow:hidden}
     <h2>প্রিমিয়াম পয়েন্ট কিনুন</h2>
     <div class="premium-intro-row">
       <div class="premium-coin-icon" aria-hidden="true">▤<small>VIP</small></div>
-      <p>প্যাকেজ বেছে নিন, Binance Pay অথবা USDT TRC20 নির্বাচন করে সঠিক অ্যামাউন্ট পাঠান, তারপর Order ID / Transaction ID দিয়ে অটোমেটিক ভেরিফাই করুন।</p>
+      <p>প্যাকেজ বেছে নিন এবং অ্যাডমিনের নির্ধারিত USDT TRC20 অ্যাড্রেস ও নেটওয়ার্ক যাচাই করুন। বাস্তব পেমেন্ট ভেরিফিকেশন চালু না থাকলে টাকা পাঠাবেন না।</p>
     </div>
     <button class="purchase-tutorial" type="button" onclick="showPurchaseDemoMessage('পেমেন্টের নিয়মের টিউটোরিয়াল')">▶　পয়েন্ট কেনার নিয়ম</button>
+  </section>
+  <section id="vvhPaymentWallet" class="vvh-payment-wallet" hidden aria-label="USDT TRC20 payment address">
+    <b>💳 USDT TRC20 পেমেন্ট</b>
+    <p>পেমেন্টের আগে নেটওয়ার্কটি অবশ্যই TRON (TRC20) নিশ্চিত করুন। ভুল নেটওয়ার্কে পাঠানো ফান্ড হারিয়ে যেতে পারে।</p>
+    <span id="vvhWalletAddress" class="vvh-wallet-address">অ্যাডমিন এখনো পেমেন্ট অ্যাড্রেস সেট করেনি।</span>
+    <button type="button" id="vvhWalletCopyButton" onclick="copyConfiguredUsdtWallet()">📋 অ্যাড্রেস কপি</button>
+    <p id="vvhWalletNote">পেমেন্ট ভেরিফিকেশন চালু না থাকলে টাকা পাঠিও না; এই অংশে অ্যাড্রেস দেখালেই পয়েন্ট অটোমেটিক যোগ হবে না।</p>
   </section>
   <div class="purchase-section-label">💎　প্যাকেজ নির্বাচন করুন</div>
   <div class="purchase-packages">
@@ -947,7 +994,7 @@ body.intro-lock{overflow:hidden}
   </div>
   <div class="purchase-section-label">🪄　CUSTOM AMOUNT</div>
   <section class="custom-amount-card">
-    <label for="customCoinAmount">পয়েন্টের পরিমাণ লিখুন</label>
+    <label for="customCoinAmount">পয়েন্টের পরিমাণ লিখুন</label><small id="customCoinRateHint" style="display:block;color:#bdaecc;margin:3px 0 8px">100 points = 1 USDT</small>
     <input id="customCoinAmount" type="number" min="100" step="100" placeholder="উদাহরণ: 1000" oninput="updateCustomCoinEstimate()">
     <div class="custom-need"><span>প্রয়োজনীয় USDT</span><strong id="customUsdtEstimate">0.00 USDT</strong></div>
     <button class="custom-purchase-btn" type="button" onclick="submitCustomCoinDemo()">♛　Purchase Custom Coins</button>
@@ -955,7 +1002,7 @@ body.intro-lock{overflow:hidden}
   <p class="purchase-demo-note">ডেমো প্রিভিউ: এখানে প্যাকেজ বেছে নেওয়া ও হিসাব দেখা যাবে। কোনো বাস্তব পেমেন্ট বা পয়েন্ট যোগ করা হবে না।</p>
 </main>
 
-<div class="footer">🔥 VIRAL VIDEO HUB LINK<br>নতুন ভিডিও নিয়মিত যুক্ত হবে...</div>
+<div class="footer">🔥 VIRAL VIDEO LINK<br>নতুন ভিডিও নিয়মিত যুক্ত হবে...</div>
 <nav class="bottom"><button id="homeTab" class="active" onclick="showHome()">🏠<br><span>হোম</span></button><button id="profileTab" onclick="showProfile()">👤<br><span>প্রোফাইল</span></button></nav>
 </div>
 
@@ -965,7 +1012,7 @@ body.intro-lock{overflow:hidden}
     <button class="quick-action age" type="button" aria-label="১৮+ নিশ্চিতকরণ" title="১৮+ নিশ্চিতকরণ" onclick="openAgeConfirmation()">18+</button>
     <button class="quick-action play" type="button" aria-label="ভিডিওতে যান" title="ভিডিওতে যান" onclick="goToVideos()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.8v14.4L19 12z"/></svg></button>
   </div>
-  <button class="quick-actions-toggle" type="button" id="quickActionsToggle" aria-label="দ্রুত বাটন দেখান" aria-expanded="false" onclick="toggleQuickActions()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></button>
+  <button class="quick-actions-toggle" type="button" id="quickActionsToggle" aria-label="দ্রুত বাটন দেখান" aria-expanded="false" onclick="toggleQuickActions()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19"/></svg></button>
 </div>
 
 <button class="support-fab" id="supportFab" type="button" onclick="openSupportChat()" aria-label="Live Support">
@@ -988,9 +1035,9 @@ body.intro-lock{overflow:hidden}
   </div>
 </div>
 
-<div class="menu" id="menu" onclick="closeMenu(event)"><aside class="drawer" onclick="event.stopPropagation()"><button class="close" onclick="closeMenu()">×</button><div class="mini-brand"><b>ভিডিও শেয়ার করুন</b><br><strong>VIRAL <span class="p">VIDEO HUB LINK</span></strong></div><h2>মেনু</h2>
+<div class="menu" id="menu" onclick="closeMenu(event)"><aside class="drawer" onclick="event.stopPropagation()"><button class="close" onclick="closeMenu()">×</button><div class="mini-brand"><b>ভিডিও শেয়ার করুন</b><br><strong>VIRAL <span class="p">VIDEO LINK</span></strong></div><h2>মেনু</h2>
 <button class="menuitem" onclick="showHome();closeMenu()">🏠 হোম</button><button class="menuitem" onclick="showProfile();closeMenu()">👤 প্রোফাইল</button><button class="menuitem" id="menuAuthBtn" onclick="handleAuthMenu();closeMenu()">🔐 Login / Sign Up</button><button class="menuitem" onclick="openSupportChat();closeMenu()">💬 Live Support <span id="menuSupportBadge" style="float:right;display:none;background:#ff3e68;border-radius:999px;padding:2px 7px;font-size:11px">0</span></button><button class="menuitem">▶ ভিডিও দেখার নিয়ম</button><button class="menuitem">⚠ ১৮+ কনটেন্ট</button><button class="menuitem">👥 ফ্রি পয়েন্ট আয় করার নিয়ম</button>
-<h3>ভাষা পরিবর্তন</h3><div class="lang"><button>বাংলা</button><button>ENGLISH</button></div><h3>সোশ্যাল লিংক</h3><button class="menuitem">🔗 WhatsApp</button><button class="menuitem">🔗 Telegram</button></aside></div>
+<h3>ভাষা পরিবর্তন</h3><div class="lang"><button>বাংলা</button><button>ENGLISH</button></div><h3>সোশ্যাল লিংক</h3><button class="menuitem" id="menuWhatsAppLink" type="button" onclick="openConfiguredLink('whatsapp')">🔗 WhatsApp</button><button class="menuitem" id="menuTelegramLink" type="button" onclick="openConfiguredLink('telegram')">🔗 Telegram</button><div id="vvhCustomMenuLinks"></div></aside></div>
 
 
 
@@ -1046,8 +1093,8 @@ function openPurchasePage(){hideAllMainPages();document.getElementById("purchase
 function closePurchasePage(){showProfile()}
 function showPurchaseDemoMessage(label){alert(label+" — এটি শুধু ডেমো। পেমেন্ট এখনো চালু করা হয়নি।")}
 function selectDemoPackage(name,usdt,points){alert(name+" প্যাকেজ নির্বাচিত: "+usdt+" USDT = "+points+" পয়েন্ট। এটি ডেমো; পেমেন্ট নেওয়া বা পয়েন্ট যোগ করা হবে না।")}
-function updateCustomCoinEstimate(){const el=document.getElementById("customCoinAmount");const out=document.getElementById("customUsdtEstimate");if(!el||!out)return;const n=Math.max(0,Number(el.value)||0);out.textContent=(n/100).toFixed(2)+" USDT"}
-function submitCustomCoinDemo(){const n=Number(document.getElementById("customCoinAmount")?.value||0);if(!Number.isFinite(n)||n<100){alert("কমপক্ষে 100 পয়েন্ট লিখুন।");return}alert("ডেমো হিসাব: "+n.toLocaleString()+" পয়েন্টের জন্য "+(n/100).toFixed(2)+" USDT। বাস্তব পেমেন্ট চালু নেই।")}
+function updateCustomCoinEstimate(){const el=document.getElementById("customCoinAmount");const out=document.getElementById("customUsdtEstimate");if(!el||!out)return;const n=Math.max(0,Number(el.value)||0);const rate=Math.max(1,Number(window.VVH_PUBLIC_SETTINGS?.monetization?.customPointsPerUsdt)||100);out.textContent=(n/rate).toFixed(2)+" USDT";const hint=document.getElementById('customCoinRateHint');if(hint)hint.textContent=rate.toLocaleString()+' points = 1 USDT'}
+function submitCustomCoinDemo(){const n=Number(document.getElementById("customCoinAmount")?.value||0);if(!Number.isFinite(n)||n<100){alert("কমপক্ষে 100 পয়েন্ট লিখুন।");return}const rate=Math.max(1,Number(window.VVH_PUBLIC_SETTINGS?.monetization?.customPointsPerUsdt)||100);alert("ডেমো হিসাব: "+n.toLocaleString()+" পয়েন্টের জন্য "+(n/rate).toFixed(2)+" USDT। বাস্তব পেমেন্ট ভেরিফিকেশন চালু নেই।")}
 function openMenu(){document.getElementById("menu").classList.add("open")}
 function closeMenu(e){if(!e||e.target.id==="menu")document.getElementById("menu").classList.remove("open")}
 function copyReferral(){const x=window.currentReferralUrl || document.getElementById("profileReferralLink").innerText;navigator.clipboard?.writeText(x).then(()=>alert("লিংক কপি হয়েছে।"))}
@@ -1062,13 +1109,12 @@ async function shareReferral() {
   }
 
   try {
-   
-if (navigator.share) {
-  await navigator.share({
-    title: "VIRAL VIDEO HUB LINK",
-    text: "আমার রেফারেল লিংক দিয়ে Viral Video Hub-এ যোগ দিন:",
-    url: url
-  });
+    if (navigator.share) {
+      await navigator.share({
+        title: "VIRAL VIDEO LINK",
+        text: "আমার রেফারেল লিংক দিয়ে Viral Video Hub-এ যোগ দিন:",
+        url: url
+      });
     } else if (navigator.clipboard && window.isSecureContext) {
       await navigator.clipboard.writeText(url);
       alert("রেফারেল লিংক কপি হয়েছে! এখন বন্ধুকে পাঠিয়ে দিন।");
@@ -1094,37 +1140,41 @@ function formatVideoAge(dateString){
   if(days < 30) return Math.floor(days/7) + " week ago";
   return Math.floor(days/30) + " month ago";
 }
-async function getVideoUnlockExpiry(videoId, video=null){
-  const key = "videoUnlockExpires_" + videoId;
-  let expires = Number(localStorage.getItem(key) || 0);
+function getVideoUnlockMinutes(video) {
+  const configured = Number(video?.unlock_minutes);
+  if (Number.isFinite(configured) && configured >= 1 && configured <= 1440) return Math.floor(configured);
+  const hours = Number(video?.unlock_hours || 1);
+  return Math.max(1, Math.min(24, Number.isFinite(hours) ? hours : 1)) * 60;
+}
+function formatUnlockDuration(minutes) {
+  const total = Math.max(1, Math.min(1440, Math.floor(Number(minutes) || 60)));
+  const days = Math.floor(total / 1440);
+  const hours = Math.floor((total % 1440) / 60);
+  const mins = total % 60;
+  if (days) return `${days} দিন${hours ? ` ${hours} ঘণ্টা` : ''}${mins ? ` ${mins} মিনিট` : ''}`;
+  if (hours) return `${hours} ঘণ্টা${mins ? ` ${mins} মিনিট` : ''}`;
+  return `${mins || total} মিনিট`;
+}
 
-  // Prefer the server-side grant so the timer survives refresh/device changes.
+async function getVideoUnlockExpiry(videoId, video=null){
+  const key = 'videoUnlockExpires_' + videoId;
+  // Server state is authoritative; localStorage is cache only and can never mint an unlock.
   try{
     const {data:{user}}=await supabaseClient.auth.getUser();
-    if(user){
-      const {data,error}=await supabaseClient.from('video_unlocks').select('expires_at').eq('user_id',user.id).eq('video_id',videoId).gt('expires_at',new Date().toISOString()).order('expires_at',{ascending:false}).limit(1).maybeSingle();
-      if(!error && data?.expires_at){
-        expires=new Date(data.expires_at).getTime();
-        localStorage.setItem(key,String(expires));
-      }
+    if(!user){localStorage.removeItem(key);localStorage.removeItem('videoUnlocked_'+videoId);return 0;}
+    const {data,error}=await supabaseClient.from('video_unlocks').select('expires_at').eq('user_id',user.id).eq('video_id',videoId).gt('expires_at',new Date().toISOString()).order('expires_at',{ascending:false}).limit(1).maybeSingle();
+    if(error) throw error;
+    if(data?.expires_at){
+      const expires=new Date(data.expires_at).getTime();
+      if(Number.isFinite(expires)&&expires>Date.now()){localStorage.setItem(key,String(expires));localStorage.removeItem('videoUnlocked_'+videoId);return expires;}
     }
-  }catch(e){ console.warn('Server unlock lookup failed:',e); }
-
-  // Backward compatibility for older builds that stored a permanent unlock flag.
-  if (!expires && localStorage.getItem("videoUnlocked_" + videoId) === "true") {
-    const hours = Number(video?.unlock_hours || 1);
-    expires = Date.now() + hours * 60 * 60 * 1000;
-    localStorage.setItem(key, String(expires));
-    localStorage.removeItem("videoUnlocked_" + videoId);
-  }
-
-  if (expires && expires <= Date.now()) {
-    localStorage.removeItem(key);
-    localStorage.removeItem("videoUnlocked_" + videoId);
-    localStorage.removeItem("videoAds_" + videoId);
+    localStorage.removeItem(key);localStorage.removeItem('videoUnlocked_'+videoId);localStorage.removeItem('videoAds_'+videoId);
+    return 0;
+  }catch(e){
+    console.warn('Server unlock lookup failed; treating as locked:',e);
+    localStorage.removeItem(key);localStorage.removeItem('videoUnlocked_'+videoId);
     return 0;
   }
-  return expires;
 }
 
 function formatUnlockCountdown(ms){
@@ -1140,7 +1190,7 @@ async function downloadViaTelegram(videoId){
     const {data:{user}}=await supabaseClient.auth.getUser();
     if(!user){ openAuth(); const m=document.getElementById('authMessage'); if(m) m.innerText='🔐 Telegram Download ব্যবহার করতে আগে Login করুন।'; return; }
 
-    const expires=Number(localStorage.getItem('videoUnlockExpires_'+videoId)||0);
+    const expires=await getVideoUnlockExpiry(videoId);
     if(!expires || expires<=Date.now()){
       alert('🔒 ভিডিও Unlock করা নেই বা সময় শেষ হয়েছে।');
       openVideo(videoId);
@@ -1198,16 +1248,18 @@ function startUnlockCountdown(videoId, expiresAt){
   window.__unlockTimers[videoId] = setInterval(tick, 1000);
 }
 
-async function setVideoUnlock(videoId, hours, source='ads'){
-  const safeHours = [1,6,12].includes(Number(hours)) ? Number(hours) : 1;
-  let expiresAt = Date.now() + safeHours * 60 * 60 * 1000;
-  try{
-    const {data,error}=await supabaseClient.rpc('grant_video_unlock',{p_video_id:Number(videoId),p_hours:safeHours,p_source:source});
-    if(!error && data) expiresAt = new Date(data).getTime();
-    if(error) console.warn('grant_video_unlock:',error.message);
-  }catch(e){ console.warn('grant_video_unlock exception:',e); }
-  localStorage.setItem('videoUnlockExpires_' + videoId, String(expiresAt));
-  localStorage.removeItem('videoUnlocked_' + videoId);
+async function setVideoUnlock(videoId, minutes, source='ads'){
+  // Only server-verified postbacks may unlock by ads. Never fall back to a browser-only timer.
+  if(source!=='ads') throw Error('পয়েন্ট আনলকের জন্য purchase_video_with_points ব্যবহার করুন।');
+  const {data,error}=await supabaseClient.rpc('claim_verified_ad_unlock',{p_video_id:Number(videoId)});
+  if(error) throw error;
+  const result=Array.isArray(data)?data[0]:data;
+  if(!result?.success||!result?.expires_at) throw Error('Monetag-এর server postback এখনো যাচাই হয়নি; ভিডিও locked আছে।');
+  const expiresAt=new Date(result.expires_at).getTime();
+  if(!Number.isFinite(expiresAt)||expiresAt<=Date.now()) throw Error('সার্ভার থেকে বৈধ unlock expiry পাওয়া যায়নি।');
+  localStorage.setItem('videoUnlockExpires_'+videoId,String(expiresAt));
+  localStorage.removeItem('videoUnlocked_'+videoId);
+  localStorage.removeItem('videoAds_'+videoId);
   return expiresAt;
 }
 
@@ -1248,12 +1300,14 @@ async function getRequiredAdsForVideo(video) {
         : (videoValue ?? configuredDefault ?? 3);
 
     const n = Number(raw);
+    const capValue = Number(settings?.ads?.adsMax);
+    const cap = Number.isFinite(capValue) ? Math.max(0, Math.min(20, Math.floor(capValue))) : 20;
 
-    if (n === 0) return 0;
+    if (n === 0 || cap === 0) return 0;
 
     return Number.isFinite(n) && n > 0
-      ? Math.min(20, Math.floor(n))
-      : 3;
+      ? Math.min(cap, Math.floor(n))
+      : Math.min(cap, 3);
   } catch (error) {
     console.warn('Ad settings load failed:', error);
     const raw =
@@ -1281,25 +1335,46 @@ async function getCurrentPointsBalance(){
   }catch(e){ return 0; }
 }
 
+async function getPublicVideoById(videoId){
+  const {data,error}=await supabaseClient.rpc('vvh_public_video_catalog',{
+    p_video_id:Number(videoId),p_category:null,p_search:null
+  });
+  if(error) throw error;
+  return Array.isArray(data) ? (data.find(row=>String(row.id)===String(videoId))||null) : null;
+}
+
+async function getServerAdRewardProgress(videoId){
+  const {data,error}=await supabaseClient.rpc('get_video_ad_reward_progress',{p_video_id:Number(videoId)});
+  if(error) throw error;
+  const row=Array.isArray(data)?data[0]:data;
+  if(!row) throw Error('Reward progress পাওয়া যায়নি।');
+  return {required_ads:Number(row.required_ads||0),verified_ads:Number(row.verified_ads||0),pending_ads:Number(row.pending_ads||0),unlock_minutes:Number(row.unlock_minutes||60)};
+}
+
 async function openVideo(videoId){
-  const {data: video, error} = await supabaseClient
-    .from('videos').select('*').eq('id', videoId).single();
-  if(error || !video){ alert('ভিডিও পাওয়া যায়নি।'); return; }
+  let video;
+  try { video = await getPublicVideoById(videoId); }
+  catch(error){ console.error('Public video catalog lookup failed:',error); alert('ভিডিও পাওয়া যায়নি। Public catalog SQL migration চালানো হয়েছে কি না দেখুন।'); return; }
+  if(!video){ alert('ভিডিও পাওয়া যায়নি।'); return; }
 
   const existing = document.getElementById('videoDetails');
   if(existing) existing.remove();
 
-  const requiredAds = await getRequiredAdsForVideo(video);
+  const {data:{user:viewer}}=await supabaseClient.auth.getUser();
+  let rewardProgress=null;
+  if(viewer){try{rewardProgress=await getServerAdRewardProgress(video.id);}catch(e){console.warn('Server ad progress unavailable:',e.message||e);}}
+  const requiredAds = rewardProgress ? rewardProgress.required_ads : await getRequiredAdsForVideo(video);
+  const watched = rewardProgress ? Math.min(rewardProgress.verified_ads,requiredAds) : 0;
   localStorage.setItem('videoAdsRequired_' + video.id, String(requiredAds));
-  const key = 'videoAds_' + video.id;
-  let watched = Math.min(Number(localStorage.getItem(key) || 0), requiredAds);
+  localStorage.setItem('videoAds_' + video.id, String(watched));
   const pointsBalance = await getCurrentPointsBalance();
-  const expiresAt = await getVideoUnlockExpiry(video.id, video);
+  let expiresAt = await getVideoUnlockExpiry(video.id, video);
+  if(!expiresAt && viewer && rewardProgress && requiredAds>0 && rewardProgress.verified_ads>=requiredAds){
+    try{expiresAt=await setVideoUnlock(video.id,rewardProgress.unlock_minutes,'ads');}
+    catch(e){console.warn('Verified ad claim is pending:',e.message||e);}
+  }
   const unlocked = !!expiresAt && expiresAt > Date.now();
-  if(!unlocked) watched = Math.min(Number(localStorage.getItem(key) || 0), requiredAds);
-  else watched = requiredAds;
 
-  const durationHours = [1,6,12].includes(Number(video.unlock_hours)) ? Number(video.unlock_hours) : 1;
   const price = Number(video.points_price || 100);
   const details = document.createElement('div');
   details.id = 'videoDetails';
@@ -1307,14 +1382,13 @@ async function openVideo(videoId){
   details.innerHTML = `
     <div class="details-topbar">
       <button type="button" onclick="document.getElementById('videoDetails').remove()" aria-label="ফিরে যান">‹</button>
-     <b>VIRAL <span>VIDEO HUB LINK</span></b>
+      <b>VIRAL <span>VIDEO LINK</span></b>
       <button type="button" class="details-share-top" aria-label="Share video"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3" fill="currentColor" stroke="none"/><circle cx="6" cy="12" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="19" r="3" fill="currentColor" stroke="none"/><path d="M8.7 10.7 15.3 6.3M8.7 13.3l6.6 4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
     </div>
    <div class="details-content">
-  <div class="details-player">
-    <video preload="metadata" poster="${escapeHtml(video.thumbnail_url || video.thumbnail || '')}"
-           src="${escapeHtml(video.video_url || '')}"
-           ${unlocked ? '' : "controlsList='nodownload'"}></video>
+  <div class="details-player telegram-only-preview" aria-label="ভিডিওর Telegram delivery preview">
+    <img class="telegram-preview-poster" src="${escapeHtml(video.thumbnail_url || '')}" alt="${escapeHtml(video.title || 'Video thumbnail')}" onerror="this.style.display='none';this.parentElement.classList.add('no-thumb');">
+    <div class="telegram-preview-overlay"><span class="telegram-preview-lock">${unlocked ? '✈️' : '🔒'}</span><b>${unlocked ? 'Telegram-এ ভিডিও প্রস্তুত' : 'ভিডিওটি Telegram বটে পাবেন'}</b><small>${unlocked ? 'নিচের Download বাটনে চাপুন' : 'আগে বিজ্ঞাপন দেখুন অথবা পয়েন্ট দিয়ে আনলক করুন'}</small></div>
     ${video.duration ? `<div class="details-duration">${escapeHtml(video.duration)}</div>` : ''}
   </div>
 
@@ -1339,14 +1413,16 @@ async function openVideo(videoId){
         ` : `
           <div class="unlock-hint">বিজ্ঞাপন বা পয়েন্ট ব্যবহার করে এই কনটেন্ট আনলক করুন।</div>
           <div class="unlock-summary">
-            <div>প্রয়োজন<br><b>${requiredAds}</b></div>
+            <div>প্রয়োজন<br><b>${requiredAds > 0 ? requiredAds : '—'}</b></div>
             <div>ব্যালেন্স<br><b id="unlockBalance">${pointsBalance.toLocaleString()}</b></div>
-            <div>বাকি<br><b id="detailsRemain">${Math.max(0, requiredAds-watched)}</b></div>
+            <div>বাকি<br><b id="detailsRemain">${requiredAds > 0 ? Math.max(0, requiredAds-watched) : 'পয়েন্ট'}</b></div>
           </div>
-          <div class="progress-line"><span id="detailsProgress" style="width:${(watched/requiredAds)*100}%"></span></div>
-          <div class="unlock-progress-label">অগ্রগতি: <span id="detailsProgressLabel">${watched}/${requiredAds}</span></div>
-          <div class="unlock-bottom-hint" id="unlockHint">পয়েন্ট বা বিজ্ঞাপন দিয়ে আনলক করুন।</div>
-          <button class="unlock-big" id="watchUnlockButton_${video.id}" onclick="watchUnlockAd(${video.id})">🔒　ভিডিও আনলক</button>
+          ${requiredAds > 0 ? `
+            <div class="progress-line"><span id="detailsProgress" style="width:${(watched/requiredAds)*100}%"></span></div>
+            <div class="unlock-progress-label">অগ্রগতি: <span id="detailsProgressLabel">${watched}/${requiredAds}</span></div>
+            <div class="unlock-bottom-hint" id="unlockHint">পয়েন্ট বা বিজ্ঞাপন দিয়ে আনলক করুন।</div>
+            <button class="unlock-big" id="watchUnlockButton_${video.id}" onclick="watchUnlockAd(${video.id})">🔒　বিজ্ঞাপন দেখে আনলক</button>
+          ` : `<div class="unlock-bottom-hint" id="unlockHint">এই মুহূর্তে বিজ্ঞাপন আনলক বন্ধ আছে। পয়েন্ট ব্যবহার করুন।</div>`}
           <button class="unlock-points-button" onclick="purchaseVideo(${video.id})"><span class="coin-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="6" rx="7.5" ry="3.2"/><path d="M4.5 6v4c0 1.8 3.4 3.2 7.5 3.2s7.5-1.4 7.5-3.2V6M4.5 10v4c0 1.8 3.4 3.2 7.5 3.2 1.5 0 2.9-.2 4.1-.7M4.5 14v3.5c0 1.8 3.4 3.2 7.5 3.2 1.8 0 3.5-.3 4.7-.9"/></svg></span><span>আমার পয়েন্ট ব্যবহার করুন</span></button>
         `}
       </div>
@@ -1355,35 +1431,22 @@ async function openVideo(videoId){
       <div class="unlock-ornate-notice">
         <div class="unlock-ornate-line">✦　━━━━━━━━━━━━━━━━　✦</div>
         <div class="unlock-ornate-message">${unlocked
-          ? `এই কনটেন্টটি আনলক করা হয়েছে। এখন আপনি নির্ধারিত সময়ের মধ্যে ভিডিওটি দেখতে ও ডাউনলোড করতে পারবেন।`
-          : `এই কনটেন্টটি আনলক করতে আপনাকে <b>${requiredAds}টি বিজ্ঞাপন</b> দেখতে হবে অথবা <b>সমপরিমাণ পয়েন্ট</b> ব্যবহার করতে হবে। তারপর ডাউনলোড বাটন চালু হয়ে যাবে।`}</div>
+          ? `এই কনটেন্টটি আনলক করা হয়েছে। নির্ধারিত সময়ের মধ্যে Telegram বট থেকে ভিডিও সংগ্রহ করুন।`
+          : `এই কনটেন্টটি আনলক করতে আপনাকে <b>${requiredAds}টি বিজ্ঞাপন</b> দেখতে হবে অথবা <b>পয়েন্ট</b> ব্যবহার করতে হবে। এরপর Telegram Bot-এর মাধ্যমে ডাউনলোড করতে পারবেন।`}</div>
         <div class="unlock-ornate-line">✦　━━━━━━━━━━━━━━━━　✦</div>
       </div>
       <button class="more-video-btn" onclick="document.getElementById('videoDetails').remove()"><span class="more-video-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="m15 10 6-3v10l-6-3z"/></svg></span><span>আরো ভিডিও দেখুন</span></button>
     </div>`;
- 
-document.body.appendChild(details);
-const shareTopBtn = details.querySelector('.details-share-top');
-const shareBtn = details.querySelector('#shareBtn_' + video.id);
+  document.body.appendChild(details);
+  vvhRenderConfiguredLinks(window.VVH_PUBLIC_SETTINGS?.links||{});
+  const shareTopBtn = details.querySelector('.details-share-top');
+  const shareBtn = details.querySelector('#shareBtn_' + video.id);
+  if (shareTopBtn) shareTopBtn.addEventListener('click', () => shareVideo(video.id, video.title || 'VIRAL VIDEO LINK'));
+  if (shareBtn) shareBtn.addEventListener('click', () => shareVideo(video.id, video.title || 'VIRAL VIDEO LINK'));
+  registerVideoView(videoId);
+  refreshEngagementState(videoId);
+  if(unlocked) startUnlockCountdown(video.id, expiresAt);
 
-if (shareTopBtn) shareTopBtn.addEventListener('click', () => shareVideo(video.id, video.title || 'VIRAL VIDEO HUB LINK'));
-if (shareBtn) shareBtn.addEventListener('click', () => shareVideo(video.id, video.title || 'VIRAL VIDEO HUB LINK'));
-
-registerVideoView(videoId);
-refreshEngagementState(videoId);
-if(unlocked) startUnlockCountdown(video.id, expiresAt);
-
-
-  if(!unlocked){
-    const v = details.querySelector('.details-player video');
-    v.addEventListener('play', function block(){
-      const currentExpiry = Number(localStorage.getItem('videoUnlockExpires_' + video.id) || 0);
-      if(currentExpiry <= Date.now()){
-        v.pause();
-        alert(`🔒 আগে ${requiredAds}টি বিজ্ঞাপন সম্পূর্ণ করুন অথবা পয়েন্ট ব্যবহার করে ভিডিওটি আনলক করুন।`);
-      }
-    });
-  }
 }
 
 async function currentUser(){
@@ -1475,13 +1538,12 @@ async function shareVideo(videoId,title){
     const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     if(isMobile && typeof navigator.share === "function") {
-      
-await navigator.share({
-  title: title || "VIRAL VIDEO HUB LINK",
-  text: "এই ভিডিওটি দেখুন 🔥",
-  url: shareUrl
-});
-shared = true;
+      await navigator.share({
+        title: title || "VIRAL VIDEO LINK",
+        text: "এই ভিডিওটি দেখুন 🔥",
+        url: shareUrl
+      });
+      shared = true;
     } else {
       if(navigator.clipboard && window.isSecureContext){
         await navigator.clipboard.writeText(shareUrl);
@@ -1574,7 +1636,35 @@ function goToVideos(){
   if(videos) videos.scrollIntoView({behavior:'smooth',block:'start'});
 }
 
-function focusSearch(){alert("ভিডিও সার্চ ফিচারটি পরের আপডেটে যুক্ত করা যাবে।")}
+let vvhSearchTimer=null, vvhSearchRequest=0;
+function vvhSearchGlobalKeydown(e){if(e.key==='Escape'&&document.getElementById('vvhSearchOverlay'))closeVvhSearch()}
+function closeVvhSearch(){vvhSearchRequest++;document.removeEventListener('keydown',vvhSearchGlobalKeydown);document.getElementById('vvhSearchOverlay')?.remove();if(vvhSearchTimer)clearTimeout(vvhSearchTimer)}
+function focusSearch(){
+  let overlay=document.getElementById('vvhSearchOverlay');
+  if(!overlay){
+    overlay=document.createElement('div');overlay.id='vvhSearchOverlay';overlay.className='vvh-search-overlay';overlay.setAttribute('role','dialog');overlay.setAttribute('aria-modal','true');overlay.setAttribute('aria-label','ভিডিও খুঁজুন');
+    const panel=document.createElement('section');panel.className='vvh-search-panel';
+    const head=document.createElement('div');head.className='vvh-search-head';const title=document.createElement('h2');title.textContent='🔎 ভিডিও খুঁজুন';const close=document.createElement('button');close.type='button';close.textContent='×';close.setAttribute('aria-label','Close search');close.addEventListener('click',closeVvhSearch);head.append(title,close);
+    const input=document.createElement('input');input.id='vvhSearchInput';input.className='vvh-search-input';input.type='search';input.placeholder='ভিডিওর নাম বা ক্যাটাগরি লিখুন…';input.autocomplete='off';input.setAttribute('aria-label','ভিডিওর নাম বা ক্যাটাগরি');
+    const results=document.createElement('div');results.id='vvhSearchResults';results.className='vvh-search-results';const hint=document.createElement('p');hint.className='message';hint.textContent='কমপক্ষে ২টি অক্ষর লিখে ভিডিও খুঁজুন।';results.append(hint);panel.append(head,input,results);overlay.append(panel);
+    overlay.addEventListener('click',e=>{if(e.target===overlay)closeVvhSearch()});document.addEventListener('keydown',vvhSearchGlobalKeydown);document.body.append(overlay);
+    input.addEventListener('input',()=>{if(vvhSearchTimer)clearTimeout(vvhSearchTimer);const query=input.value.trim();results.replaceChildren();if(query.length<2){const p=document.createElement('p');p.className='message';p.textContent='কমপক্ষে ২টি অক্ষর লিখে ভিডিও খুঁজুন।';results.append(p);return}const pending=document.createElement('p');pending.className='message';pending.textContent='খোঁজা হচ্ছে…';results.append(pending);vvhSearchTimer=setTimeout(()=>vvhRunSearch(query,results),280)});
+  }
+  overlay.style.display='flex';const input=overlay.querySelector('#vvhSearchInput');if(input){input.focus();input.select()}
+}
+async function vvhRunSearch(query,results){
+  const request=++vvhSearchRequest;const term=String(query||'').trim().replace(/[%_]/g,'');if(term.length<2)return;
+  try{
+    const {data,error}=await supabaseClient.rpc('vvh_public_video_catalog',{
+      p_video_id:null,p_category:null,p_search:term
+    });
+    if(request!==vvhSearchRequest||!document.getElementById('vvhSearchOverlay'))return;
+    if(error)throw error;
+    const items=(Array.isArray(data)?data:[]).slice(0,20);results.replaceChildren();
+    if(!items.length){const p=document.createElement('p');p.className='message';p.textContent='কোনো ভিডিও পাওয়া যায়নি। অন্য নাম লিখে চেষ্টা করুন।';results.append(p);return}
+    items.forEach(v=>{const button=document.createElement('button');button.type='button';button.className='vvh-search-result';const image=document.createElement('img');const thumb=String(v.thumbnail_url||'');if(/^https?:\/\//i.test(thumb))image.src=thumb;image.alt='';image.onerror=()=>{image.style.visibility='hidden'};const copy=document.createElement('span');const name=document.createElement('b');name.textContent=String(v.title||'Untitled');const meta=document.createElement('small');meta.textContent=String(v.category||'Other')+(v.duration?' · '+String(v.duration):'');copy.append(name,meta);button.append(image,copy);button.addEventListener('click',()=>{const id=v.id;closeVvhSearch();openVideo(id)});results.append(button)});
+  }catch(e){if(request!==vvhSearchRequest)return;results.replaceChildren();const p=document.createElement('p');p.className='message';p.textContent='ভিডিও খোঁজা যায়নি: '+String(e?.message||'Database error');results.append(p)}
+}
 </script>
 <script>
 
@@ -1600,9 +1690,16 @@ function initStartupFlow() {
     gate.style.display = "flex";
   }
   document.body.classList.add("intro-lock");
-  setTimeout(() => {
-    if (splash) splash.classList.add("hide");
-  }, 1650);
+  const finishSplash = () => {
+    const loader = window.VVH_PUBLIC_SETTINGS?.loader || {};
+    if (loader.enabled === false) { if (splash) splash.classList.add("hide"); return; }
+    const ms = Math.max(0, Math.min(10000, Number(loader.durationMs ?? 1650)));
+    setTimeout(() => { if (splash) splash.classList.add("hide"); }, ms);
+  };
+  if (typeof loadVVHPublicConfig === "function") {
+    window.vvhConfigReady = window.vvhConfigReady || loadVVHPublicConfig().catch((error) => { console.warn("Config load failed; using defaults", error); return null; });
+    window.vvhConfigReady.then(finishSplash).catch(finishSplash);
+  } else finishSplash();
 }
 
 
@@ -1614,6 +1711,303 @@ function initStartupFlow() {
     SUPABASE_URL,
     SUPABASE_KEY
   );
+
+  // Public-facing, non-secret site settings; gracefully falls back if migration isn't installed yet.
+  const VVH_FALLBACK_CATEGORIES = [
+    {name:'বাংলা',icon:'🇧🇩',sort_order:1,is_active:true,is_adult:false},
+    {name:'ইংলিশ',icon:'🌐',sort_order:2,is_active:true,is_adult:false},
+    {name:'ভাইরাল ভিডিও',icon:'🔥',sort_order:3,is_active:true,is_adult:false},
+    {name:'টেলিগ্রাম',icon:'✈️',sort_order:4,is_active:true,is_adult:false},
+    {name:'টিকটক',icon:'🎵',sort_order:5,is_active:true,is_adult:false},
+    {name:'জাপানি',icon:'🇯🇵',sort_order:6,is_active:true,is_adult:false},
+    {name:'ফানি',icon:'😂',sort_order:7,is_active:true,is_adult:false},
+    {name:'মিউজিক',icon:'🎧',sort_order:8,is_active:true,is_adult:false},
+    {name:'শর্টস',icon:'📱',sort_order:9,is_active:true,is_adult:false},
+    {name:'কমেডি',icon:'🤣',sort_order:10,is_active:true,is_adult:false},
+    {name:'নিউজ',icon:'📰',sort_order:11,is_active:true,is_adult:false},
+    {name:'ট্রেন্ডিং',icon:'📈',sort_order:12,is_active:true,is_adult:false},
+    {name:'18+',icon:'🔞',sort_order:99,is_active:true,is_adult:true},
+    {name:'Other',icon:'🎬',sort_order:100,is_active:true,is_adult:false}
+  ];
+  window.VVH_PUBLIC_SETTINGS = window.VVH_PUBLIC_SETTINGS || {};
+  let vvhSiteCategories = VVH_FALLBACK_CATEGORIES.slice();
+  let vvhMaintenanceOverlay = null;
+
+  function vvhSafeColor(value, fallback) {
+    const s = String(value || '').trim();
+    return /^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i.test(s) ? s : fallback;
+  }
+  function vvhCategoryIcon(categoryName) {
+    const name = String(categoryName || 'Other').trim().toLocaleLowerCase();
+    const match = (vvhSiteCategories || VVH_FALLBACK_CATEGORIES).find(c => String(c.name || '').trim().toLocaleLowerCase() === name);
+    return match && match.icon ? String(match.icon) : '🎬';
+  }
+  function vvhRenderCategoryBar(categories) {
+    const bar = document.getElementById('categoryBar');
+    if (!bar) return;
+    const cfg = window.VVH_PUBLIC_SETTINGS || {};
+    const hideAdult = cfg.adult?.hideCategory !== false;
+    const showCategories = cfg.homepage?.showCategories !== false;
+    bar.style.display = showCategories ? 'flex' : 'none';
+    const visible = (categories || VVH_FALLBACK_CATEGORIES)
+      .filter(c => c && c.is_active !== false && !(hideAdult && (c.is_adult || /^(18\+|adult|প্রাপ্তবয়স্ক)$/i.test(String(c.name||'')))))
+      .sort((a,b) => Number(a.sort_order||0)-Number(b.sort_order||0));
+    bar.replaceChildren();
+    const makeButton = (label, category, active=false, icon='') => {
+      const btn = document.createElement('button');
+      btn.type='button'; btn.textContent = `${icon ? icon+' ' : ''}${label}`;
+      btn.dataset.category=category;
+      if (active) btn.classList.add('active');
+      btn.addEventListener('click', () => loadVideos(category, btn));
+      bar.appendChild(btn);
+    };
+    makeButton('সব ভিডিও','All',true);
+    visible.forEach(c => makeButton(String(c.name||'Other'),String(c.name||'Other'),false,String(c.icon||'🎬')));
+  }
+  const VVH_DEFAULT_PACKAGES = [
+    {name:'সিলভার',usdt:1,points:100,style:'silver',icon:'🏅',enabled:true},
+    {name:'গোল্ড',usdt:5,points:550,style:'gold',icon:'♛',enabled:true},
+    {name:'প্লাটিনাম প্যাক',usdt:10,points:1200,style:'platinum',icon:'♙',enabled:true},
+    {name:'ডায়মন্ড প্যাক',usdt:20,points:2600,style:'diamond',icon:'◆',enabled:true}
+  ];
+  function vvhRenderPointPackages(config) {
+    const wrap=document.querySelector('.purchase-packages');
+    if(!wrap)return;
+    const packages=Array.isArray(config?.packages)?config.packages:VVH_DEFAULT_PACKAGES;
+    const visible=packages.filter(p=>p&&p.enabled!==false&&String(p.name||'').trim()&&Number(p.usdt)>0&&Number(p.points)>0).slice(0,12);
+    wrap.replaceChildren();
+    if(!visible.length){const empty=document.createElement('p');empty.className='message';empty.textContent='এখন কোনো প্যাকেজ উপলব্ধ নেই। পরে আবার দেখুন।';wrap.append(empty);return;}
+    visible.forEach((p,index)=>{
+      const style=['silver','gold','platinum','diamond'].includes(String(p.style||'').toLowerCase())?String(p.style).toLowerCase():['silver','gold','platinum','diamond'][index%4];
+      const card=document.createElement('div');card.className='purchase-package '+style;
+      const medal=document.createElement('div');medal.className='package-medal';medal.textContent=String(p.icon||'💎').slice(0,8);
+      const main=document.createElement('div');main.className='package-main';
+      const name=document.createElement('b');name.textContent=String(p.name).slice(0,60);
+      const details=document.createElement('div');details.className='package-details';
+      const price=document.createElement('span');price.className='usdt-pill';price.textContent='$ '+Number(p.usdt).toFixed(2)+' USDT';
+      const points=document.createElement('span');points.className='coins-pill';points.textContent='▤ '+Math.floor(Number(p.points)).toLocaleString()+' পয়েন্ট';
+      details.append(price,points);main.append(name,details);
+      const buy=document.createElement('button');buy.type='button';buy.className='package-buy';buy.textContent='▣ কিনুন';buy.addEventListener('click',()=>selectDemoPackage(String(p.name),Number(p.usdt),Math.floor(Number(p.points))));
+      card.append(medal,main,buy);wrap.append(card);
+    });
+  }
+  function vvhRenderConfiguredWallet(config) {
+    const panel=document.getElementById('vvhPaymentWallet');
+    const address=String(config?.usdtTrc20Address||'').trim();
+    if(!panel)return;
+    panel.hidden=!address;
+    const out=document.getElementById('vvhWalletAddress');if(out)out.textContent=address||'অ্যাডমিন এখনো পেমেন্ট অ্যাড্রেস সেট করেনি।';
+    const note=document.getElementById('vvhWalletNote');if(note&&config?.paymentVerificationEnabled!==true)note.textContent='পেমেন্ট ভেরিফিকেশন এখনো সার্ভার থেকে চালু/পরীক্ষা করা হয়নি। পেমেন্ট পাঠানোর আগে অ্যাডমিনের নিশ্চিতকরণ নিন; অ্যাড্রেস দেখালেই পয়েন্ট অটোমেটিক যোগ হবে না।';
+  }
+  async function copyConfiguredUsdtWallet(){const text=document.getElementById('vvhWalletAddress')?.textContent?.trim()||'';if(!text||text.includes('সেট করেনি')){alert('অ্যাডমিন এখনো USDT TRC20 অ্যাড্রেস সেট করেনি।');return}try{await navigator.clipboard.writeText(text);alert('USDT TRC20 অ্যাড্রেস কপি হয়েছে।')}catch(_){window.prompt('USDT TRC20 অ্যাড্রেস কপি করুন:',text)}}
+
+
+function vvhApplyFloatingQuickActions(settings={}){
+  const q=settings.quickActions||{}, adult=settings.adult||{}, components=settings.theme?.components||{};
+  const wrap=document.getElementById('quickActions'), menu=document.getElementById('quickActionsMenu'), toggle=document.getElementById('quickActionsToggle');
+  if(!wrap||!menu||!toggle)return;
+  const age=wrap.querySelector('.quick-action.age'), play=wrap.querySelector('.quick-action.play');
+  const clamp=(n,min,max)=>Math.max(min,Math.min(max,n));
+  const legacy=String(adult.floatingPosition||'right-bottom');
+  const side=(q.position==='left'||q.position==='right')?q.position:(legacy.startsWith('left-')?'left':'right');
+  let topPercent;
+  if(q.verticalPercent!==undefined&&q.verticalPercent!==null&&Number.isFinite(Number(q.verticalPercent)))topPercent=clamp(Number(q.verticalPercent),10,90);
+  else if(legacy.endsWith('top'))topPercent=15;else if(legacy.endsWith('center'))topPercent=50;else topPercent=75;
+  const enabled=q.enabled!==false;
+  const ageEnabled=q.adultEnabled!==undefined?q.adultEnabled!==false:adult.floatingEnabled!==false;
+  const playEnabled=q.playEnabled!==false;
+  const toggleEnabled=q.toggleEnabled!==false;
+  const activeCount=(ageEnabled?1:0)+(playEnabled?1:0);
+  const visible=enabled&&activeCount>0;
+  wrap.style.display=visible?'block':'none';
+  wrap.style.left=side==='left'?'12px':'auto';wrap.style.right=side==='right'?'12px':'auto';
+  wrap.style.top=topPercent+'%';wrap.style.bottom='auto';wrap.style.transform='translateY(-50%)';wrap.dataset.side=side;
+  menu.style.top='5px';menu.style.flexDirection=side==='left'?'row-reverse':'row';
+  if(age)age.style.display=ageEnabled?'':'none';if(play)play.style.display=playEnabled?'':'none';
+  toggle.style.display=toggleEnabled?'':'none';
+  if(toggleEnabled){
+    wrap.style.width='42px';menu.style.left=side==='left'?'49px':'auto';menu.style.right=side==='right'?'49px':'auto';
+    // Keep the panel closed by default when the toggle is available.
+    menu.setAttribute('aria-hidden',String(!wrap.classList.contains('open')));toggle.setAttribute('aria-expanded',String(wrap.classList.contains('open')));
+  }else{
+    wrap.style.width=Math.max(1,activeCount)*54+Math.max(0,activeCount-1)*9+'px';
+    menu.style.left=side==='left'?'0':'auto';menu.style.right=side==='right'?'0':'auto';
+    wrap.classList.add('open');menu.setAttribute('aria-hidden','false');toggle.setAttribute('aria-expanded','false');
+  }
+  const adultColor=vvhSafeColor(q.adultColor||components.adultButtonBg||adult.floatingColor,'#e60000');
+  const playColor=vvhSafeColor(q.playColor,'#ffad00');
+  const toggleBg=vvhSafeColor(q.toggleBgColor,'#17101f');
+  const toggleBorder=vvhSafeColor(q.toggleBorderColor,'#5c4b70');
+  const toggleIcon=vvhSafeColor(q.toggleIconColor,'#f3d9ff');
+  if(age){if(q.adultColor||components.adultButtonBg||adult.floatingColor)age.style.background=adultColor;else age.style.removeProperty('background');age.style.borderColor=vvhSafeColor(components.adultButtonBorder,adultColor);age.style.color=vvhSafeColor(components.adultButtonText,'#ffffff');}
+  if(play){if(q.playColor)play.style.background=playColor;else play.style.removeProperty('background');play.style.color='#17100a';}
+  toggle.style.background=toggleBg;toggle.style.borderColor=toggleBorder;toggle.style.color=toggleIcon;
+  const glowEnabled=q.glowEnabled===true;
+  const glowColor=vvhSafeColor(q.glowColor,'#9c4dff');
+  const glowStrength=clamp(Number(q.glowStrength??12),0,32);
+  const styleButton=(el,anim)=>{
+    if(!el)return;
+    el.classList.remove('vvh-quick-anim-pulse','vvh-quick-anim-bounce','vvh-quick-anim-float','vvh-quick-anim-shine','vvh-age-pulse','vvh-age-bounce');
+    const allowed=['pulse','bounce','float','shine'];if(allowed.includes(anim))el.classList.add('vvh-quick-anim-'+anim);
+    if(glowEnabled&&glowStrength>0){el.style.filter=`drop-shadow(0 0 ${glowStrength}px ${glowColor})`;el.style.boxShadow=`0 0 ${glowStrength}px ${glowColor}, 0 5px 15px #0009`;}else{el.style.removeProperty('filter');el.style.removeProperty('box-shadow');}
+  };
+  styleButton(age,q.adultAnimation||adult.floatingAnimation||'none');styleButton(play,q.playAnimation||'none');styleButton(toggle,q.toggleAnimation||'none');
+}
+
+  function vvhApplyPublicSettings() {
+    const s = window.VVH_PUBLIC_SETTINGS || {};
+    const site = s.site || {}, theme=s.theme||{}, loader=s.loader||{}, home=s.homepage||{}, componentColors=theme.components||{};
+    const root=document.documentElement;
+    const componentColorDefaults = {"pageBg":"#030304","appBg":"#030304","headerBg":"#08070b","headerBorder":"#c32dff","bodyText":"#ffffff","titleText":"#ffffff","mutedText":"#c7bfd3","heroBg":"#100c15","videoCardBg":"#100c15","cardBorder":"#54206f","categoryBg":"#24152f","categoryText":"#d6a4ff","categoryBorder":"#4c2b5a","categoryActiveA":"#8b2cff","categoryActiveB":"#ff2d91","timerBg":"#050505","timerText":"#ffffff","buttonA":"#8b2cff","buttonB":"#ff2d91","buttonText":"#ffffff","supportBg":"#ffbd32","supportText":"#17100a","announcementBg":"#171109","announcementText":"#f5c64d","unlockBg":"#171109","unlockBorder":"#75501b","profileBg":"#21102f","profileBorder":"#522067","avatarBg":"#271536","avatarBorder":"#a92fff","pointsBg":"#17101f","pointsBorder":"#55306b","bottomBg":"#0d0c0f","bottomText":"#aaaaaa","bottomActiveBg":"#171021","bottomActiveText":"#ffffff","inputBg":"#111116","inputBorder":"#39323f","loaderSubText":"#d7d7d7","adultButtonBg":"#e60000","adultButtonText":"#ffffff","adultButtonBorder":"#e60000","ageGateBg":"#030304","ageGateCardBg":"#171010","ageGateBorder":"#8c5f13","ageGateText":"#d0d0d0","ageGateAccent":"#ffd447"};
+    Object.entries(componentColorDefaults).forEach(([key,fallback])=>{const cssKey='--vvh-ui-'+String(key).replace(/[A-Z]/g,m=>'-'+m.toLowerCase());root.style.setProperty(cssKey,vvhSafeColor(componentColors[key],fallback));});
+    root.style.setProperty('--vvh-accent-a',vvhSafeColor(theme.accentA,'#8b2cff'));
+    root.style.setProperty('--vvh-accent-b',vvhSafeColor(theme.accentB,'#ff2d91'));
+    root.style.setProperty('--vvh-ring-color',vvhSafeColor(theme.ringColor,'#b52cff'));
+    root.style.setProperty('--vvh-ring-inner-color',vvhSafeColor(theme.ringInnerColor,theme.accentB||'#ff2d91'));
+    const ringSize=Math.max(100,Math.min(220,Number(theme.ringSize||150)));root.style.setProperty('--vvh-ring-size',ringSize+'px');
+    const speed=Math.max(.4,Math.min(8,Number(theme.ringSpeed||1.8)));
+    root.style.setProperty('--vvh-ring-speed',speed+'s');
+    const brand=String(site.title||home.title||'').trim();
+    if(brand){const brandEl=document.getElementById('siteBrand');if(brandEl){brandEl.textContent=brand;brandEl.style.color=vvhSafeColor(theme.accentB,'#ff2d91')}const topbarBrand=document.querySelector('.topbar span');if(topbarBrand)topbarBrand.textContent=brand;const splashBrand=document.getElementById('splashBrand');if(splashBrand)splashBrand.textContent=brand;}
+    const subtitle=String(loader.text||site.subtitle||home.subtitle||'').trim();
+    if(subtitle){const el=document.getElementById('splashSub');if(el)el.textContent=subtitle;}
+    const announcement=document.getElementById('publicAnnouncement');
+    if(announcement){if(site.showAnnouncement===false||home.showNotice===false){announcement.style.display='none'}else{announcement.style.display='';const message=String(site.announcement||home.announcement||'').trim();if(message)announcement.textContent=message;}}
+    const heroes=document.querySelectorAll('.hero-card');
+    if(heroes.length>1)heroes[1].style.display=home.showTrending===false?'none':'';
+    const latestHeading=document.querySelector('#homePage .latest-heading');
+    const videosArea=document.getElementById('videos');
+    if(latestHeading)latestHeading.style.display=home.showLatest===false?'none':'';
+    if(videosArea)videosArea.style.display=home.showLatest===false?'none':'';
+    const guide=document.querySelector('.video-guide-btn');
+    if(guide)guide.style.display=home.showGuide===false?'none':'';
+    const hero=document.querySelector('#homePage .hero');
+    const bannerUrl=vvhAllowedHttpUrl(home.bannerUrl||'');
+    if(hero){if(bannerUrl){hero.classList.add('vvh-banner-image');hero.style.backgroundImage='linear-gradient(90deg,#090612c9,#09061255),url("'+bannerUrl.replace(/"/g,'%22')+'")';}else{hero.classList.remove('vvh-banner-image');hero.style.removeProperty('background-image');}}
+    vvhRenderPointPackages(s.monetization||{});
+    vvhRenderConfiguredWallet(s.monetization||{});
+    const customRate=Math.max(1,Number(s.monetization?.customPointsPerUsdt)||100);const rateHint=document.getElementById('customCoinRateHint');if(rateHint)rateHint.textContent=customRate.toLocaleString()+' points = 1 USDT';
+    const shopPromo=document.getElementById('vvhShopPromo');
+    if(shopPromo)shopPromo.hidden=home.showShop!==true;
+    const referralVisible=home.showReferral!==false && s.referrals?.enabled!==false;
+    for(const id of ['vvhReferralHeading','vvhReferralBox']){const el=document.getElementById(id);if(el)el.style.display=referralVisible?'':'none';}
+    const splash=document.getElementById('startupSplash');
+    if(splash && loader.enabled===false)splash.classList.add('hide');
+    vvhApplyFloatingQuickActions(s);
+    const ageGate=document.getElementById('ageGate');
+    let softAgeNotice=document.getElementById('vvhAgeNotice');
+    const gateEnabled=s.adult?.gateEnabled!==false;
+    const requireAgeConfirmation=s.adult?.requireConfirmation!==false;
+    const ageMessage=String(s.adult?.message||'এই অংশটি শুধুমাত্র প্রাপ্তবয়স্কদের জন্য। প্রবেশের আগে আপনার বয়স নিশ্চিত করুন।');
+    if(ageGate && (!gateEnabled || !requireAgeConfirmation)){
+      ageGate.classList.remove('show');ageGate.style.display='none';document.body.classList.remove('intro-lock');
+    }else if(ageGate && gateEnabled){
+      ageGate.classList.add('show');ageGate.style.display='flex';const copy=ageGate.querySelector('.age-copy');if(copy)copy.textContent=ageMessage;
+      document.body.classList.add('intro-lock');
+    }
+    if(gateEnabled && !requireAgeConfirmation){
+      if(!softAgeNotice){softAgeNotice=document.createElement('div');softAgeNotice.id='vvhAgeNotice';softAgeNotice.className='vvh-age-notice';const msg=document.createElement('span');msg.id='vvhAgeNoticeText';const close=document.createElement('button');close.type='button';close.textContent='বুঝেছি';close.addEventListener('click',()=>softAgeNotice?.remove());softAgeNotice.append(msg,close);document.body.append(softAgeNotice);}
+      const msg=softAgeNotice.querySelector('#vvhAgeNoticeText');if(msg)msg.textContent=ageMessage;
+    }else if(softAgeNotice){softAgeNotice.remove();}
+    vvhRenderConfiguredLinks(s.links||{});
+    const seo=s.seo||{};
+    const metaContent=(key,value)=>{if(value===undefined||value===null||String(value).trim()==='')return;let el=document.querySelector('meta['+key+']');if(!el){el=document.createElement('meta');const [attr,val]=key.split('=');if(val)el.setAttribute(attr,val.replace(/["']/g,''));document.head.appendChild(el);}el.setAttribute('content',String(value).slice(0,500));};
+    const safeSeoTitle=String(seo.title||site.title||'VIRAL VIDEO HUB').trim().slice(0,120);
+    if(safeSeoTitle)document.title=safeSeoTitle;
+    metaContent('name="description"',seo.description||'');
+    metaContent('name="robots"',seo.robots==='noindex,nofollow'?'noindex,nofollow':'index,follow');
+    metaContent('property="og:title"',safeSeoTitle);
+    metaContent('property="og:description"',seo.description||'');
+    const socialImage=vvhAllowedHttpUrl(seo.image||'');if(socialImage)metaContent('property="og:image"',socialImage);
+    const canonical=vvhAllowedHttpUrl(seo.canonical||'');if(canonical){let link=document.querySelector('link[rel="canonical"]');if(!link){link=document.createElement('link');link.rel='canonical';document.head.appendChild(link);}link.href=canonical;}
+    vvhRenderCategoryBar(vvhSiteCategories);
+    if(site.maintenanceMode===true || s.maintenance?.mode===true || s.maintenance?.mode==='on') vvhShowMaintenance(String(site.maintenanceMessage||s.maintenance?.message||'সাইট রক্ষণাবেক্ষণ চলছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।'));
+  }
+  function vvhShowMaintenance(message) {
+    if(!vvhMaintenanceOverlay){
+      vvhMaintenanceOverlay=document.createElement('div');vvhMaintenanceOverlay.className='vvh-maintenance-overlay';
+      const card=document.createElement('div');card.className='vvh-maintenance-card';
+      const h=document.createElement('h1');h.textContent='🛠️ সাইট আপডেট চলছে';
+      const p=document.createElement('p');p.id='vvhMaintenanceMessage';
+      const small=document.createElement('small');small.textContent='VIRAL VIDEO HUB';
+      card.append(h,p,small);vvhMaintenanceOverlay.append(card);document.body.append(vvhMaintenanceOverlay);
+    }
+    const p=vvhMaintenanceOverlay.querySelector('#vvhMaintenanceMessage');if(p)p.textContent=message;
+    vvhMaintenanceOverlay.classList.add('active');
+  }
+  function vvhAllowedHttpUrl(value) { try { const u=new URL(String(value||'')); return ['http:','https:'].includes(u.protocol) ? u.href : ''; } catch (_) { return ''; } }
+  function vvhNormalisePlacement(value) {
+    const p=String(value||'support').toLowerCase();
+    return ['header','footer','support','drawer','video','shop','floating'].includes(p)?p:'support';
+  }
+  function vvhEnsureLinkContainer(id,parent,className,insertBefore=null) {
+    if(!parent)return null;
+    let box=document.getElementById(id);
+    if(!box){box=document.createElement('div');box.id=id;box.className=className;if(insertBefore&&insertBefore.parentNode===parent)parent.insertBefore(box,insertBefore);else parent.appendChild(box);}
+    box.className=className;return box;
+  }
+  function vvhRenderConfiguredLinks(links) {
+    links=links||{};
+    const builtIns=[
+      {key:'whatsapp',id:'menuWhatsAppLink',label:'WhatsApp Support',fallback:'https://wa.me/'},
+      {key:'telegram',id:'menuTelegramLink',label:'Official Telegram',fallback:'https://t.me/VIRALVIDEOHUBBD'}
+    ].map(item=>{const cfg=links[item.key]||{};return {...item,...cfg,url:vvhAllowedHttpUrl(cfg.url||item.fallback),placement:vvhNormalisePlacement(cfg.placement),enabled:cfg.enabled!==false,custom:false}});
+    builtIns.forEach(item=>{
+      const el=document.getElementById(item.id);if(!el)return;
+      el.textContent='🔗 '+String(item.label||item.key).slice(0,80);el.dataset.url=item.url;
+      el.style.display=item.enabled&&['support','drawer'].includes(item.placement)?'':'none';
+    });
+    const custom=Array.isArray(links.custom)?links.custom:[];
+    const all=[...builtIns,...custom.filter(x=>x&&x.enabled!==false&&vvhAllowedHttpUrl(x.url)).map((x,i)=>({key:String(x.id??('custom-'+i)),id:'',label:String(x.label||'Open link'),url:vvhAllowedHttpUrl(x.url),placement:vvhNormalisePlacement(x.placement),enabled:x.enabled!==false,custom:true}))];
+
+    const drawer=document.getElementById('vvhCustomMenuLinks');
+    if(drawer){drawer.replaceChildren();all.filter(x=>x.custom&&x.enabled&&['support','drawer'].includes(x.placement)).forEach(item=>{const a=document.createElement('a');a.className='menuitem vvh-custom-menu-link';a.href=item.url;a.target='_blank';a.rel='noopener noreferrer';a.textContent='🔗 '+item.label.slice(0,80);a.style.cssText='display:block;text-decoration:none';drawer.appendChild(a);});}
+
+    const header=document.querySelector('.mainhead');
+    const headerBox=vvhEnsureLinkContainer('vvhHeaderLinks',header,'vvh-placement-links vvh-header-links',header?.querySelector('.support-header-btn')||null);
+    const footer=vvhEnsureLinkContainer('vvhFooterLinks',document.querySelector('.footer'),'vvh-placement-links vvh-footer-links');
+    const floating=vvhEnsureLinkContainer('vvhFloatingLinks',document.body,'vvh-placement-links vvh-floating-links');
+    const shopParent=document.querySelector('#purchasePage .premium-intro');
+    const shop=vvhEnsureLinkContainer('vvhShopLinks',shopParent,'vvh-placement-links vvh-shop-links');
+    const videoParent=document.querySelector('#videoDetails .details-content');
+    const video=vvhEnsureLinkContainer('vvhVideoLinks',videoParent,'vvh-placement-links vvh-video-links');
+    [headerBox,footer,floating,shop,video].forEach(box=>{if(box)box.replaceChildren()});
+
+    const targets={header:headerBox,footer:footer,video:video,shop:shop,floating:floating};
+    all.filter(item=>item.enabled&&!['support','drawer'].includes(item.placement)&&item.url).forEach(item=>{
+      const target=targets[item.placement];if(!target)return;
+      const a=document.createElement('a');a.className='vvh-placement-link';a.href=item.url;a.target='_blank';a.rel='noopener noreferrer';
+      const label=String(item.label||'Open link').trim().slice(0,80);a.title=label;
+      if(item.placement==='header'){a.textContent='↗';const span=document.createElement('span');span.textContent=label;a.appendChild(span)}else a.textContent='↗ '+label;
+      if(item.key==='whatsapp')a.dataset.configuredLink='whatsapp';else if(item.key==='telegram')a.dataset.configuredLink='telegram';
+      target.appendChild(a);
+    });
+    if(headerBox&&!headerBox.children.length)headerBox.style.display='none';else if(headerBox)headerBox.style.display='flex';
+    if(footer&&!footer.children.length)footer.style.display='none';else if(footer)footer.style.display='flex';
+    if(floating&&!floating.children.length)floating.style.display='none';else if(floating)floating.style.display='grid';
+    if(shop&&!shop.children.length)shop.style.display='none';else if(shop)shop.style.display='flex';
+    if(video&&!video.children.length)video.style.display='none';else if(video)video.style.display='flex';
+  }
+  function openConfiguredLink(key) {
+    const el=document.getElementById(key==='whatsapp'?'menuWhatsAppLink':'menuTelegramLink');
+    const fallback=key==='whatsapp'?'https://wa.me/':'https://t.me/VIRALVIDEOHUBBD';
+    const url=vvhAllowedHttpUrl(el?.dataset.url||fallback);
+    if(url)window.open(url,'_blank','noopener,noreferrer');
+  }
+  async function loadVVHPublicConfig() {
+    let settingsLoaded=false;
+    try {
+      const {data,error}=await supabaseClient.from('vvh_site_settings').select('settings').eq('id','public').maybeSingle();
+      if(!error && data?.settings){window.VVH_PUBLIC_SETTINGS=data.settings;settingsLoaded=true;}
+    } catch(e) { console.warn('VVH public settings unavailable; using defaults.',e); }
+    try {
+      const {data,error}=await supabaseClient.from('vvh_site_categories').select('name,icon,sort_order,is_active,is_adult').eq('is_active',true).order('sort_order',{ascending:true});
+      if(!error && Array.isArray(data)){vvhSiteCategories=data;}
+      else vvhSiteCategories=VVH_FALLBACK_CATEGORIES.slice();
+    } catch(e) { vvhSiteCategories=VVH_FALLBACK_CATEGORIES.slice(); }
+    vvhApplyPublicSettings();
+    return {settingsLoaded,categories:vvhSiteCategories.length};
+  }
 async function loginWithTelegramMiniApp() {
   const tgApp = window.Telegram?.WebApp;
   const initData = tgApp?.initData;
@@ -1737,23 +2131,12 @@ async function loadVideos(category = "All", button = null) {
     videosDiv.innerHTML =
       '<div class="message">Loading videos...</div>';
 
-    let query = supabaseClient
-      .from("videos")
-      .select("*");
-
-    if (category === "Trending") {
-      // Trending: highest view count first. Do not depend on is_trending column.
-      query = query.order("views", { ascending: false });
-    } else if (category !== "All") {
-      query = query
-        .eq("category", category)
-        .order("created_at", { ascending: false });
-    } else {
-      // All videos: newest first
-      query = query.order("created_at", { ascending: false });
-    }
-
-    const { data, error } = await query;
+    // Public catalogue returns only allowed metadata. Private source IDs and direct media URLs stay server-side.
+    const { data, error } = await supabaseClient.rpc('vvh_public_video_catalog', {
+      p_video_id: null,
+      p_category: category || 'All',
+      p_search: null
+    });
 
     if (error) {
       console.error("loadVideos error:", error);
@@ -1792,7 +2175,7 @@ async function loadVideos(category = "All", button = null) {
 
   <div class="video-info" onclick="openVideo(${video.id})">
     <div class="video-title-row"><div class="video-title">${escapeHtml(video.title || "Untitled")}</div><button class="card-share" type="button" aria-label="ভিডিও শেয়ার" title="ভিডিও শেয়ার করুন"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.7 10.7 15.3 6.3M8.7 13.3l6.6 4.4"/></svg></button></div>
-    <div class="video-category">🎬 ${escapeHtml(video.category || "Other")}</div>
+    <div class="video-category">${escapeHtml(vvhCategoryIcon(video.category || "Other"))} ${escapeHtml(video.category || "Other")}</div>
     <div class="video-stats">
       <span>👁 ${Number(video.views || 0).toLocaleString()}</span>
       <span>❤️ ${Number(video.likes || 0).toLocaleString()}</span>
@@ -1800,11 +2183,7 @@ async function loadVideos(category = "All", button = null) {
     </div>
   </div>
 `;
-
-card.querySelector(".card-share").addEventListener("click", event => {
-  event.stopPropagation();
-  shareVideo(video.id, video.title || "VIRAL VIDEO HUB LINK");
-});
+card.querySelector(".card-share").addEventListener("click", event => { event.stopPropagation(); shareVideo(video.id, video.title || "VIRAL VIDEO LINK"); });
 videosDiv.appendChild(card);
 
     });
@@ -1835,25 +2214,26 @@ async function loadUserPoints(){
 async function purchaseVideo(videoId){
   const {data:{user}} = await supabaseClient.auth.getUser();
   if(!user){ alert('ভিডিও কিনতে আগে Login করুন।'); openAuth(); return; }
-  const {data:video,error:vErr}=await supabaseClient.from('videos').select('id,title,points_price,unlock_hours').eq('id',videoId).single();
-  if(vErr || !video){ alert('ভিডিও পাওয়া যায়নি।'); return; }
-  const price=Number(video.points_price || 100);
-  const {data:profile,error:pErr}=await supabaseClient.from('profiles').select('points').eq('id',user.id).single();
-  if(pErr){ alert('Points তথ্য পাওয়া যায়নি। Supabase profiles table-এ points column আছে কি না দেখুন।'); return; }
-  const current=Number(profile?.points||0);
-  if(current < price){ alert(`আপনার Points কম। দরকার ${price} Points, আছে ${current} Points।`); return; }
-  const {error:uErr}=await supabaseClient.from('profiles').update({points:current-price}).eq('id',user.id);
-  if(uErr){ alert('Points কাটতে সমস্যা হয়েছে: '+uErr.message); return; }
-  const {error:iErr}=await supabaseClient.from('video_purchases').insert({user_id:user.id,video_id:videoId,points_spent:price});
-  if(iErr){
-    await supabaseClient.from('profiles').update({points:current}).eq('id',user.id);
-    alert('কেনাকাটা সংরক্ষণ করা যায়নি। Supabase-এ video_purchases table তৈরি করতে হবে।');
-    return;
+  try{
+    const {data,error}=await supabaseClient.rpc('purchase_video_with_points',{p_video_id:Number(videoId)});
+    if(error)throw error;
+    const result=Array.isArray(data)?data[0]:data;
+    if(!result?.success)throw Error('পয়েন্ট দিয়ে ভিডিও আনলক করা যায়নি।');
+    if(result.already_unlocked){alert('এই ভিডিওটি ইতিমধ্যে আনলক আছে।');openVideo(videoId);return;}
+    const minutes=Number(result.unlock_minutes||60);
+    const expiresAt=new Date(result.expires_at).getTime();
+    if(!Number.isFinite(expiresAt))throw Error('সার্ভার থেকে আনলক মেয়াদ পাওয়া যায়নি।');
+    alert(`✅ ${Number(result.points_spent||0)} Points দিয়ে ভিডিওটি কেনা হয়েছে। ${formatUnlockDuration(minutes)} সময়ের জন্য আনলক হয়েছে।
+বাকি পয়েন্ট: ${Number(result.points_remaining||0)}`);
+    await openVideo(videoId);
+    setTimeout(()=>startUnlockCountdown(videoId,expiresAt),400);
+  }catch(err){
+    console.error('purchase_video_with_points failed:',err);
+    alert(`❌ পয়েন্ট দিয়ে আনলক করা যায়নি।
+${err?.message||'সার্ভারের সমস্যা'}
+
+Supabase Pro Max SQL migration চালানো হয়েছে কি না পরীক্ষা করুন।`);
   }
-  const expiresAt = await setVideoUnlock(videoId, Number(video.unlock_hours || 1), 'points');
-  alert(`✅ ${price} Points দিয়ে ভিডিওটি কেনা হয়েছে। ${Number(video.unlock_hours || 1)} ঘণ্টার জন্য আনলক হয়েছে।`);
-  openVideo(videoId);
-  setTimeout(()=>startUnlockCountdown(videoId, expiresAt), 400);
 }
 
 async function hasPurchasedVideo(videoId){
@@ -1862,148 +2242,70 @@ async function hasPurchasedVideo(videoId){
 
 
 async function watchUnlockAd(videoId) {
-  let button = document.getElementById('watchUnlockButton_' + videoId);
-
-  const resetButton = () => {
-    button = document.getElementById('watchUnlockButton_' + videoId);
-    if (button) {
-      button.disabled = false;
-      button.textContent = '🔒　ভিডিও আনলক';
-    }
+  let button=document.getElementById('watchUnlockButton_'+videoId);
+  const resetButton=()=>{button=document.getElementById('watchUnlockButton_'+videoId);if(button){button.disabled=false;button.textContent='🔒　বিজ্ঞাপন দেখে আনলক';}};
+  const updateProgressUI=(progress)=>{
+    localStorage.setItem('videoAdsRequired_'+videoId,String(progress.required_ads));
+    localStorage.setItem('videoAds_'+videoId,String(progress.verified_ads));
+    const remain=Math.max(0,progress.required_ads-progress.verified_ads);
+    const remainEl=document.getElementById('detailsRemain');
+    const progressEl=document.getElementById('detailsProgress');
+    const label=document.getElementById('detailsProgressLabel');
+    const hint=document.getElementById('unlockHint');
+    if(remainEl)remainEl.textContent=String(remain);
+    if(progressEl)progressEl.style.width=(progress.required_ads?Math.min(100,progress.verified_ads/progress.required_ads*100):0)+'%';
+    if(label)label.textContent=progress.verified_ads+'/'+progress.required_ads;
+    if(hint)hint.textContent=remain?`${remain}টি server-verified বিজ্ঞাপন বাকি — অথবা পয়েন্ট ব্যবহার করুন।`:'Server verification সম্পন্ন হচ্ছে…';
   };
-
-  try {
-    let requiredAds = Number(
-      localStorage.getItem('videoAdsRequired_' + videoId) || 0
-    );
-
-    if (!requiredAds) {
-      const { data: video } = await supabaseClient
-        .from('videos')
-        .select('*')
-        .eq('id', videoId)
-        .single();
-
-      requiredAds = await getRequiredAdsForVideo(video);
-
-      if (!requiredAds || requiredAds < 1) {
-        alert('বিজ্ঞাপনের সংখ্যা নির্ধারণ করা যায়নি।');
-        return;
-      }
-
-      localStorage.setItem(
-        'videoAdsRequired_' + videoId,
-        String(requiredAds)
-      );
+  try{
+    const {data:{user}}=await supabaseClient.auth.getUser();
+    if(!user){resetButton();openAuth();const message=document.getElementById('authMessage');if(message)message.innerText='🔐 বিজ্ঞাপন আনলক করতে আগে Login করুন।';return;}
+    let progress=await getServerAdRewardProgress(videoId);
+    if(progress.required_ads<1){resetButton();alert('এই ভিডিওর জন্য বিজ্ঞাপন আনলক বন্ধ আছে। পয়েন্ট ব্যবহার করুন।');return;}
+    updateProgressUI(progress);
+    if(progress.verified_ads>=progress.required_ads){
+      const expiresAt=await setVideoUnlock(videoId,progress.unlock_minutes,'ads');
+      alert(`✅ ${progress.required_ads}টি server-verified বিজ্ঞাপন সম্পূর্ণ। ${formatUnlockDuration(progress.unlock_minutes)} সময়ের জন্য আনলক হয়েছে।`);
+      await openVideo(videoId);setTimeout(()=>startUnlockCountdown(videoId,expiresAt),400);return;
     }
-
-    if (typeof window.show_12063217 !== 'function') {
-      alert('❌ Monetag SDK লোড হয়নি। পেজ রিফ্রেশ করে আবার চেষ্টা করুন।');
-      return;
+    if(typeof window.show_12063217!=='function')throw Error('Monetag SDK লোড হয়নি। পেজ রিফ্রেশ করে আবার চেষ্টা করুন।');
+    if(button){button.disabled=true;button.textContent='বিজ্ঞাপন লোড হচ্ছে…';}
+    const {data:sessionData,error:sessionError}=await supabaseClient.rpc('create_ad_reward_session',{p_video_id:Number(videoId)});
+    if(sessionError)throw sessionError;
+    const ymid=typeof sessionData==='string'?sessionData:(Array.isArray(sessionData)?Object.values(sessionData[0]||{})[0]:sessionData?.ymid);
+    if(typeof ymid!=='string'||!/^vvh_[a-f0-9]{32}$/i.test(ymid))throw Error('Ad reward session তৈরি হয়নি।');
+    const event=await window.show_12063217({ymid,requestVar:'video_unlock'});
+    if(event?.reward_event_type!=='valued'){
+      resetButton();alert('Monetag বিজ্ঞাপনটি valued হিসেবে নিশ্চিত করেনি। এই বিজ্ঞাপনটি reward হিসেবে গণনা হবে না।');return;
     }
-
-    if (button) {
-      button.disabled = true;
-      button.textContent = 'বিজ্ঞাপন লোড হচ্ছে...';
-    }
-
-    const event = await window.show_12063217();
-
-    if (event?.reward_event_type !== 'valued') {
-      resetButton();
-      alert('বিজ্ঞাপন থেকে পুরস্কার নিশ্চিত হয়নি। বিজ্ঞাপনটি আবার চেষ্টা করুন।');
-      return;
-    }
-
-    const key = 'videoAds_' + videoId;
-    const current = Math.min(
-      requiredAds,
-      Number(localStorage.getItem(key) || 0)
-    );
-    const next = Math.min(requiredAds, current + 1);
-
-    localStorage.setItem(key, String(next));
-
-    if (next >= requiredAds) {
-      const { data: video, error } = await supabaseClient
-        .from('videos')
-        .select('*')
-        .eq('id', videoId)
-        .single();
-
-      if (error || !video) {
-        resetButton();
-        alert('ভিডিওর তথ্য পাওয়া যায়নি। আবার চেষ্টা করুন।');
-        return;
-      }
-
-      const hours = Number(video.unlock_hours || 1);
-      const expiresAt = await setVideoUnlock(videoId, hours, 'ads');
-
-      alert(
-        `✅ ${requiredAds}টি বিজ্ঞাপন সম্পূর্ণ হয়েছে। ${hours} ঘণ্টার জন্য কনটেন্ট আনলক হয়েছে!`
-      );
-
-      await openVideo(videoId);
-      setTimeout(() => startUnlockCountdown(videoId, expiresAt), 400);
-      return;
-    }
-
-    const remainEl = document.getElementById('detailsRemain');
-    const progressEl = document.getElementById('detailsProgress');
-    const hintEl = document.getElementById('unlockHint');
-    const balanceEl = document.getElementById('unlockBalance');
-    const progressLabel = document.getElementById('detailsProgressLabel');
-
-    const { data: { user } } = await supabaseClient.auth.getUser();
-
-    if (user) {
-      const { data: profile } = await supabaseClient
-        .from('profiles')
-        .select('points')
-        .eq('id', user.id)
-        .single();
-
-      if (balanceEl) {
-        balanceEl.textContent = Number(profile?.points || 0).toLocaleString();
+    if(button)button.textContent='সার্ভার যাচাই করছে…';
+    // The SDK callback updates the UI, but only Monetag's secret-protected postback credits progress.
+    for(let attempt=0;attempt<12;attempt++){
+      await new Promise(resolve=>setTimeout(resolve,1250));
+      progress=await getServerAdRewardProgress(videoId);updateProgressUI(progress);
+      if(progress.verified_ads>=progress.required_ads){
+        const expiresAt=await setVideoUnlock(videoId,progress.unlock_minutes,'ads');
+        alert(`✅ ${progress.required_ads}টি বিজ্ঞাপন Monetag server postback দিয়ে যাচাই হয়েছে। ${formatUnlockDuration(progress.unlock_minutes)} সময়ের জন্য আনলক হয়েছে।`);
+        await openVideo(videoId);setTimeout(()=>startUnlockCountdown(videoId,expiresAt),400);return;
       }
     }
-
-    if (remainEl) remainEl.textContent = String(requiredAds - next);
-    if (progressEl) progressEl.style.width = `${(next / requiredAds) * 100}%`;
-    if (progressLabel) progressLabel.textContent = `${next}/${requiredAds}`;
-    if (hintEl) {
-      hintEl.textContent = `${requiredAds - next}টি বিজ্ঞাপন বাকি — অথবা পয়েন্ট ব্যবহার করুন।`;
-    }
-
     resetButton();
+    alert('বিজ্ঞাপন সম্পন্ন হয়েছে, কিন্তু server postback এখনো আসেনি। কোনো reward অনুমান করে দেওয়া হয়নি। কিছুক্ষণ পরে আবার চেষ্টা করুন; প্রাপ্ত verified reward সার্ভারে থাকলে সেটি গণনা হবে।');
+  }catch(error){
+    console.error('Rewarded ad verification failed:',error);resetButton();
+    alert(`❌ বিজ্ঞাপন আনলক সম্পন্ন হয়নি।
+${error?.message||'Monetag / Supabase verification error'}
 
-  } catch (error) {
-    console.error('Monetag error:', error);
-    resetButton();
-    alert(
-      '❌ বিজ্ঞাপন দেখানো যায়নি।\n' +
-      (error?.description || error?.message || 'Monetag error')
-    );
+Monetag postback ও Supabase Edge Function সেটআপ যাচাই করুন।`);
   }
 }
 
-
 async function unlockVideo(videoId){
-  let requiredAds = Number(localStorage.getItem('videoAdsRequired_' + videoId) || 0);
-  if(!requiredAds){
-    const {data:video}=await supabaseClient.from('videos').select('*').eq('id',videoId).single();
-    requiredAds = await getRequiredAdsForVideo(video);
-    localStorage.setItem('videoAdsRequired_' + videoId, String(requiredAds));
-  }
-  const key='videoAds_'+videoId;
-  const watched=Math.min(requiredAds,Number(localStorage.getItem(key)||0));
-  if(watched>=requiredAds){
-    const {data:video}=await supabaseClient.from('videos').select('*').eq('id',videoId).single();
-    const expiresAt=await setVideoUnlock(videoId,Number(video?.unlock_hours||1), 'ads');
-    await openVideo(videoId);
-    startUnlockCountdown(videoId,expiresAt);
-    return;
+  const progress=await getServerAdRewardProgress(videoId);
+  if(progress.required_ads<1){alert('এই ভিডিওর জন্য বিজ্ঞাপন আনলক বন্ধ আছে। পয়েন্ট ব্যবহার করুন।');return;}
+  if(progress.verified_ads>=progress.required_ads){
+    const expiresAt=await setVideoUnlock(videoId,progress.unlock_minutes,'ads');
+    await openVideo(videoId);startUnlockCountdown(videoId,expiresAt);return;
   }
   await watchUnlockAd(videoId);
 }
@@ -2112,7 +2414,8 @@ initStartupFlow();
 updateAuthUI();
 loadReferral().catch(()=>{});
 updateProfileAdCount();
-loadVideos().catch(()=>{});
+window.vvhConfigReady = window.vvhConfigReady || loadVVHPublicConfig().catch((error)=>{console.warn('Public settings load failed:',error);return null;});
+window.vvhConfigReady.finally(()=>loadVideos().catch(()=>{}));
 
 </script>
 
@@ -2288,60 +2591,6 @@ async function startEarnAdDemo(reward=2){
 }
 
 document.addEventListener('DOMContentLoaded', syncEarnDemoStats);
-</script>
-
-<script>
-(function () {
-  function setupThumbnail(box) {
-    if (box.dataset.ringReady) return;
-
-    const img = box.querySelector("img");
-    if (!img) return;
-
-    box.dataset.ringReady = "1";
-
-    function finishLoading() {
-      box.classList.remove("is-loading");
-    }
-
-    if (img.complete) {
-      finishLoading();
-      return;
-    }
-
-    box.classList.add("is-loading");
-    img.addEventListener("load", finishLoading, { once: true });
-    img.addEventListener("error", finishLoading, { once: true });
-  }
-
-  function scan(root) {
-    if (root.nodeType !== 1) return;
-
-    if (root.matches(".video-thumb")) setupThumbnail(root);
-    root.querySelectorAll(".video-thumb").forEach(setupThumbnail);
-  }
-
-  function init() {
-    document.querySelectorAll(".video-thumb").forEach(setupThumbnail);
-
-    const observer = new MutationObserver(function (changes) {
-      changes.forEach(function (change) {
-        change.addedNodes.forEach(scan);
-      });
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init, { once: true });
-  } else {
-    init();
-  }
-})();
 </script>
 
 </body>
