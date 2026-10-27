@@ -497,18 +497,20 @@ body.intro-lock{overflow:hidden}
 .quick-action.play{background:linear-gradient(145deg,#ffbf00,#ff8a00);color:#17100a}
 .quick-action.play svg{width:23px;height:23px;fill:currentColor}
 .quick-actions-toggle svg{width:22px;height:22px;stroke:currentColor;stroke-width:2.7;fill:none;stroke-linecap:round;stroke-linejoin:round;transition:transform .18s ease}
-.quick-actions.open .quick-actions-toggle svg{transform:rotate(180deg)}
+/* Arrow stays fixed; only the action menu opens. */
 @media(max-width:420px){.quick-actions{right:8px;bottom:153px}.quick-action{width:52px;height:52px}}
 
 /* PRO MAX: admin-managed three-button floating control. The toggle mirrors to the other side. */
 .quick-actions{width:42px;height:64px;top:75%;bottom:auto;transform:translateY(-50%);right:12px;left:auto;max-width:calc(100vw - 16px);}
-.quick-actions-toggle{z-index:2;touch-action:manipulation;flex:0 0 42px;}
+.quick-actions-toggle{z-index:2;touch-action:none;flex:0 0 42px;cursor:grab;user-select:none;-webkit-user-select:none;}
+.quick-actions.vvh-dragging{transition:none!important;opacity:.96;cursor:grabbing}
+.quick-actions.vvh-dragging *{transition:none!important}
 .quick-actions-menu{gap:clamp(5px,2vw,9px);max-width:calc(100vw - 70px);flex-wrap:nowrap;align-items:center;}
 .quick-actions-menu>.quick-action{flex:0 0 54px;min-width:44px;min-height:44px;padding:0;touch-action:manipulation;transition:filter .16s ease,box-shadow .16s ease;}
-.quick-actions[data-side="left"] .quick-actions-toggle svg{transform:rotate(180deg)}
-.quick-actions[data-side="left"].open .quick-actions-toggle svg{transform:rotate(0deg)}
-.quick-actions[data-side="right"] .quick-actions-toggle svg{transform:rotate(0deg)}
-.quick-actions[data-side="right"].open .quick-actions-toggle svg{transform:rotate(180deg)}
+.quick-actions[data-side="left"] .quick-actions-toggle svg{transform:none}
+
+.quick-actions[data-side="right"] .quick-actions-toggle svg{transform:none}
+
 .quick-actions[data-side="left"] .quick-actions-menu{flex-direction:row-reverse}
 .quick-actions[data-side="right"] .quick-actions-menu{flex-direction:row}
 @keyframes vvhQuickPulse{0%,100%{scale:1;filter:brightness(1)}50%{scale:1.06;filter:brightness(1.17)}}
@@ -724,8 +726,9 @@ body.intro-lock{overflow:hidden}
 }
 .mainhead .support-header-btn svg{width:23px;height:23px;display:block;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .mainhead .support-header-btn:active{transform:scale(.96)}
-/* Support chat now lives in the header, so hide the old floating duplicate. */
+/* Live Support floating button: keep visible with a green online indicator. */
 #supportFab{display:none!important}
+#supportFab::after{content:"";position:absolute;right:2px;top:2px;width:11px;height:11px;border-radius:50%;background:#22e56b;border:2px solid #09080c;box-shadow:0 0 8px #22e56b}
 
 /* Pro Max live-control variables. Values are loaded from public.vvh_site_settings. */
 :root{--vvh-accent-a:#8b2cff;--vvh-accent-b:#ff2d91;--vvh-ring-color:#b52cff;--vvh-ring-inner-color:#ff2d91;--vvh-ring-size:150px;--vvh-ring-speed:1.8s;--vvh-splash-time:1650ms}
@@ -775,6 +778,21 @@ body.intro-lock{overflow:hidden}
 .vvh-footer-links{justify-content:center;padding:0 10px 10px}.vvh-video-links{padding:12px 0;border-top:1px solid #382443;margin-top:14px}.vvh-shop-links{padding:0 12px 12px}.vvh-floating-links{position:fixed;right:12px;bottom:112px;z-index:39;display:grid;gap:7px;justify-items:end;max-width:52vw}.vvh-floating-links .vvh-placement-link{box-shadow:0 6px 18px #0007;border-radius:999px;max-width:100%}
 @media(max-width:390px){.vvh-header-links .vvh-placement-link{max-width:48px;padding:7px 6px}.vvh-header-links .vvh-placement-link span{display:none}.vvh-header-links{margin-left:2px}}
 
+
+/* VVH subtle neon rings: preserve the existing layout and button positions. */
+@keyframes vvhNeonRingSpin{to{transform:rotate(360deg)}}
+@keyframes vvhNeonAlternating{0%,100%{filter:drop-shadow(0 0 2px #ffb52e) brightness(1)}50%{filter:drop-shadow(0 0 4px #45f5ff) brightness(1.12)}}
+.quick-actions-toggle{position:relative;isolation:isolate;box-shadow:0 5px 16px #0009!important}
+.quick-actions-toggle::before,.quick-action::before{content:"";position:absolute;inset:-3px;border-radius:inherit;padding:2px;background:conic-gradient(from 0deg,#ff9f1c 0deg,#fff5c7 42deg,#36f7db 95deg,#a34bff 150deg,#ff3aa9 210deg,#ff315a 270deg,#ffb52e 330deg,#ff9f1c 360deg);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:.9;animation:vvhNeonRingSpin 4.5s linear infinite,vvhNeonAlternating 2.2s ease-in-out infinite;z-index:2}
+.quick-actions-toggle::before{inset:-2px;opacity:.72;animation:vvhNeonRingSpin 6s linear infinite}
+.quick-action{position:relative;isolation:isolate;overflow:visible}
+.quick-action::before{inset:-3px;animation:vvhNeonRingSpin 4.5s linear infinite,vvhNeonAlternating 2.4s ease-in-out infinite}
+.quick-action.play::before{animation-delay:0s,0s}
+.quick-action.age::before{animation-delay:1.2s,1.2s}
+.quick-actions.open .quick-action.play{animation:vvhQuickPulse 2.4s ease-in-out infinite}
+.quick-actions.open .quick-action.age{animation:vvhQuickPulse 2.4s ease-in-out infinite;animation-delay:1.2s}
+.quick-actions-toggle svg{position:relative;z-index:3}
+@media(prefers-reduced-motion:reduce){.quick-actions-toggle::before,.quick-action::before,.quick-actions.open .quick-action.play,.quick-actions.open .quick-action.age{animation:none!important}}
 
 /* PRO MAX live spinner + floating 18+ settings */
 .splash-orbit{width:var(--vvh-ring-size,150px)!important;height:var(--vvh-ring-size,150px)!important}
@@ -856,6 +874,17 @@ html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-
 @keyframes vvhTickerLeft{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 @keyframes vvhTickerRight{from{transform:translateX(-50%)}to{transform:translateX(0)}}
 @media(prefers-reduced-motion:reduce){#publicAnnouncement .vvh-ticker-track{animation:none!important;transform:none!important;white-space:normal;flex-wrap:wrap;width:100%;min-width:0}#publicAnnouncement .vvh-ticker-item[aria-hidden="true"]{display:none}}
+</style>
+<!-- Public navigation: Login / Sign Up is shown instead of a Logout button. -->
+
+<style id="vvh-final-fix-styles">
+/* Keep the existing headphone Live Support control; do not show a duplicate floating support button. */
+#supportFab{display:none!important}
+/* The arrow remains still; only its surrounding glow pulses in place. */
+.quick-actions-toggle svg,.quick-actions[data-side="left"] .quick-actions-toggle svg,.quick-actions[data-side="right"] .quick-actions-toggle svg{transform:none!important;transition:none!important}
+.quick-actions-toggle{position:relative;isolation:isolate}
+.quick-actions-toggle::before{content:"";position:absolute;inset:-3px;border-radius:inherit;pointer-events:none;z-index:-1;border:1px solid var(--vvh-quick-glow,rgba(181,44,255,.8));box-shadow:0 0 7px var(--vvh-quick-glow,rgba(181,44,255,.8)),0 0 15px var(--vvh-quick-glow,rgba(181,44,255,.35));animation:vvhFixedArrowGlow 2.2s ease-in-out infinite}
+@keyframes vvhFixedArrowGlow{0%,100%{opacity:.55;filter:brightness(.9)}50%{opacity:1;filter:brightness(1.45)}}
 </style>
 </head>
 <body class="intro-lock">
@@ -1020,7 +1049,7 @@ html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-
 
 <div class="quick-actions" id="quickActions">
   <div class="quick-actions-menu" id="quickActionsMenu" aria-hidden="true">
-    <button class="quick-action age" type="button" aria-label="১৮+ নিশ্চিতকরণ" title="১৮+ নিশ্চিতকরণ" onclick="openAgeConfirmation()">18+</button>
+    <button class="quick-action age" type="button" aria-label="১৮+ নিশ্চিতকরণ" title="১৮+ নিশ্চিতকরণ" onclick="openAgeButtonDestination()">18+</button>
     <button class="quick-action play" type="button" aria-label="ভিডিওতে যান" title="ভিডিওতে যান" onclick="goToVideos()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4.8v14.4L19 12z"/></svg></button>
   </div>
   <button class="quick-actions-toggle" type="button" id="quickActionsToggle" aria-label="দ্রুত বাটন দেখান" aria-expanded="false" onclick="toggleQuickActions()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5 L8 12 L15 19"/></svg></button>
@@ -1446,7 +1475,7 @@ async function openVideo(videoId){
           : `এই কনটেন্টটি আনলক করতে আপনাকে <b>${requiredAds}টি বিজ্ঞাপন</b> দেখতে হবে অথবা <b>পয়েন্ট</b> ব্যবহার করতে হবে। এরপর Telegram Bot-এর মাধ্যমে ডাউনলোড করতে পারবেন।`}</div>
         <div class="unlock-ornate-line">✦　━━━━━━━━━━━━━━━━　✦</div>
       </div>
-      <button class="more-video-btn" onclick="document.getElementById('videoDetails').remove()"><span class="more-video-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="m15 10 6-3v10l-6-3z"/></svg></span><span>আরো ভিডিও দেখুন</span></button>
+      <button class="more-video-btn" onclick="vvhOpenMoreVideos()"><span class="more-video-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="m15 10 6-3v10l-6-3z"/></svg></span><span>আরো ভিডিও দেখুন</span></button>
     </div>`;
   // Keep the video-unlock page brand in sync with the saved live website name.
   const savedBrand = String(
@@ -1630,7 +1659,69 @@ async function shareVideo(videoId,title){
 }
 
 
+let vvhQuickDragSkipClick=false;
+function openAgeButtonDestination(){
+  const q=window.VVH_PUBLIC_SETTINGS?.quickActions||{};
+  const target=String(q.adultUrl||'').trim();
+  if(target){
+    try{
+      const parsed=new URL(target);
+      if(!['http:','https:'].includes(parsed.protocol))throw new Error('Unsupported URL protocol');
+      const wrap=document.getElementById('quickActions');if(wrap)wrap.classList.remove('open');
+      const toggle=document.getElementById('quickActionsToggle');if(toggle)toggle.setAttribute('aria-expanded','false');
+      const menu=document.getElementById('quickActionsMenu');if(menu)menu.setAttribute('aria-hidden','true');
+      if(q.adultOpenNewTab!==false)window.open(parsed.href,'_blank','noopener,noreferrer');else window.location.assign(parsed.href);
+      return;
+    }catch(e){console.warn('Floating 18+ URL is invalid; opening age confirmation instead.',e)}
+  }
+  openAgeConfirmation();
+}
+function vvhApplySavedQuickDragPosition(){
+  const wrap=document.getElementById('quickActions');if(!wrap)return;
+  try{
+    const p=JSON.parse(localStorage.getItem('vvh_quick_actions_position_v1')||'null');
+    if(!p||!Number.isFinite(Number(p.x))||!Number.isFinite(Number(p.y)))return;
+    const maxX=Math.max(0,window.innerWidth-wrap.offsetWidth),maxY=Math.max(0,window.innerHeight-wrap.offsetHeight);
+    wrap.style.left=(Math.max(0,Math.min(100,Number(p.x)))/100*maxX)+'px';
+    wrap.style.top=(Math.max(0,Math.min(100,Number(p.y)))/100*maxY)+'px';
+    wrap.style.right='auto';wrap.style.bottom='auto';wrap.style.transform='none';wrap.dataset.dragged='true';
+  }catch(_){}
+}
+function vvhInitQuickActionDrag(){
+  const wrap=document.getElementById('quickActions'),handle=document.getElementById('quickActionsToggle');
+  if(!wrap||!handle||handle.dataset.dragReady==='true')return;
+  handle.dataset.dragReady='true';
+  let active=null,moved=false,startX=0,startY=0,origX=0,origY=0;
+  handle.addEventListener('pointerdown',e=>{
+    if(e.button!==undefined&&e.button!==0)return;
+    const r=wrap.getBoundingClientRect();active={id:e.pointerId};moved=false;startX=e.clientX;startY=e.clientY;origX=r.left;origY=r.top;
+    try{handle.setPointerCapture(e.pointerId)}catch(_){}
+  });
+  handle.addEventListener('pointermove',e=>{
+    if(!active||active.id!==e.pointerId)return;
+    const dx=e.clientX-startX,dy=e.clientY-startY;
+    if(!moved&&Math.hypot(dx,dy)<5)return;
+    moved=true;wrap.classList.add('vvh-dragging');
+    const maxX=Math.max(0,window.innerWidth-wrap.offsetWidth),maxY=Math.max(0,window.innerHeight-wrap.offsetHeight);
+    const x=Math.max(0,Math.min(maxX,origX+dx)),y=Math.max(0,Math.min(maxY,origY+dy));
+    wrap.style.left=x+'px';wrap.style.top=y+'px';wrap.style.right='auto';wrap.style.bottom='auto';wrap.style.transform='none';wrap.dataset.dragged='true';
+    e.preventDefault();
+  });
+  const finish=e=>{
+    if(!active||(e&&active.id!==e.pointerId))return;
+    if(moved){const maxX=Math.max(1,window.innerWidth-wrap.offsetWidth),maxY=Math.max(1,window.innerHeight-wrap.offsetHeight),r=wrap.getBoundingClientRect();
+      try{localStorage.setItem('vvh_quick_actions_position_v1',JSON.stringify({x:Math.round(r.left/maxX*1000)/10,y:Math.round(r.top/maxY*1000)/10}))}catch(_){}
+      vvhQuickDragSkipClick=true;setTimeout(()=>{vvhQuickDragSkipClick=false},350);
+    }
+    active=null;wrap.classList.remove('vvh-dragging');
+  };
+  handle.addEventListener('pointerup',finish);handle.addEventListener('pointercancel',finish);
+  window.addEventListener('resize',vvhApplySavedQuickDragPosition);
+  vvhApplySavedQuickDragPosition();
+}
+
 function toggleQuickActions(){
+  if(vvhQuickDragSkipClick){vvhQuickDragSkipClick=false;return;}
   const wrap=document.getElementById('quickActions');
   const toggle=document.getElementById('quickActionsToggle');
   const menu=document.getElementById('quickActionsMenu');
@@ -1879,6 +1970,7 @@ function vvhApplyFloatingQuickActions(settings={}){
   const glowEnabled=q.glowEnabled!==false;
   const glowColor=vvhSafeColor(q.glowColor,'#9c4dff');
   const glowStrength=clamp(Number(q.glowStrength??12),0,32);
+  wrap.style.setProperty('--vvh-quick-glow',glowColor);
   const styleButton=(el,anim)=>{
     if(!el)return;
     el.classList.remove('vvh-quick-anim-pulse','vvh-quick-anim-bounce','vvh-quick-anim-float','vvh-quick-anim-shine','vvh-age-pulse','vvh-age-bounce');
@@ -1886,6 +1978,8 @@ function vvhApplyFloatingQuickActions(settings={}){
     if(glowEnabled&&glowStrength>0){el.style.filter=`drop-shadow(0 0 ${glowStrength}px ${glowColor})`;el.style.boxShadow=`0 0 ${glowStrength}px ${glowColor}, 0 5px 15px #0009`;}else{el.style.removeProperty('filter');el.style.removeProperty('box-shadow');}
   };
   styleButton(age,q.adultAnimation||adult.floatingAnimation||'none');styleButton(play,q.playAnimation||'none');styleButton(toggle,q.toggleAnimation||'none');
+  vvhInitQuickActionDrag();
+  if(wrap.dataset.dragged==='true')vvhApplySavedQuickDragPosition();
 }
 
   function vvhApplyPublicSettings() {
@@ -2034,6 +2128,14 @@ function vvhRenderMenuItemSettings(menuItems={}){
     el.setAttribute('aria-label',label);
   }
 }
+function vvhOpenMoreVideos(){
+  const cfg=window.VVH_PUBLIC_SETTINGS?.links?.menuItems?.moreVideos||{};
+  if(cfg.enabled===false)return;
+  const url=vvhAllowedHttpUrl(cfg.url||'');
+  if(url){if(cfg.newTab!==false)window.open(url,'_blank','noopener,noreferrer');else window.location.href=url;return;}
+  document.getElementById('videoDetails')?.remove();
+  document.getElementById('videos')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
 function vvhHandleMenuItem(key){
   const cfg=window.VVH_PUBLIC_SETTINGS?.links?.menuItems?.[key]||{};
   if(cfg.enabled===false){closeMenu();return;}
@@ -2048,8 +2150,8 @@ function vvhHandleMenuItem(key){
     case 'guide': document.getElementById('videos')?.scrollIntoView({behavior:'smooth',block:'start'}); return;
     case 'adult': { const gate=document.getElementById('ageGate');if(gate){gate.style.display='flex';gate.classList.add('show');document.body.classList.add('intro-lock');}else{const cat=[...document.querySelectorAll('#categoryBar button,.categories button')].find(b=>/18\+|adult/i.test(b.textContent||''));if(cat)cat.click();} return; }
     case 'earn': showEarnPage(); return;
-    case 'bangla': return;
-    case 'english': alert('English ভাষার জন্য আলাদা অনুবাদ পেজ/URL Link Manager-এ বসাও।'); return;
+    case 'bangla': vvhSetLanguage('bn'); return;
+    case 'english': vvhSetLanguage('en'); return;
     default: return;
   }
 }
@@ -2470,18 +2572,36 @@ if (user && profileName) {
   const menuBtn = document.getElementById("menuAuthBtn");
   const accountBtn = document.getElementById("accountActionBtn");
   const status = document.getElementById("profileAuthStatus");
+  // Public website navigation intentionally has no visible Logout button.
+  // Keep the Login option in the menu; when already authenticated it opens Profile.
+  if (menuBtn) {
+    menuBtn.textContent = "🔐 Login / Sign Up";
+    menuBtn.classList.remove("logout-btn");
+    menuBtn.onclick = handleAuthMenu;
+  }
   if (user) {
-    if (menuBtn) { menuBtn.textContent = "🚪 Logout"; menuBtn.onclick = logout; }
-    if (accountBtn) { accountBtn.textContent = "🚪 Logout"; accountBtn.classList.add("logout-btn"); accountBtn.onclick = logout; }
+    if (accountBtn) {
+      accountBtn.textContent = "👤 Profile";
+      accountBtn.classList.remove("logout-btn");
+      accountBtn.onclick = showProfile;
+    }
     if (status) status.textContent = "লগইন: " + (user.email || "User");
   } else {
-    if (menuBtn) { menuBtn.textContent = "🔐 Login / Sign Up"; menuBtn.onclick = openAuth; }
-    if (accountBtn) { accountBtn.textContent = "🔐 Login / Sign Up"; accountBtn.classList.remove("logout-btn"); accountBtn.onclick = openAuth; }
+    if (accountBtn) {
+      accountBtn.textContent = "🔐 Login / Sign Up";
+      accountBtn.classList.remove("logout-btn");
+      accountBtn.onclick = openAuth;
+    }
     if (status) status.textContent = "লগইন করা হয়নি";
   }
 }
 
-function handleAuthMenu() { supabaseClient.auth.getUser().then(({data:{user}}) => user ? logout() : openAuth()); }
+function handleAuthMenu() {
+  supabaseClient.auth.getUser().then(({data:{user}}) => {
+    if (user) showProfile();
+    else openAuth();
+  });
+}
 
 async function claimPendingReferral() {
   const code = localStorage.getItem("vvh_pending_referral_code");
@@ -2609,6 +2729,10 @@ function closeSupportSubscription(){
   if(supportRealtimeChannel){supabaseClient.removeChannel(supportRealtimeChannel);supportRealtimeChannel=null}
 }
 async function openSupportChat(){
+  const supportCfg=window.VVH_PUBLIC_SETTINGS?.links?.menuItems?.support||{};
+  if(supportCfg.enabled===false)return;
+  const supportUrl=vvhAllowedHttpUrl(supportCfg.url||'');
+  if(supportUrl){if(supportCfg.newTab!==false)window.open(supportUrl,'_blank','noopener,noreferrer');else window.location.href=supportUrl;return;}
   const {data:{user}}=await supabaseClient.auth.getUser();
   if(!user){
     openAuth();
@@ -2701,5 +2825,78 @@ async function startEarnAdDemo(reward=2){
 document.addEventListener('DOMContentLoaded', syncEarnDemoStats);
 </script>
 
+
+<script id="vvh-language-switcher">
+
+/* Built-in Bangla/English UI language switch. Keeps user-created video titles and descriptions untouched. */
+(function(){
+  const pairs = [
+    ['হোম','Home'],['হোমপেজ','Homepage'],['প্রোফাইল','Profile'],['Login / Sign Up','Login / Sign Up'],
+    ['Live Support','Live Support'],['ভিডিও দেখার নিয়ম','How to Watch Videos'],['আরো ভিডিও দেখুন','More Videos'],
+    ['১৮+ কনটেন্ট','18+ Content'],['১৮+','18+'],['ফ্রি পয়েন্ট আয় করার নিয়ম','How to Earn Free Points'],['ফ্রি পয়েন্ট','Free Points'],
+    ['ভাষা পরিবর্তন','Change Language'],['বাংলা','বাংলা'],['ENGLISH','ENGLISH'],['সোশ্যাল লিংক','Social Links'],
+    ['ভিডিও','Videos'],['পয়েন্ট','Points'],['আমার পয়েন্ট','My Points'],['আনলক','Unlock'],['ভিডিও আনলক করুন','Unlock Video'],
+    ['বিজ্ঞাপন দেখুন','Watch Ad'],['ফ্রি আনলক','Unlock for Free'],['কিনুন','Buy'],['ডাউনলোড','Download'],['শেয়ার','Share'],
+    ['লাইক','Like'],['ভিউ','Views'],['সময়','Duration'],['ক্যাটাগরি','Category'],['সব','All'],['ট্রেন্ডিং','Trending'],
+    ['লগইন','Log In'],['লগ আউট','Log Out'],['রেজিস্টার','Sign Up'],['নাম','Name'],['ইমেইল','Email'],['পাসওয়ার্ড','Password'],
+    ['সেভ করুন','Save'],['সংরক্ষণ করুন','Save'],['বাতিল','Cancel'],['বন্ধ করুন','Close'],['হ্যাঁ','Yes'],['না','No'],
+    ['লোড হচ্ছে...','Loading...'],['লোড হচ্ছে','Loading'],['পরে আবার চেষ্টা করুন।','Please try again later.'],
+    ['আপনার মেসেজ লিখুন...','Write your message...'],['আমাদের সাথে সরাসরি কথা বলুন','Chat with us directly'],
+    ['Support chat খুলতে Login করুন।','Log in to open support chat.'],['Live Support ব্যবহার করতে আগে Login করুন।','Log in first to use Live Support.'],
+    ['বুঝেছি','Got it'],['সাইট আপডেট চলছে','Site update in progress'],['সাইট রক্ষণাবেক্ষণ চলছে। কিছুক্ষণ পরে আবার চেষ্টা করুন।','Site maintenance is in progress. Please try again later.'],
+    ['এখন কোনো প্যাকেজ উপলব্ধ নেই। পরে আবার দেখুন।','No packages are available right now. Please check again later.'],
+    ['অ্যাডমিন এখনো পেমেন্ট অ্যাড্রেস সেট করেনি।','The admin has not set a payment address yet.'],
+    ['পেমেন্ট ভেরিফিকেশন এখনো সার্ভার থেকে চালু/পরীক্ষা করা হয়নি।','Payment verification has not been enabled or tested on the server yet.'],
+    ['আপনার মেসেজ লিখে শুরু করুন।','Start by writing your message.'],['Chat load করা যায়নি।','Could not load chat.'],
+    ['বিজ্ঞাপন সম্পন্ন হয়েছে। এটি এখন UI ডেমো—পয়েন্টের ব্যালেন্সে বাস্তব রিওয়ার্ড যোগ করা হয়নি।','Ad completed. This is a UI demo; no real points were added to your balance.'],
+    ['বিজ্ঞাপন চালু করা যায়নি। পরে আবার চেষ্টা করুন।','Could not start the ad. Please try again later.'],
+    ['আজকের বিজ্ঞাপনের সীমা শেষ হয়েছে।','You have reached today’s ad limit.'],
+    ['কমপক্ষে 100 পয়েন্ট লিখুন।','Enter at least 100 points.'],['USDT TRC20 অ্যাড্রেস কপি হয়েছে।','USDT TRC20 address copied.'],
+    ['অ্যাডমিন এখনো USDT TRC20 অ্যাড্রেস সেট করেনি।','The admin has not set a USDT TRC20 address yet.'],
+    ['ফ্রি পয়েন্ট','Free Points'],['আরো দেখুন','See More'],['সাপোর্ট','Support'],['অফিসিয়াল চ্যানেল','Official Channel'],
+    ['ভিডিওতে যান','Go to Videos'],['দ্রুত বাটন দেখান','Show quick actions'],['দ্রুত বাটন লুকান','Hide quick actions'],
+    ['এই কনটেন্ট কেবল ১৮+ ব্যবহারকারীদের জন্য।','This content is for users aged 18 and over.'],
+    ['এই অংশটি শুধুমাত্র প্রাপ্তবয়স্কদের জন্য। প্রবেশের আগে আপনার বয়স নিশ্চিত করুন।','This section is for adults only. Please confirm your age before entering.'],
+    ['বয়স নিশ্চিত করুন','Confirm age'],['প্রবেশ করুন','Enter'],['ফিরে যান','Go back'],['পয়েন্ট কিনুন','Buy Points'],
+    ['রেফারেল','Referral'],['শেয়ার লিংক','Share Link'],['কপি করুন','Copy'],['কপি হয়েছে','Copied'],
+    ['সফল হয়েছে','Success'],['ব্যর্থ হয়েছে','Failed'],['ত্রুটি','Error'],['সেটিংস','Settings'],['সেভ','Save'],
+    ['নতুন ভিডিও','New Videos'],['ভিডিও খুঁজুন','Search Videos'],['খুঁজুন','Search'],['কোনো ভিডিও পাওয়া যায়নি','No videos found']
+  ];
+  const bnToEn=new Map(pairs); const enToBn=new Map(); for(const [bn,en] of pairs){if(!enToBn.has(en))enToBn.set(en,bn)}
+  const storageKey='vvh_ui_language'; let language='bn';
+  try{language=localStorage.getItem(storageKey)==='en'?'en':'bn'}catch(_){}
+  function translateText(original, lang){
+    if(!original || !original.trim()) return original;
+    const map=lang==='en'?bnToEn:enToBn;
+    const trimmed=original.trim();
+    if(map.has(trimmed)) return original.replace(trimmed,map.get(trimmed));
+    // Translate known phrases within static UI sentences while preserving whitespace and user content.
+    let out=original; const entries=[...map.entries()].sort((a,b)=>b[0].length-a[0].length);
+    for(const [from,to] of entries){ if(from.length>=3 && out.includes(from)) out=out.split(from).join(to); }
+    return out;
+  }
+  const skipTags=new Set(['SCRIPT','STYLE','NOSCRIPT','TEXTAREA','INPUT','CODE','PRE','SVG','PATH']);
+  function translateElement(el, lang){
+    if(!el || el.nodeType!==1 || skipTags.has(el.tagName) || el.closest('[data-vvh-no-translate]'))return;
+    if(el.hasAttribute('placeholder')){const original=el.dataset.vvhOriginalPlaceholder??el.getAttribute('placeholder');el.dataset.vvhOriginalPlaceholder=original;el.setAttribute('placeholder',translateText(original,lang));}
+    for(const attr of ['aria-label','title']){if(el.hasAttribute(attr)){const key='vvhOriginal'+attr.replace(/-([a-z])/g,(_,c)=>c.toUpperCase());const original=el.dataset[key]??el.getAttribute(attr);el.dataset[key]=original;el.setAttribute(attr,translateText(original,lang));}}
+    for(const node of el.childNodes){
+      if(node.nodeType===3){if(!node.__vvhOriginalText)node.__vvhOriginalText=node.nodeValue;node.nodeValue=translateText(node.__vvhOriginalText,lang)}
+      else if(node.nodeType===1)translateElement(node,lang);
+    }
+  }
+  function addLanguageControl(){
+    if(document.getElementById('vvhLanguageControl'))return;
+    const box=document.createElement('div');box.id='vvhLanguageControl';box.setAttribute('aria-label','Language');
+    box.style.cssText='position:fixed;top:10px;right:10px;z-index:12000;display:flex;gap:3px;padding:3px;border:1px solid #51435f;border-radius:999px;background:#111015eF;box-shadow:0 3px 12px #0008;font:700 11px Arial,sans-serif';
+    for(const [lang,label] of [['bn','বাংলা'],['en','EN']]){const b=document.createElement('button');b.type='button';b.textContent=label;b.dataset.lang=lang;b.style.cssText='border:0;border-radius:999px;padding:6px 9px;color:#fff;background:transparent;font:inherit;cursor:pointer';b.addEventListener('click',()=>window.vvhSetLanguage(lang));box.appendChild(b)}
+    document.body.appendChild(box);
+  }
+  window.vvhSetLanguage=function(lang){language=lang==='en'?'en':'bn';try{localStorage.setItem(storageKey,language)}catch(_){};document.documentElement.lang=language;document.documentElement.dataset.vvhLanguage=language;translateElement(document.body,language);const box=document.getElementById('vvhLanguageControl');if(box){for(const b of box.querySelectorAll('button')){b.style.background=b.dataset.lang===language?'linear-gradient(90deg,#8b2cff,#ff2d91)':'transparent';b.setAttribute('aria-pressed',String(b.dataset.lang===language))}};return language};
+  function init(){addLanguageControl();window.vvhSetLanguage(language);const observer=new MutationObserver(records=>{for(const record of records){if(record.type==='childList'){for(const node of record.addedNodes){if(node.nodeType===1 && node.id!=='vvhLanguageControl')translateElement(node,language);else if(node.nodeType===3 && node.parentElement && !skipTags.has(node.parentElement.tagName)){if(!node.__vvhOriginalText)node.__vvhOriginalText=node.nodeValue;node.nodeValue=translateText(node.__vvhOriginalText,language)}}}else if(record.type==='characterData'){const node=record.target;if(!node.__vvhOriginalText)node.__vvhOriginalText=node.nodeValue;const translated=translateText(node.__vvhOriginalText,language);if(node.nodeValue!==translated)node.nodeValue=translated}}});observer.observe(document.body,{childList:true,subtree:true,characterData:true});}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+
+</script>
 </body>
 </html>
