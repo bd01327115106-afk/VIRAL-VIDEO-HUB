@@ -254,6 +254,19 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
 .admin-search-footer{display:flex;justify-content:space-between;gap:10px;padding:8px 10px 5px;color:#93839e;font-size:10px;border-top:1px solid #2b1b35;margin-top:4px}
 @media(max-width:720px){.admin-global-search{grid-template-columns:minmax(0,1fr);gap:7px;margin:-8px 0 16px}.admin-global-search-main{padding:0 10px;border-radius:12px}.admin-global-search-input{height:45px;font-size:13px}.admin-global-search-submit{width:100%;height:42px}.admin-search-shortcut{display:none}.admin-search-results{max-height:55vh}.admin-search-result{padding:12px 10px}}
 
+
+.menu-link-settings-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}
+.menu-link-row{min-width:0;padding:14px!important;margin:0!important;border:1px solid var(--line)!important;border-radius:14px!important;background:rgba(255,255,255,.018)!important}
+.menu-link-row .mlr-head{display:flex;align-items:flex-start;gap:8px;margin-bottom:10px}
+.menu-link-row .mlr-icon{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:10px;background:rgba(173,87,255,.14);font-size:18px}
+.menu-link-row .mlr-title{font-weight:800;line-height:1.3}
+.menu-link-row .mlr-note{font-size:11px;color:var(--muted);margin-top:3px}
+.menu-link-row .field{margin-top:9px}
+.menu-link-row input[type=text],.menu-link-row input[type=url]{width:100%;min-width:0}
+.menu-link-row .mlr-options{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:12px}
+.menu-link-row .mlr-options label{display:flex;align-items:center;gap:7px;color:var(--muted)}
+.menu-link-row .mlr-options input[type=checkbox]{width:19px;height:19px}
+@media(max-width:760px){.menu-link-settings-grid{grid-template-columns:minmax(0,1fr)}.menu-link-row{padding:12px!important}}
 </style>
 
 </head>
@@ -431,6 +444,12 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
    <div class="field"><label>Telegram status</label><select id="linkTelegramEnabled"><option value="true">Enabled</option><option value="false">Disabled</option></select></div>
   </div>
  </div>
+ <div class="card" style="margin-top:15px" id="menuLinksControlCard">
+  <div class="section-head"><div><h2>Website menu links · প্রতিটি আইটেম আলাদা</h2><p>হোম, প্রোফাইল, Login, Support, ভিডিও গাইড, 18+, পয়েন্ট, বাংলা/English—প্রতিটির নাম ও লিংক আলাদাভাবে সেট করো।</p></div><span class="tag">LIVE CONFIG</span></div>
+  <div class="notice">URL ফাঁকা রাখলে ওই আইটেমের স্বাভাবিক সাইটের কাজ চলবে। URL দিলে সেটি তোমার দেওয়া লিংক খুলবে। Enabled বন্ধ করলে আইটেমটি মেনু থেকে লুকাবে। External link নতুন ট্যাবে খোলা ডিফল্ট।</div>
+  <div id="menuLinkSettingsGrid" class="menu-link-settings-grid"></div>
+  <p class="hint">এই সেটিংস `vvh_site_settings`-এর `links.menuItems`-এ সেভ হবে। নতুন SQL migration লাগবে না; `index.html` ও `admin.html` দুটোই আপডেট থাকতে হবে।</p>
+ </div>
  <div class="card" style="margin-top:15px"><div class="section-head"><div><h2>Any custom button</h2><p>যেকোনো নাম ও URL দিয়ে বাটন যোগ করো</p></div></div>
   <div class="form-grid">
    <div class="field"><label>Button name</label><input id="linkCustomLabel" maxlength="50" placeholder="যেমন: Facebook, Shop, YouTube"></div>
@@ -553,13 +572,13 @@ input,select,textarea{background:#070b2b!important;border-color:#30258c!importan
   <div class="field"><label>Age warning message</label><textarea id="adultMessage" maxlength="500">এই অংশটি শুধুমাত্র প্রাপ্তবয়স্কদের জন্য। প্রবেশের আগে আপনার বয়স নিশ্চিত করুন।</textarea></div>
   <hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
   <div class="section-head"><div><h2>Floating Quick Actions · তিনটি বাটন</h2><p>18+, ভিডিওতে যাওয়ার Play বাটন, এবং ডান/বাম পাশে খোলা-বন্ধ করার arrow—সব এক জায়গা থেকে নিয়ন্ত্রণ করো।</p></div><span class="tag">LIVE CONFIG</span></div>
-  <div class="notice">ডান পাশে রাখলে arrow বামদিকে menu খুলবে; বাম পাশে রাখলে arrow ডানদিকে খুলবে। Vertical position দিয়ে পাবলিক পেজে উপরে/মাঝে/নিচে সরাতে পারবে। Save করলে `vvh_site_settings`-এ config যাবে।</div>
+  <div class="notice">ডান/বাম পাশ ও Vertical position দিয়ে arrow-সহ পুরো গ্রুপ স্ক্রিনের উপরে/মাঝে/নিচে সরাতে পারবে। Always-on glow চালু থাকলে arrow, ▶ Video এবং 18+—তিনটিতেই আলো থাকবে। Save করলে `vvh_site_settings`-এ config যাবে।</div>
   <label class="user-row"><span><b>Enable floating quick-action group</b><div class="muted">তিনটি বাটনের পুরো গ্রুপ দেখানো/লুকানো</div></span><input id="quickActionsMaster" type="checkbox" checked style="width:22px;height:22px" oninput="previewQuickActions()"></label>
   <div class="quick-control-grid form-grid">
    <label class="user-row"><span><b>Show 18+ button</b><div class="muted">Age confirmation খুলবে</div></span><input id="adultFloatEnabled" type="checkbox" checked style="width:22px;height:22px" oninput="previewQuickActions()"></label>
    <label class="user-row"><span><b>Show Play button</b><div class="muted">ভিডিও তালিকায় নিয়ে যাবে</div></span><input id="quickPlayEnabled" type="checkbox" checked style="width:22px;height:22px" oninput="previewQuickActions()"></label>
    <label class="user-row"><span><b>Show side arrow/toggle</b><div class="muted">বাটনগুলো খোলা/বন্ধ করবে</div></span><input id="quickToggleEnabled" type="checkbox" checked style="width:22px;height:22px" oninput="previewQuickActions()"></label>
-   <label class="user-row"><span><b>Enable glow / light effect</b><div class="muted">বাটনের চারপাশে আলো</div></span><input id="quickGlowEnabled" type="checkbox" checked style="width:22px;height:22px" oninput="previewQuickActions()"></label>
+   <label class="user-row"><span><b>Always-on glow · তিনটি বাটনেই স্থায়ী আলো</b><div class="muted">Arrow, ▶ Video এবং 18+—তিনটিই দৃশ্যমান থাকলে সবসময় glow করবে</div></span><input id="quickGlowEnabled" type="checkbox" checked style="width:22px;height:22px" oninput="previewQuickActions()"></label>
   </div>
   <div class="form-grid">
    <div class="field"><label>Public side</label><select id="adultFloatPosition" onchange="previewQuickActions()"><option value="right">Right side</option><option value="left">Left side</option></select></div>
@@ -1029,6 +1048,7 @@ async function loadLiveSiteSettings(){
   setControl('refPoints',refs.pointsPerReferral??10);setControl('refMinUnlock',refs.minimumUnlock??0);setControl('refDailyCap',refs.dailyCap??20);setControl('refEnabled',refs.enabled!==false);setControl('refMax',refs.maximumPerDay??20);setControl('refNotes',refs.notes||'');
   setControl('linkWhatsAppLabel',links.whatsapp?.label||'WhatsApp Support');setControl('linkWhatsAppUrl',links.whatsapp?.url||'');setControl('linkWhatsAppPlacement',['header','footer','support','video','floating'].includes(links.whatsapp?.placement)?links.whatsapp.placement:'support');setControl('linkWhatsAppEnabled',links.whatsapp?.enabled!==false);if(Array.isArray(links.custom)){try{localStorage.setItem(CUSTOM_LINK_DRAFT_KEY,JSON.stringify(links.custom));renderCustomLinkDraft()}catch(_){}}
   setControl('linkTelegramLabel',links.telegram?.label||'Official Telegram');setControl('linkTelegramUrl',links.telegram?.url||'https://t.me/VIRALVIDEOHUBBD');setControl('linkTelegramPlacement',['header','footer','support','video','floating'].includes(links.telegram?.placement)?links.telegram.placement:'support');setControl('linkTelegramEnabled',links.telegram?.enabled!==false);
+  renderMenuLinkSettingsRows(links.menuItems||{});
   if($('liveSettingsSummary'))$('liveSettingsSummary').innerHTML=`<div class="user-row"><span>Settings row</span><b>${data?'Connected':'Not created'}</b></div><div class="user-row"><span>Last updated</span><b>${data?.updated_at?esc(new Date(data.updated_at).toLocaleString()):'—'}</b></div><div class="user-row"><span>Top-level groups</span><b>${Object.keys(s).length}</b></div>`;
   previewThemeSettings();previewHomepageExtras();previewQuickActions();if(status)status.textContent=data?'Live settings loaded.':'Settings row not found yet; save to create it.';
   log('Live site settings loaded',data?'vvh_site_settings/public':'No public settings row yet');
@@ -1066,6 +1086,42 @@ function previewQuickActions(){
  const playUrl=String($('quickPlayUrl')?.value||'').trim();const playPreview=$('quickPlayUrlPreview');if(playPreview)playPreview.textContent=playUrl?( /^https?:\/\//i.test(playUrl)?('▶ চাপলে '+playUrl+' '+($('quickPlayOpenNewTab')?.checked?'নতুন ট্যাবে':'একই ট্যাবে')+' খুলবে।'):'সঠিক http:// অথবা https:// URL দাও।'):'URL ফাঁকা: ▶ চাপলে ভিডিও তালিকায় যাবে।';
 }
 
+const VVH_MENU_LINK_DEFS = [
+ {key:'home',title:'হোমপেজ',icon:'🏠',label:'হোম',note:'URL ফাঁকা থাকলে সাইটের Home পেজ খুলবে.'},
+ {key:'profile',title:'প্রোফাইল',icon:'👤',label:'প্রোফাইল',note:'URL ফাঁকা থাকলে user profile খুলবে.'},
+ {key:'login',title:'Login / Sign Up',icon:'🔐',label:'Login / Sign Up',note:'URL ফাঁকা থাকলে login modal খুলবে.'},
+ {key:'support',title:'Live Support',icon:'💬',label:'Live Support',note:'URL ফাঁকা থাকলে সাইটের support chat খুলবে.'},
+ {key:'guide',title:'ভিডিও দেখার নিয়ম',icon:'▶️',label:'ভিডিও দেখার নিয়ম',note:'URL ফাঁকা থাকলে ভিডিও তালিকায় স্ক্রল করবে.'},
+ {key:'adult',title:'18+ Content',icon:'⚠️',label:'১৮+ কনটেন্ট',note:'URL ফাঁকা থাকলে age confirmation দেখাবে.'},
+ {key:'earn',title:'ফ্রি পয়েন্ট',icon:'👥',label:'ফ্রি পয়েন্ট আয় করার নিয়ম',note:'URL ফাঁকা থাকলে Earn/Points পেজ খুলবে.'},
+ {key:'bangla',title:'বাংলা Language link',icon:'🇧🇩',label:'বাংলা',note:'URL দিলে ওই বাংলা/ভাষার পেজ খুলবে; ফাঁকা থাকলে বর্তমান পেজেই থাকবে.'},
+ {key:'english',title:'English Language link',icon:'🌐',label:'ENGLISH',note:'URL দিলে English পেজ খুলবে; সাইট অনুবাদ আলাদাভাবে implement করতে হয়.'}
+];
+function renderMenuLinkSettingsRows(saved={}){
+ const root=$('menuLinkSettingsGrid');if(!root)return;
+ root.innerHTML=VVH_MENU_LINK_DEFS.map(def=>{
+  const cfg=saved?.[def.key]||{};
+  const label=String(cfg.label??def.label);
+  const url=String(cfg.url||'');
+  const enabled=cfg.enabled!==false;
+  const newTab=cfg.newTab!==false;
+  return `<div class="card menu-link-row"><div class="mlr-head"><span class="mlr-icon">${esc(def.icon)}</span><div><div class="mlr-title">${esc(def.title)}</div><div class="mlr-note">${esc(def.note)}</div></div></div>
+   <div class="field"><label>Button / item name</label><input type="text" maxlength="50" id="menuLink-${def.key}-label" value="${esc(label)}" placeholder="${esc(def.label)}"></div>
+   <div class="field"><label>Destination URL (optional)</label><input type="url" id="menuLink-${def.key}-url" value="${esc(url)}" placeholder="https://example.com"></div>
+   <div class="mlr-options"><label><input type="checkbox" id="menuLink-${def.key}-enabled" ${enabled?'checked':''}> Show item</label><label><input type="checkbox" id="menuLink-${def.key}-newtab" ${newTab?'checked':''}> Open URL in new tab</label></div></div>`;
+ }).join('');
+}
+function readMenuLinkSettings(){
+ const out={};
+ for(const def of VVH_MENU_LINK_DEFS){
+  const label=String($('menuLink-'+def.key+'-label')?.value||def.label).trim().slice(0,50)||def.label;
+  const url=String($('menuLink-'+def.key+'-url')?.value||'').trim();
+  if(url){let parsed;try{parsed=new URL(url)}catch(_){throw Error(def.title+'-এর জন্য পূর্ণ URL লিখো।')}if(!['http:','https:'].includes(parsed.protocol))throw Error('লিংক অবশ্যই http:// অথবা https:// দিয়ে শুরু হবে: '+def.title)}
+  out[def.key]={label,url,enabled:$('menuLink-'+def.key+'-enabled')?.checked!==false,newTab:$('menuLink-'+def.key+'-newtab')?.checked!==false};
+ }
+ return out;
+}
+
 async function saveLiveSettings(group){
  const statusId=group==='links'?'liveLinksStatus':'live'+group.charAt(0).toUpperCase()+group.slice(1)+'Status';const status=$(statusId);if(status)status.textContent='Live settings saving…';
  try{
@@ -1091,7 +1147,8 @@ async function saveLiveSettings(group){
   }else if(group==='maintenance'){
     const on=$('maintMode').checked;next.maintenance={mode:on,message:$('maintMessage').value.trim(),showSupport:$('maintSupport').checked};next.site={...(next.site||{}),maintenanceMode:on,maintenanceMessage:next.maintenance.message};
   }else if(group==='links'){
-    next.links={whatsapp:{label:$('linkWhatsAppLabel').value.trim(),url:$('linkWhatsAppUrl').value.trim(),placement:$('linkWhatsAppPlacement').value,enabled:$('linkWhatsAppEnabled').value==='true'},telegram:{label:$('linkTelegramLabel').value.trim(),url:$('linkTelegramUrl').value.trim(),placement:$('linkTelegramPlacement').value,enabled:$('linkTelegramEnabled').value==='true'},custom:readCustomLinks()};
+    const menuItems=readMenuLinkSettings();
+    next.links={...(next.links||{}),whatsapp:{label:$('linkWhatsAppLabel').value.trim(),url:$('linkWhatsAppUrl').value.trim(),placement:$('linkWhatsAppPlacement').value,enabled:$('linkWhatsAppEnabled').value==='true'},telegram:{label:$('linkTelegramLabel').value.trim(),url:$('linkTelegramUrl').value.trim(),placement:$('linkTelegramPlacement').value,enabled:$('linkTelegramEnabled').value==='true'},custom:readCustomLinks(),menuItems};
   }else {throw Error('Unknown settings group: '+group)}
   await writeLiveSiteSettings(next,group);if(status)status.textContent='Saved to Supabase. Updated website reads this public setting on load.';
  }catch(e){if(status)status.textContent='Live save ব্যর্থ: '+(e.message||String(e))+' · RLS ও SQL migration পরীক্ষা করো।';errorBox(e.message||String(e));}
