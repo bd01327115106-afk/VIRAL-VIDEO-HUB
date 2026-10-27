@@ -846,6 +846,17 @@ html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-
 .age-no{background:var(--vvh-ui-input-bg,#111116)!important;border-color:var(--vvh-ui-input-border,#39323f)!important;color:var(--vvh-ui-body-text,#fff)!important}
 
 </style>
+
+<style id="vvh-ticker-shortcut-styles">
+#publicAnnouncement.vvh-announcement-ticker{overflow:hidden;white-space:nowrap;position:relative;display:block;padding:8px 0;}
+#publicAnnouncement .vvh-ticker-track{display:flex;align-items:center;width:max-content;min-width:max-content;will-change:transform;animation:vvhTickerLeft var(--vvh-ticker-duration,20s) linear infinite;}
+#publicAnnouncement .vvh-ticker-track[data-direction="right"]{animation-name:vvhTickerRight;}
+#publicAnnouncement .vvh-ticker-item{display:inline-flex;align-items:center;flex:0 0 auto;white-space:nowrap;padding-right:48px;}
+#publicAnnouncement.vvh-announcement-ticker:hover .vvh-ticker-track{animation-play-state:paused;}
+@keyframes vvhTickerLeft{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@keyframes vvhTickerRight{from{transform:translateX(-50%)}to{transform:translateX(0)}}
+@media(prefers-reduced-motion:reduce){#publicAnnouncement .vvh-ticker-track{animation:none!important;transform:none!important;white-space:normal;flex-wrap:wrap;width:100%;min-width:0}#publicAnnouncement .vvh-ticker-item[aria-hidden="true"]{display:none}}
+</style>
 </head>
 <body class="intro-lock">
 <div class="startup-splash" id="startupSplash" aria-label="Loading">
@@ -876,7 +887,7 @@ html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-
 
 
 <div class="app">
-<div class="topbar"><button onclick="openMenu()">‹</button><span>VIRAL VIDEO LINK</span><button>⋯</button></div>
+<!-- Duplicate legacy topbar removed: mainhead below contains the single site brand. -->
 <header class="mainhead">
   <button class="icon" onclick="openMenu()">☰</button>
   <div class="brand" id="siteBrand"><span class="v">VIRAL </span><span class="p">VIDEO LINK</span></div>
@@ -892,7 +903,7 @@ html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-
   <button class="active" type="button" data-category="All">সব ভিডিও</button>
 </div>
 <div class="latest-heading"><h2 class="section-title">Latest Videos</h2><button class="video-guide-btn" type="button" onclick="openMenu()">▶ ভিডিও দেখার নিয়ম</button></div>
-<div class="notice" id="publicAnnouncement">🔔 নতুন ভিডিও নিয়মিত দেখুন — ক্যাটাগরি বেছে ভিডিও খুঁজুন ✨</div>
+<div class="notice vvh-announcement-ticker" id="publicAnnouncement" role="status" aria-label="ওয়েবসাইটের ঘোষণা"><span class="vvh-ticker-track" id="publicAnnouncementTrack" data-direction="left" style="--vvh-ticker-duration:20s"><span class="vvh-ticker-item" id="publicAnnouncementText">🔔 নতুন ভিডিও নিয়মিত দেখুন — ক্যাটাগরি বেছে ভিডিও খুঁজুন ✨</span><span class="vvh-ticker-item" aria-hidden="true">🔔 নতুন ভিডিও নিয়মিত দেখুন — ক্যাটাগরি বেছে ভিডিও খুঁজুন ✨</span></span></div>
 <div id="videos"><div class="message">ভিডিও লোড হচ্ছে...</div></div>
 <section id="vvhShopPromo" class="vvh-shop-promo" hidden aria-label="Premium points shop">
   <div class="vvh-shop-icon" aria-hidden="true">💎</div>
@@ -1382,7 +1393,7 @@ async function openVideo(videoId){
   details.innerHTML = `
     <div class="details-topbar">
       <button type="button" onclick="document.getElementById('videoDetails').remove()" aria-label="ফিরে যান">‹</button>
-      <b>VIRAL <span>VIDEO LINK</span></b>
+      <b id="videoDetailsBrand">VIRAL VIDEO LINK</b>
       <button type="button" class="details-share-top" aria-label="Share video"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3" fill="currentColor" stroke="none"/><circle cx="6" cy="12" r="3" fill="currentColor" stroke="none"/><circle cx="18" cy="19" r="3" fill="currentColor" stroke="none"/><path d="M8.7 10.7 15.3 6.3M8.7 13.3l6.6 4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></button>
     </div>
    <div class="details-content">
@@ -1437,6 +1448,14 @@ async function openVideo(videoId){
       </div>
       <button class="more-video-btn" onclick="document.getElementById('videoDetails').remove()"><span class="more-video-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="m15 10 6-3v10l-6-3z"/></svg></span><span>আরো ভিডিও দেখুন</span></button>
     </div>`;
+  // Keep the video-unlock page brand in sync with the saved live website name.
+  const savedBrand = String(
+    window.VVH_PUBLIC_SETTINGS?.site?.title ||
+    window.VVH_PUBLIC_SETTINGS?.homepage?.title ||
+    'VIRAL VIDEO LINK'
+  ).trim().slice(0, 100);
+  const detailsBrand = details.querySelector('#videoDetailsBrand');
+  if (detailsBrand) detailsBrand.textContent = savedBrand || 'VIRAL VIDEO LINK';
   document.body.appendChild(details);
   vvhRenderConfiguredLinks(window.VVH_PUBLIC_SETTINGS?.links||{});
   const shareTopBtn = details.querySelector('.details-share-top');
@@ -1629,6 +1648,21 @@ function openAgeConfirmation(){
   const menu=document.getElementById('quickActionsMenu'); if(menu) menu.setAttribute('aria-hidden','true');
 }
 function goToVideos(){
+  const q=window.VVH_PUBLIC_SETTINGS?.quickActions||{};
+  const target=String(q.playUrl||'').trim();
+  if(target){
+    try{
+      const parsed=new URL(target);
+      if(['http:','https:'].includes(parsed.protocol)){
+        const wrap=document.getElementById('quickActions'); if(wrap) wrap.classList.remove('open');
+        const toggle=document.getElementById('quickActionsToggle'); if(toggle) toggle.setAttribute('aria-expanded','false');
+        const menu=document.getElementById('quickActionsMenu'); if(menu) menu.setAttribute('aria-hidden','true');
+        if(q.playOpenNewTab!==false) window.open(parsed.href,'_blank','noopener,noreferrer');
+        else window.location.assign(parsed.href);
+        return;
+      }
+    }catch(e){console.warn('Floating Play URL is invalid; using default video-list action.',e)}
+  }
   const wrap=document.getElementById('quickActions'); if(wrap) wrap.classList.remove('open');
   const toggle=document.getElementById('quickActionsToggle'); if(toggle) toggle.setAttribute('aria-expanded','false');
   const menu=document.getElementById('quickActionsMenu'); if(menu) menu.setAttribute('aria-hidden','true');
@@ -1872,7 +1906,32 @@ function vvhApplyFloatingQuickActions(settings={}){
     const subtitle=String(loader.text||site.subtitle||home.subtitle||'').trim();
     if(subtitle){const el=document.getElementById('splashSub');if(el)el.textContent=subtitle;}
     const announcement=document.getElementById('publicAnnouncement');
-    if(announcement){if(site.showAnnouncement===false||home.showNotice===false){announcement.style.display='none'}else{announcement.style.display='';const message=String(site.announcement||home.announcement||'').trim();if(message)announcement.textContent=message;}}
+    if(announcement){
+      if(site.showAnnouncement===false||home.showNotice===false){announcement.style.display='none'}
+      else{
+        announcement.style.display='';
+        const ticker=home.ticker||{};
+        const message=String(ticker.text||site.announcement||home.announcement||'🔔 নতুন ভিডিও নিয়মিত দেখুন — ক্যাটাগরি বেছে ভিডিও খুঁজুন ✨').trim().slice(0,500);
+        const bg=vvhSafeColor(ticker.backgroundColor,'#171109');
+        const color=vvhSafeColor(ticker.textColor,'#f5c64d');
+        announcement.style.setProperty('--vvh-ui-announcement-bg',bg);
+        announcement.style.setProperty('--vvh-ui-announcement-text',color);
+        if(ticker.enabled===false){
+          announcement.classList.remove('vvh-announcement-ticker');
+          announcement.textContent=message;
+        }else{
+          announcement.classList.add('vvh-announcement-ticker');
+          announcement.replaceChildren();
+          const track=document.createElement('span');track.className='vvh-ticker-track';track.id='publicAnnouncementTrack';
+          const speed=Math.max(8,Math.min(60,Number(ticker.speedSeconds||20)));
+          track.style.setProperty('--vvh-ticker-duration',speed+'s');
+          track.dataset.direction=ticker.direction==='right'?'right':'left';
+          const first=document.createElement('span');first.className='vvh-ticker-item';first.id='publicAnnouncementText';first.textContent=message;
+          const second=document.createElement('span');second.className='vvh-ticker-item';second.setAttribute('aria-hidden','true');second.textContent=message;
+          track.append(first,second);announcement.append(track);
+        }
+      }
+    }
     const heroes=document.querySelectorAll('.hero-card');
     if(heroes.length>1)heroes[1].style.display=home.showTrending===false?'none':'';
     const latestHeading=document.querySelector('#homePage .latest-heading');
