@@ -1047,8 +1047,8 @@ html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-
 </div>
 
 <div class="menu" id="menu" onclick="closeMenu(event)"><aside class="drawer" onclick="event.stopPropagation()"><button class="close" onclick="closeMenu()">×</button><div class="mini-brand"><b>ভিডিও শেয়ার করুন</b><br><strong>VIRAL <span class="p">VIDEO LINK</span></strong></div><h2>মেনু</h2>
-<button class="menuitem" onclick="showHome();closeMenu()">🏠 হোম</button><button class="menuitem" onclick="showProfile();closeMenu()">👤 প্রোফাইল</button><button class="menuitem" id="menuAuthBtn" onclick="handleAuthMenu();closeMenu()">🔐 Login / Sign Up</button><button class="menuitem" onclick="openSupportChat();closeMenu()">💬 Live Support <span id="menuSupportBadge" style="float:right;display:none;background:#ff3e68;border-radius:999px;padding:2px 7px;font-size:11px">0</span></button><button class="menuitem">▶ ভিডিও দেখার নিয়ম</button><button class="menuitem">⚠ ১৮+ কনটেন্ট</button><button class="menuitem">👥 ফ্রি পয়েন্ট আয় করার নিয়ম</button>
-<h3>ভাষা পরিবর্তন</h3><div class="lang"><button>বাংলা</button><button>ENGLISH</button></div><h3>সোশ্যাল লিংক</h3><button class="menuitem" id="menuWhatsAppLink" type="button" onclick="openConfiguredLink('whatsapp')">🔗 WhatsApp</button><button class="menuitem" id="menuTelegramLink" type="button" onclick="openConfiguredLink('telegram')">🔗 Telegram</button><div id="vvhCustomMenuLinks"></div></aside></div>
+<button class="menuitem" id="menuHomeItem" onclick="vvhHandleMenuItem('home')">🏠 হোম</button><button class="menuitem" id="menuProfileItem" onclick="vvhHandleMenuItem('profile')">👤 প্রোফাইল</button><button class="menuitem" id="menuAuthBtn" onclick="vvhHandleMenuItem('login')">🔐 Login / Sign Up</button><button class="menuitem" id="menuSupportItem" onclick="vvhHandleMenuItem('support')">💬 Live Support <span id="menuSupportBadge" style="float:right;display:none;background:#ff3e68;border-radius:999px;padding:2px 7px;font-size:11px">0</span></button><button class="menuitem" id="menuGuideItem" onclick="vvhHandleMenuItem('guide')">▶ ভিডিও দেখার নিয়ম</button><button class="menuitem" id="menuAdultItem" onclick="vvhHandleMenuItem('adult')">⚠ ১৮+ কনটেন্ট</button><button class="menuitem" id="menuEarnItem" onclick="vvhHandleMenuItem('earn')">👥 ফ্রি পয়েন্ট আয় করার নিয়ম</button>
+<h3>ভাষা পরিবর্তন</h3><div class="lang"><button id="menuBanglaItem" onclick="vvhHandleMenuItem('bangla')">বাংলা</button><button id="menuEnglishItem" onclick="vvhHandleMenuItem('english')">ENGLISH</button></div><h3>সোশ্যাল লিংক</h3><button class="menuitem" id="menuWhatsAppLink" type="button" onclick="openConfiguredLink('whatsapp')">🔗 WhatsApp</button><button class="menuitem" id="menuTelegramLink" type="button" onclick="openConfiguredLink('telegram')">🔗 Telegram</button><div id="vvhCustomMenuLinks"></div></aside></div>
 
 
 
@@ -1876,7 +1876,7 @@ function vvhApplyFloatingQuickActions(settings={}){
   if(age){if(q.adultColor||components.adultButtonBg||adult.floatingColor)age.style.background=adultColor;else age.style.removeProperty('background');age.style.borderColor=vvhSafeColor(components.adultButtonBorder,adultColor);age.style.color=vvhSafeColor(components.adultButtonText,'#ffffff');}
   if(play){if(q.playColor)play.style.background=playColor;else play.style.removeProperty('background');play.style.color='#17100a';}
   toggle.style.background=toggleBg;toggle.style.borderColor=toggleBorder;toggle.style.color=toggleIcon;
-  const glowEnabled=q.glowEnabled===true;
+  const glowEnabled=q.glowEnabled!==false;
   const glowColor=vvhSafeColor(q.glowColor,'#9c4dff');
   const glowStrength=clamp(Number(q.glowStrength??12),0,32);
   const styleButton=(el,anim)=>{
@@ -1968,6 +1968,7 @@ function vvhApplyFloatingQuickActions(settings={}){
       if(!softAgeNotice){softAgeNotice=document.createElement('div');softAgeNotice.id='vvhAgeNotice';softAgeNotice.className='vvh-age-notice';const msg=document.createElement('span');msg.id='vvhAgeNoticeText';const close=document.createElement('button');close.type='button';close.textContent='বুঝেছি';close.addEventListener('click',()=>softAgeNotice?.remove());softAgeNotice.append(msg,close);document.body.append(softAgeNotice);}
       const msg=softAgeNotice.querySelector('#vvhAgeNoticeText');if(msg)msg.textContent=ageMessage;
     }else if(softAgeNotice){softAgeNotice.remove();}
+    vvhRenderMenuItemSettings(s.links?.menuItems||{});
     vvhRenderConfiguredLinks(s.links||{});
     const seo=s.seo||{};
     const metaContent=(key,value)=>{if(value===undefined||value===null||String(value).trim()==='')return;let el=document.querySelector('meta['+key+']');if(!el){el=document.createElement('meta');const [attr,val]=key.split('=');if(val)el.setAttribute(attr,val.replace(/["']/g,''));document.head.appendChild(el);}el.setAttribute('content',String(value).slice(0,500));};
@@ -2005,7 +2006,55 @@ function vvhApplyFloatingQuickActions(settings={}){
     if(!box){box=document.createElement('div');box.id=id;box.className=className;if(insertBefore&&insertBefore.parentNode===parent)parent.insertBefore(box,insertBefore);else parent.appendChild(box);}
     box.className=className;return box;
   }
-  function vvhRenderConfiguredLinks(links) {
+  const VVH_PUBLIC_MENU_ITEM_DEFS = [
+ {key:'home',id:'menuHomeItem',icon:'🏠',label:'হোম'},
+ {key:'profile',id:'menuProfileItem',icon:'👤',label:'প্রোফাইল'},
+ {key:'login',id:'menuAuthBtn',icon:'🔐',label:'Login / Sign Up'},
+ {key:'support',id:'menuSupportItem',icon:'💬',label:'Live Support'},
+ {key:'guide',id:'menuGuideItem',icon:'▶',label:'ভিডিও দেখার নিয়ম'},
+ {key:'adult',id:'menuAdultItem',icon:'⚠',label:'১৮+ কনটেন্ট'},
+ {key:'earn',id:'menuEarnItem',icon:'👥',label:'ফ্রি পয়েন্ট আয় করার নিয়ম'},
+ {key:'bangla',id:'menuBanglaItem',icon:'',label:'বাংলা'},
+ {key:'english',id:'menuEnglishItem',icon:'',label:'ENGLISH'}
+];
+function vvhRenderMenuItemSettings(menuItems={}){
+  for(const def of VVH_PUBLIC_MENU_ITEM_DEFS){
+    const el=document.getElementById(def.id);if(!el)continue;
+    const cfg=menuItems?.[def.key]||{};
+    const label=String(cfg.label||def.label).trim().slice(0,50)||def.label;
+    const displayLabel=(def.icon?def.icon+' ':'')+label;
+    if(def.key==='support'){
+      // Keep the unread-count badge element intact while updating the label.
+      const badge=el.querySelector('#menuSupportBadge');
+      [...el.childNodes].forEach(node=>{if(node!==badge)node.remove()});
+      el.insertBefore(document.createTextNode(displayLabel+' '),badge||null);
+    }else el.textContent=displayLabel;
+    el.style.display=cfg.enabled===false?'none':'';
+    el.dataset.menuKey=def.key;
+    el.setAttribute('aria-label',label);
+  }
+}
+function vvhHandleMenuItem(key){
+  const cfg=window.VVH_PUBLIC_SETTINGS?.links?.menuItems?.[key]||{};
+  if(cfg.enabled===false){closeMenu();return;}
+  const url=vvhAllowedHttpUrl(cfg.url||'');
+  if(url){closeMenu();if(cfg.newTab!==false)window.open(url,'_blank','noopener,noreferrer');else window.location.href=url;return;}
+  closeMenu();
+  switch(key){
+    case 'home': showHome(); return;
+    case 'profile': showProfile(); return;
+    case 'login': handleAuthMenu(); return;
+    case 'support': openSupportChat(); return;
+    case 'guide': document.getElementById('videos')?.scrollIntoView({behavior:'smooth',block:'start'}); return;
+    case 'adult': { const gate=document.getElementById('ageGate');if(gate){gate.style.display='flex';gate.classList.add('show');document.body.classList.add('intro-lock');}else{const cat=[...document.querySelectorAll('#categoryBar button,.categories button')].find(b=>/18\+|adult/i.test(b.textContent||''));if(cat)cat.click();} return; }
+    case 'earn': showEarnPage(); return;
+    case 'bangla': return;
+    case 'english': alert('English ভাষার জন্য আলাদা অনুবাদ পেজ/URL Link Manager-এ বসাও।'); return;
+    default: return;
+  }
+}
+
+function vvhRenderConfiguredLinks(links) {
     links=links||{};
     const builtIns=[
       {key:'whatsapp',id:'menuWhatsAppLink',label:'WhatsApp Support',fallback:'https://wa.me/'},
