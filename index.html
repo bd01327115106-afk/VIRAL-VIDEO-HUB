@@ -915,36 +915,37 @@ html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-
 .quick-actions-toggle{position:relative;isolation:isolate}
 .quick-actions-toggle::before{content:"";position:absolute;inset:-3px;border-radius:inherit;pointer-events:none;z-index:-1;border:1px solid var(--vvh-quick-glow,rgba(181,44,255,.8));box-shadow:0 0 7px var(--vvh-quick-glow,rgba(181,44,255,.8)),0 0 15px var(--vvh-quick-glow,rgba(181,44,255,.35));animation:vvhFixedArrowGlow 2.2s ease-in-out infinite}
 @keyframes vvhFixedArrowGlow{0%,100%{opacity:.55;filter:brightness(.9)}50%{opacity:1;filter:brightness(1.45)}}
-  
-/* Arrow button: blurred when idle */
+/* Normal state: transparent button */
 .quick-actions-toggle {
-  background: rgba(38, 27, 50, 0.42) !important;
-  backdrop-filter: blur(7px);
-  -webkit-backdrop-filter: blur(7px);
-  border: 1px solid rgba(210, 175, 255, 0.55) !important;
-  box-shadow: 0 0 8px rgba(180, 100, 255, 0.25);
+  background: rgba(38, 27, 50, 0.25) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(210, 175, 255, 0.35) !important;
+  box-shadow: none !important;
   transition: background 0.15s ease,
               box-shadow 0.15s ease;
 }
 
-/* Soft glow when idle */
+/* Dim glow when not pressed */
 .quick-actions-toggle::before {
   animation: none !important;
-  opacity: 0.45;
+  opacity: 0.12 !important;
+  box-shadow: none !important;
 }
 
 /* Bright purple glow while pressing */
 .quick-actions-toggle:active {
-  background: rgba(125, 45, 255, 0.95) !important;
-  border-color: #fff !important;
-  box-shadow: 0 0 12px #c77dff,
-              0 0 24px #a03cff;
+  background: rgba(125, 45, 255, 0.98) !important;
+  border-color: #ffffff !important;
+  box-shadow: 0 0 14px #c77dff,
+              0 0 28px #a03cff !important;
 }
 
 .quick-actions-toggle:active::before {
-  opacity: 1;
+  opacity: 1 !important;
+  box-shadow: 0 0 14px #c77dff,
+              0 0 28px #a03cff !important;
 }
-
 </style>
 </head>
 <body class="intro-lock">
