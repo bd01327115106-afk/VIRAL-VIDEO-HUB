@@ -2885,13 +2885,60 @@ document.addEventListener('DOMContentLoaded', syncEarnDemoStats);
       else if(node.nodeType===1)translateElement(node,lang);
     }
   }
-  function addLanguageControl(){
-    if(document.getElementById('vvhLanguageControl'))return;
-    const box=document.createElement('div');box.id='vvhLanguageControl';box.setAttribute('aria-label','Language');
-    box.style.cssText='position:fixed;top:10px;right:10px;z-index:12000;display:flex;gap:3px;padding:3px;border:1px solid #51435f;border-radius:999px;background:#111015eF;box-shadow:0 3px 12px #0008;font:700 11px Arial,sans-serif';
-    for(const [lang,label] of [['bn','বাংলা'],['en','EN']]){const b=document.createElement('button');b.type='button';b.textContent=label;b.dataset.lang=lang;b.style.cssText='border:0;border-radius:999px;padding:6px 9px;color:#fff;background:transparent;font:inherit;cursor:pointer';b.addEventListener('click',()=>window.vvhSetLanguage(lang));box.appendChild(b)}
-    document.body.appendChild(box);
+ 
+function addLanguageControl() {
+  const profileHead = document.querySelector('#profilePage .profile-head');
+  if (!profileHead) return;
+
+  let box = document.getElementById('vvhLanguageControl');
+
+  if (!box) {
+    box = document.createElement('div');
+    box.id = 'vvhLanguageControl';
+    box.setAttribute('aria-label', 'Language');
+
+    box.style.cssText = `
+      position: relative;
+      top: auto;
+      right: auto;
+      z-index: 2;
+      display: flex;
+      flex: 0 0 auto;
+      gap: 3px;
+      padding: 3px;
+      margin-left: auto;
+      border: 1px solid #51435f;
+      border-radius: 999px;
+      background: #111015;
+      font: 700 11px Arial, sans-serif;
+    `;
+
+    for (const [lang, label] of [['bn', 'বাংলা'], ['en', 'ENGLISH']]) {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = label;
+      b.dataset.lang = lang;
+
+      b.style.cssText = `
+        border: 0;
+        border-radius: 999px;
+        padding: 7px 8px;
+        color: #fff;
+        background: transparent;
+        font: inherit;
+        white-space: nowrap;
+        cursor: pointer;
+      `;
+
+      b.addEventListener('click', () => window.vvhSetLanguage(lang));
+      box.appendChild(b);
+    }
   }
+
+  // ভাষার বাটন শুধু প্রোফাইল কার্ডের ভেতরে থাকবে
+  profileHead.appendChild(box);
+}
+
   window.vvhSetLanguage=function(lang){language=lang==='en'?'en':'bn';try{localStorage.setItem(storageKey,language)}catch(_){};document.documentElement.lang=language;document.documentElement.dataset.vvhLanguage=language;translateElement(document.body,language);const box=document.getElementById('vvhLanguageControl');if(box){for(const b of box.querySelectorAll('button')){b.style.background=b.dataset.lang===language?'linear-gradient(90deg,#8b2cff,#ff2d91)':'transparent';b.setAttribute('aria-pressed',String(b.dataset.lang===language))}};return language};
   function init(){addLanguageControl();window.vvhSetLanguage(language);const observer=new MutationObserver(records=>{for(const record of records){if(record.type==='childList'){for(const node of record.addedNodes){if(node.nodeType===1 && node.id!=='vvhLanguageControl')translateElement(node,language);else if(node.nodeType===3 && node.parentElement && !skipTags.has(node.parentElement.tagName)){if(!node.__vvhOriginalText)node.__vvhOriginalText=node.nodeValue;node.nodeValue=translateText(node.__vvhOriginalText,language)}}}else if(record.type==='characterData'){const node=record.target;if(!node.__vvhOriginalText)node.__vvhOriginalText=node.nodeValue;const translated=translateText(node.__vvhOriginalText,language);if(node.nodeValue!==translated)node.nodeValue=translated}}});observer.observe(document.body,{childList:true,subtree:true,characterData:true});}
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
