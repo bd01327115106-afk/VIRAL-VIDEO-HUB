@@ -10,36 +10,6 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
-  
-/* Arrow button: blurred when idle */
-.quick-actions-toggle {
-  background: rgba(38, 27, 50, 0.42) !important;
-  backdrop-filter: blur(7px);
-  -webkit-backdrop-filter: blur(7px);
-  border: 1px solid rgba(210, 175, 255, 0.55) !important;
-  box-shadow: 0 0 8px rgba(180, 100, 255, 0.25);
-  transition: background 0.15s ease,
-              box-shadow 0.15s ease;
-}
-
-/* Soft glow when idle */
-.quick-actions-toggle::before {
-  animation: none !important;
-  opacity: 0.45;
-}
-
-/* Full glow while pressing */
-.quick-actions-toggle:active {
-  background: rgba(125, 45, 255, 0.95) !important;
-  border-color: #fff !important;
-  box-shadow: 0 0 12px #c77dff,
-              0 0 24px #a03cff;
-}
-
-.quick-actions-toggle:active::before {
-  opacity: 1;
-}
-
 *{box-sizing:border-box}
   
 .video-thumb {
@@ -915,37 +885,46 @@ html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-
 .quick-actions-toggle{position:relative;isolation:isolate}
 .quick-actions-toggle::before{content:"";position:absolute;inset:-3px;border-radius:inherit;pointer-events:none;z-index:-1;border:1px solid var(--vvh-quick-glow,rgba(181,44,255,.8));box-shadow:0 0 7px var(--vvh-quick-glow,rgba(181,44,255,.8)),0 0 15px var(--vvh-quick-glow,rgba(181,44,255,.35));animation:vvhFixedArrowGlow 2.2s ease-in-out infinite}
 @keyframes vvhFixedArrowGlow{0%,100%{opacity:.55;filter:brightness(.9)}50%{opacity:1;filter:brightness(1.45)}}
-/* Normal state: transparent button */
-.quick-actions-toggle {
-  background: rgba(38, 27, 50, 0.25) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  border: 1px solid rgba(210, 175, 255, 0.35) !important;
-  box-shadow: none !important;
-  transition: background 0.15s ease,
-              box-shadow 0.15s ease;
-}
 
-/* Dim glow when not pressed */
-.quick-actions-toggle::before {
-  animation: none !important;
-  opacity: 0.12 !important;
-  box-shadow: none !important;
+/* Reference-style edge arrow: keep the full glass pill visible; only the slim edge light animates. */
+#quickActions{right:0!important;width:44px!important;height:50px!important;top:66%!important;bottom:auto!important;transform:translateY(-50%) translateX(30px)!important;transition:transform .28s ease!important;}
+#quickActions:hover,#quickActions:focus-within,#quickActions.open{transform:translateY(-50%) translateX(0)!important;}
+/* Keep the chevron pointing left even after the menu is opened. */
+#quickActions .quick-actions-toggle svg,
+#quickActions.open .quick-actions-toggle svg,
+#quickActions:hover .quick-actions-toggle svg,
+#quickActions:focus-within .quick-actions-toggle svg{transform:rotate(0deg)!important;transition:none!important;}
+body:not(.vvh-home-active) #quickActions{display:none!important;}
+#quickActions .quick-actions-toggle{
+  right:0!important;top:0!important;width:42px!important;height:50px!important;
+  border:1px solid rgba(220,220,232,.3)!important;
+  border-right:0!important;border-radius:22px 0 0 22px!important;
+  background:rgba(48,48,56,.20)!important;color:rgba(240,240,248,.72)!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  box-shadow:0 2px 8px rgba(0,0,0,.16)!important;
+  transition:background .18s ease,box-shadow .18s ease,transform .22s ease!important;
 }
-
-/* Bright purple glow while pressing */
-.quick-actions-toggle:active {
-  background: rgba(125, 45, 255, 0.98) !important;
-  border-color: #ffffff !important;
-  box-shadow: 0 0 14px #c77dff,
-              0 0 28px #a03cff !important;
+#quickActions .quick-actions-toggle::before{
+  content:none!important;display:none!important;animation:none!important;opacity:0!important;
+  border:0!important;box-shadow:none!important;background:none!important;
 }
-
-.quick-actions-toggle:active::before {
-  opacity: 1 !important;
-  box-shadow: 0 0 14px #c77dff,
-              0 0 28px #a03cff !important;
+#quickActions .quick-actions-toggle svg{opacity:.7!important;stroke-width:2.4!important;}
+#quickActions .quick-actions-toggle:active{
+  background:rgba(125,45,255,.88)!important;color:#fff!important;
+  border-color:rgba(230,210,255,.8)!important;
+  box-shadow:0 0 10px rgba(168,80,255,.48)!important;
 }
+/* Reference detail: a thin vertical multicolor light strip beside the arrow, not a glow around it. */
+#quickActions .quick-actions-toggle::after{
+  content:""!important;display:block!important;position:absolute!important;
+  left:3px!important;top:8px!important;bottom:8px!important;width:2px!important;
+  border-radius:3px!important;pointer-events:none!important;z-index:2!important;
+  background:linear-gradient(180deg,#b85cff 0%,#55e7ff 28%,#8df36b 52%,#ffd45b 75%,#ff5cba 100%)!important;
+  background-size:100% 240%!important;animation:vvhEdgeLightShift 3.6s linear infinite!important;
+  box-shadow:0 0 3px rgba(179,91,255,.65),0 0 6px rgba(76,231,255,.35)!important;
+}
+@keyframes vvhEdgeLightShift{0%{background-position:0 0}100%{background-position:0 100%}}
+@media(max-width:420px){#quickActions{right:0!important;top:66%!important}}
 </style>
 </head>
 <body class="intro-lock">
@@ -3005,6 +2984,30 @@ function addLanguageControl() {
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 
+</script>
+
+<script id="vvh-home-only-quick-actions">
+(function(){
+  function syncQuickActionsHomeVisibility(){
+    const home=document.getElementById('homePage');
+    document.body.classList.toggle('vvh-home-active',!!home && home.classList.contains('active'));
+    const wrap=document.getElementById('quickActions');
+    if(wrap && !(home && home.classList.contains('active'))){
+      wrap.classList.remove('open');
+      const menu=document.getElementById('quickActionsMenu');
+      const toggle=document.getElementById('quickActionsToggle');
+      if(menu) menu.setAttribute('aria-hidden','true');
+      if(toggle) toggle.setAttribute('aria-expanded','false');
+    }
+  }
+  function init(){
+    syncQuickActionsHomeVisibility();
+    const home=document.getElementById('homePage');
+    if(home){new MutationObserver(syncQuickActionsHomeVisibility).observe(home,{attributes:true,attributeFilter:['class']});}
+    document.querySelectorAll('.page').forEach(page=>new MutationObserver(syncQuickActionsHomeVisibility).observe(page,{attributes:true,attributeFilter:['class']}));
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
 </script>
 </body>
 </html>
