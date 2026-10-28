@@ -10,6 +10,36 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <style>
+  
+/* Arrow button: blurred when idle */
+.quick-actions-toggle {
+  background: rgba(38, 27, 50, 0.42) !important;
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  border: 1px solid rgba(210, 175, 255, 0.55) !important;
+  box-shadow: 0 0 8px rgba(180, 100, 255, 0.25);
+  transition: background 0.15s ease,
+              box-shadow 0.15s ease;
+}
+
+/* Soft glow when idle */
+.quick-actions-toggle::before {
+  animation: none !important;
+  opacity: 0.45;
+}
+
+/* Full glow while pressing */
+.quick-actions-toggle:active {
+  background: rgba(125, 45, 255, 0.95) !important;
+  border-color: #fff !important;
+  box-shadow: 0 0 12px #c77dff,
+              0 0 24px #a03cff;
+}
+
+.quick-actions-toggle:active::before {
+  opacity: 1;
+}
+
 *{box-sizing:border-box}
   
 .video-thumb {
@@ -878,54 +908,96 @@ html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-
 <!-- Public navigation: Login / Sign Up is shown instead of a Logout button. -->
 
 <style id="vvh-final-fix-styles">
-/* Keep the existing headphone Live Support control; do not show a duplicate floating support button. */
+/* Keep the existing live support implementation untouched. */
 #supportFab{display:none!important}
-/* The arrow remains still; only its surrounding glow pulses in place. */
-.quick-actions-toggle svg,.quick-actions[data-side="left"] .quick-actions-toggle svg,.quick-actions[data-side="right"] .quick-actions-toggle svg{transform:none!important;transition:none!important}
-.quick-actions-toggle{position:relative;isolation:isolate}
-.quick-actions-toggle::before{content:"";position:absolute;inset:-3px;border-radius:inherit;pointer-events:none;z-index:-1;border:1px solid var(--vvh-quick-glow,rgba(181,44,255,.8));box-shadow:0 0 7px var(--vvh-quick-glow,rgba(181,44,255,.8)),0 0 15px var(--vvh-quick-glow,rgba(181,44,255,.35));animation:vvhFixedArrowGlow 2.2s ease-in-out infinite}
-@keyframes vvhFixedArrowGlow{0%,100%{opacity:.55;filter:brightness(.9)}50%{opacity:1;filter:brightness(1.45)}}
-
-/* Reference-style edge arrow: keep the full glass pill visible; only the slim edge light animates. */
-#quickActions{right:0!important;width:44px!important;height:50px!important;top:66%!important;bottom:auto!important;transform:translateY(-50%) translateX(30px)!important;transition:transform .28s ease!important;}
-#quickActions:hover,#quickActions:focus-within,#quickActions.open{transform:translateY(-50%) translateX(0)!important;}
-/* Keep the chevron pointing left even after the menu is opened. */
-#quickActions .quick-actions-toggle svg,
-#quickActions.open .quick-actions-toggle svg,
-#quickActions:hover .quick-actions-toggle svg,
-#quickActions:focus-within .quick-actions-toggle svg{transform:rotate(0deg)!important;transition:none!important;}
-body:not(.vvh-home-active) #quickActions{display:none!important;}
-#quickActions .quick-actions-toggle{
-  right:0!important;top:0!important;width:42px!important;height:50px!important;
-  border:1px solid rgba(220,220,232,.3)!important;
-  border-right:0!important;border-radius:22px 0 0 22px!important;
-  background:rgba(48,48,56,.20)!important;color:rgba(240,240,248,.72)!important;
-  backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
-  box-shadow:0 2px 8px rgba(0,0,0,.16)!important;
-  transition:background .18s ease,box-shadow .18s ease,transform .22s ease!important;
+/* Compact circular clear-glass arrow handle; no blur or rainbow ring around the whole button. */
+#quickActions[data-side="right"]{
+  transition:right .22s ease,left .22s ease,transform .22s ease!important;
 }
-#quickActions .quick-actions-toggle::before{
-  content:none!important;display:none!important;animation:none!important;opacity:0!important;
-  border:0!important;box-shadow:none!important;background:none!important;
+#quickActions[data-side="right"]:not(.open){right:-20px!important;left:auto!important;}
+#quickActions[data-side="right"].open{right:8px!important;left:auto!important;}
+#quickActions[data-side="right"] .quick-actions-toggle{
+  box-sizing:border-box!important;
+  width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;
+  flex:0 0 42px!important;aspect-ratio:1/1!important;padding:0!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  border-radius:50%!important;overflow:visible!important;
+  background:rgba(255,255,255,.16)!important;
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+  border:1px solid rgba(255,255,255,.48)!important;
+  box-shadow:inset 0 0 5px rgba(255,255,255,.12),0 1px 4px rgba(0,0,0,.18)!important;
+  transition:background .18s ease,box-shadow .18s ease!important;
 }
-#quickActions .quick-actions-toggle svg{opacity:.7!important;stroke-width:2.4!important;}
-#quickActions .quick-actions-toggle:active{
-  background:rgba(125,45,255,.88)!important;color:#fff!important;
-  border-color:rgba(230,210,255,.8)!important;
-  box-shadow:0 0 10px rgba(168,80,255,.48)!important;
+/* Remove the previous animated ring that made the control look misshapen. */
+#quickActions[data-side="right"] .quick-actions-toggle::before{content:none!important;display:none!important;animation:none!important;box-shadow:none!important;}
+/* Arrow faces left when closed and right after opening. */
+#quickActions[data-side="right"] .quick-actions-toggle svg{
+  width:18px!important;height:18px!important;display:block!important;flex:none!important;
+  transform:rotate(0deg)!important;transition:transform .2s ease!important;
 }
-/* Reference detail: a thin vertical multicolor light strip beside the arrow, not a glow around it. */
-#quickActions .quick-actions-toggle::after{
+#quickActions[data-side="right"].open .quick-actions-toggle svg{transform:rotate(180deg)!important;}
+/* Closed: one slim color-shifting light. Open: two short yellow light segments, aligned with the round handle. */
+#quickActions[data-side="right"] .quick-actions-toggle::after{
   content:""!important;display:block!important;position:absolute!important;
-  left:3px!important;top:8px!important;bottom:8px!important;width:2px!important;
-  border-radius:3px!important;pointer-events:none!important;z-index:2!important;
-  background:linear-gradient(180deg,#b85cff 0%,#55e7ff 28%,#8df36b 52%,#ffd45b 75%,#ff5cba 100%)!important;
-  background-size:100% 240%!important;animation:vvhEdgeLightShift 3.6s linear infinite!important;
-  box-shadow:0 0 3px rgba(179,91,255,.65),0 0 6px rgba(76,231,255,.35)!important;
+  left:4px!important;top:8px!important;bottom:8px!important;width:2px!important;
+  border-radius:3px!important;pointer-events:none!important;z-index:4!important;
+  background:linear-gradient(180deg,#c45cff,#48eaff,#8affb0,#ffe16b,#ff5bc8,#c45cff)!important;
+  background-size:100% 220%!important;animation:vvhEdgeLightShift 3s linear infinite!important;
+  box-shadow:0 0 3px rgba(105,220,255,.65),0 0 5px rgba(193,73,255,.3)!important;
+}
+/* On opening, the arrow itself turns yellow and points right; no separate yellow button is added. */
+#quickActions[data-side="right"].open .quick-actions-toggle{
+  border-color:rgba(255,190,35,.9)!important;
+  background:rgba(255,190,35,.13)!important;
+  box-shadow:inset 0 0 5px rgba(255,190,35,.12),0 0 8px rgba(255,176,0,.22)!important;
+}
+#quickActions[data-side="right"].open .quick-actions-toggle svg{color:#ffc21a!important;stroke:#ffc21a!important;}
+#quickActions[data-side="right"].open .quick-actions-toggle::after{
+  /* Reference: one straight yellow line beside the arrow, not bars above/below. */
+  left:4px!important;top:8px!important;bottom:8px!important;width:2px!important;
+  background:#ffbd16!important;
+  animation:none!important;
+  box-shadow:0 0 4px rgba(255,190,22,.55)!important;
+}
+#quickActions[data-side="right"] .quick-actions-toggle:active{
+  background:rgba(255,255,255,.24)!important;
+  box-shadow:inset 0 0 6px rgba(255,255,255,.18),0 0 8px rgba(167,83,255,.28)!important;
 }
 @keyframes vvhEdgeLightShift{0%{background-position:0 0}100%{background-position:0 100%}}
-@media(max-width:420px){#quickActions{right:0!important;top:66%!important}}
 </style>
+
+<style id="vvh-vertical-quick-actions-fix">
+/* Reference layout: 18+ above, video/play below; the round arrow stays to their right. */
+#quickActions[data-side="right"] .quick-actions-menu{
+  display:flex!important;
+  flex-direction:column!important;
+  align-items:center!important;
+  justify-content:center!important;
+  gap:8px!important;
+  width:54px!important;
+  height:auto!important;
+  right:49px!important;
+  top:50%!important;
+  transform:translate(10px,-50%) scale(.96)!important;
+  transform-origin:center center!important;
+}
+#quickActions[data-side="right"].open .quick-actions-menu{
+  transform:translate(0,-50%) scale(1)!important;
+}
+#quickActions[data-side="right"] .quick-action{
+  width:54px!important;
+  height:54px!important;
+  min-width:54px!important;
+  min-height:54px!important;
+  flex:0 0 54px!important;
+  border-radius:50%!important;
+}
+@media(max-width:420px){
+  #quickActions[data-side="right"] .quick-actions-menu{right:49px!important;gap:8px!important}
+  #quickActions[data-side="right"] .quick-action{width:52px!important;height:52px!important;min-width:52px!important;min-height:52px!important;flex-basis:52px!important}
+}
+</style>
+
 </head>
 <body class="intro-lock">
 <div class="startup-splash" id="startupSplash" aria-label="Loading">
@@ -2984,30 +3056,6 @@ function addLanguageControl() {
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 
-</script>
-
-<script id="vvh-home-only-quick-actions">
-(function(){
-  function syncQuickActionsHomeVisibility(){
-    const home=document.getElementById('homePage');
-    document.body.classList.toggle('vvh-home-active',!!home && home.classList.contains('active'));
-    const wrap=document.getElementById('quickActions');
-    if(wrap && !(home && home.classList.contains('active'))){
-      wrap.classList.remove('open');
-      const menu=document.getElementById('quickActionsMenu');
-      const toggle=document.getElementById('quickActionsToggle');
-      if(menu) menu.setAttribute('aria-hidden','true');
-      if(toggle) toggle.setAttribute('aria-expanded','false');
-    }
-  }
-  function init(){
-    syncQuickActionsHomeVisibility();
-    const home=document.getElementById('homePage');
-    if(home){new MutationObserver(syncQuickActionsHomeVisibility).observe(home,{attributes:true,attributeFilter:['class']});}
-    document.querySelectorAll('.page').forEach(page=>new MutationObserver(syncQuickActionsHomeVisibility).observe(page,{attributes:true,attributeFilter:['class']}));
-  }
-  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
-})();
 </script>
 </body>
 </html>
