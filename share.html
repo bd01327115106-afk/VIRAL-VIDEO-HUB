@@ -1,1 +1,31 @@
 
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta property="og:title" content="VIRAL VIDEO LINK">
+  <meta property="og:description" content="আমার রেফারেল লিংক দিয়ে যোগ দিন!">
+  <meta property="og:image" content="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/Viral%20Link%20Reaction%20Thumbnail.png">
+  <meta property="og:type" content="website">
+  <title>VIRAL VIDEO LINK</title>
+</head>
+<body>
+  <h2>VIRAL VIDEO LINK</h2>
+  <p>আপনার রেফারেল লিংক দিয়ে অ্যাপে যোগ দিন।</p>
+  <button id="openApp">অ্যাপ খুলুন</button>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("ref");
+
+    const appUrl = code
+      ? "https://t.me/ViralVideoHubBDBot?startapp=ref_" + encodeURIComponent(code)
+      : "https://t.me/ViralVideoHubBDBot";
+
+    document.getElementById("openApp").onclick = function () {
+      window.location.href = appUrl;
+    };
+  </script>
+</body>
+</html>
