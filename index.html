@@ -1256,31 +1256,42 @@ function openMenu(){document.getElementById("menu").classList.add("open")}
 function closeMenu(e){if(!e||e.target.id==="menu")document.getElementById("menu").classList.remove("open")}
 function copyReferral(){const x=window.currentReferralUrl || document.getElementById("profileReferralLink").innerText;navigator.clipboard?.writeText(x).then(()=>alert("লিংক কপি হয়েছে।"))}
 
+
 async function shareReferral() {
   const el = document.getElementById("profileReferralLink");
-  const url = window.currentReferralUrl || (el ? el.innerText.trim() : "");
+  const originalUrl = window.currentReferralUrl ||
+    (el ? el.innerText.trim() : "");
 
-  if (!url) {
+  if (!originalUrl) {
     alert("রেফারেল লিংক পাওয়া যায়নি!");
     return;
   }
+
+  const match = originalUrl.match(/[?&]startapp=ref_([^&]+)/);
+  if (!match) {
+    alert("রেফারেল কোড পাওয়া যায়নি!");
+    return;
+  }
+
+  const code = decodeURIComponent(match[1]);
+  const shareUrl =
+    "https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/share.html?ref=" +
+    encodeURIComponent(code);
 
   try {
     if (navigator.share) {
       await navigator.share({
         title: "VIRAL VIDEO LINK",
-        text: "আমার রেফারেল লিংক দিয়ে Viral Video Hub-এ যোগ দিন:",
-        url: url
+        text: "আমার রেফারেল লিংক দিয়ে যোগ দিন:",
+        url: shareUrl
       });
-    } else if (navigator.clipboard && window.isSecureContext) {
-      await navigator.clipboard.writeText(url);
-      alert("রেফারেল লিংক কপি হয়েছে! এখন বন্ধুকে পাঠিয়ে দিন।");
     } else {
-      window.prompt("এই লিংকটি কপি করে বন্ধুকে পাঠান:", url);
+      await navigator.clipboard.writeText(shareUrl);
+      alert("শেয়ার লিংক কপি হয়েছে!");
     }
   } catch (err) {
     if (err.name !== "AbortError") {
-      window.prompt("রেফারেল লিংকটি কপি করুন:", url);
+      window.prompt("লিংকটি কপি করুন:", shareUrl);
     }
   }
 }
