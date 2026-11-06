@@ -425,6 +425,167 @@
       .welcome h2 { font-size:20px; }
       .stat-value { font-size:24px; }
     }
+/* ===== PRO MAX MULTI NEON COLOR UPGRADE ===== */
+
+.topbar {
+  filter: drop-shadow(0 0 12px rgba(165,65,255,.25));
+}
+
+.brand-icon {
+  background: linear-gradient(135deg,#6725ff,#d51aff,#ff299c);
+  box-shadow: 0 0 15px #a72cff, 0 0 32px #ed239f;
+  animation: iconPulse 2.5s ease-in-out infinite alternate;
+}
+
+@keyframes iconPulse {
+  to { box-shadow: 0 0 22px #d42cff, 0 0 42px #ff299c; }
+}
+
+.welcome {
+  background: linear-gradient(115deg,#301078,#7413a5,#a20d65);
+  border: 1px solid #e15cff;
+  box-shadow: 0 0 15px #872cff, 0 0 30px rgba(255,30,170,.3);
+}
+
+.welcome h2 {
+  color: #fff;
+  text-shadow: 0 0 8px #ff45db, 0 0 20px #b52cff;
+}
+
+.stat {
+  position: relative;
+  overflow: hidden;
+  transition: .25s ease;
+}
+
+.stat:nth-child(1) {
+  border-color: #ff35bd;
+  box-shadow: 0 0 15px rgba(255,40,190,.25), inset 0 0 18px rgba(255,40,190,.08);
+}
+.stat:nth-child(2) {
+  border-color: #35ffb0;
+  box-shadow: 0 0 15px rgba(40,255,160,.22), inset 0 0 18px rgba(40,255,160,.07);
+}
+.stat:nth-child(3) {
+  border-color: #ffad36;
+  box-shadow: 0 0 15px rgba(255,165,40,.23), inset 0 0 18px rgba(255,165,40,.07);
+}
+.stat:nth-child(4) {
+  border-color: #39caff;
+  box-shadow: 0 0 15px rgba(40,190,255,.22), inset 0 0 18px rgba(40,190,255,.07);
+}
+
+.stat:nth-child(3) .stat-value {
+  color: #ffc15a;
+  text-shadow: 0 0 14px #ff9d24;
+}
+.stat:nth-child(4) .stat-value {
+  color: #62dfff;
+  text-shadow: 0 0 14px #27baff;
+}
+
+.action-btn {
+  transition: transform .2s ease, box-shadow .2s ease;
+  font-weight: 900;
+}
+
+.action-btn:nth-child(1) {
+  background: linear-gradient(135deg,#102b76,#164fbb);
+  border: 1px solid #55aaff;
+  box-shadow: 0 0 13px rgba(45,140,255,.35), inset 0 0 15px rgba(65,150,255,.12);
+}
+.action-btn:nth-child(2) {
+  background: linear-gradient(135deg,#743000,#bd5410);
+  border: 1px solid #ffae52;
+  box-shadow: 0 0 13px rgba(255,145,40,.3), inset 0 0 15px rgba(255,155,40,.1);
+}
+.action-btn:nth-child(3) {
+  background: linear-gradient(135deg,#07563d,#078c62);
+  border: 1px solid #4dffb4;
+  box-shadow: 0 0 13px rgba(40,255,160,.3), inset 0 0 15px rgba(40,255,160,.1);
+}
+.action-btn:nth-child(4) {
+  background: linear-gradient(135deg,#461080,#8224c8);
+  border: 1px solid #d58aff;
+  box-shadow: 0 0 13px rgba(175,75,255,.35), inset 0 0 15px rgba(175,75,255,.1);
+}
+
+.action-btn:active {
+  transform: scale(.96);
+  filter: brightness(1.25);
+}
+
+.action-btn span {
+  filter: drop-shadow(0 0 7px currentColor);
+}
+
+.upload-btn {
+  background: linear-gradient(100deg,#701bff,#d20bba,#ff2688);
+  border: 1px solid #ffb0f0;
+  box-shadow: 0 0 16px #a52dff, 0 0 32px rgba(255,35,180,.55);
+}
+
+.cancel-btn {
+  background: linear-gradient(100deg,#76001f,#e00042,#ff315e);
+  border: 1px solid #ff8ca5;
+  box-shadow: 0 0 15px rgba(255,30,80,.45), inset 0 0 12px rgba(255,255,255,.08);
+}
+
+.online {
+  box-shadow: 0 0 12px rgba(54,245,160,.35);
+}
+
+.panel {
+  border-color: #c14dff;
+  box-shadow: 0 0 20px rgba(175,50,255,.25), inset 0 0 18px rgba(150,50,255,.06);
+}
+
+.close-btn {
+  background: linear-gradient(135deg,#48216e,#762c9f);
+  border-color: #c17aff;
+}
+
+.mini-btn {
+  background: linear-gradient(135deg,#174a9c,#216fd0);
+  border-color: #64baff;
+  box-shadow: 0 0 8px rgba(50,145,255,.25);
+}
+
+.mini-btn.danger {
+  background: linear-gradient(135deg,#78122e,#c91e4c);
+  border-color: #ff6c91;
+  box-shadow: 0 0 8px rgba(255,40,90,.3);
+}
+
+.save-btn {
+  background: linear-gradient(100deg,#6d21ff,#c21bca,#fa268d);
+  box-shadow: 0 0 16px rgba(190,40,255,.4);
+}
+
+.secondary-btn {
+  background: linear-gradient(135deg,#173e83,#245eb0);
+  border-color: #65aaff;
+}
+
+.field:focus {
+  border-color: #ff4bd5;
+  box-shadow: 0 0 13px rgba(255,50,205,.35);
+}
+
+.notice {
+  border-color: rgba(185,95,255,.45);
+  box-shadow: 0 0 13px rgba(145,60,255,.13);
+}
+
+@media (hover:hover) {
+  .action-btn:hover,
+  .upload-btn:hover,
+  .cancel-btn:hover {
+    filter: brightness(1.2);
+    transform: translateY(-2px);
+  }
+}
+
   </style>
 </head>
 
