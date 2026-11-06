@@ -1,0 +1,365 @@
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>VIRAL VIDEO HUB UPLOAD BOT</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  padding: 18px;
+  color: white;
+  background:
+    radial-gradient(ellipse at 15% 5%, #482078 0%, transparent 42%),
+    radial-gradient(ellipse at 90% 45%, #35104e 0%, transparent 45%),
+    linear-gradient(145deg, #10091f, #170b29 55%, #0c0716);
+  font-family: Arial, sans-serif;
+}
+
+.app {
+  max-width: 480px;
+  margin: auto;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  margin: 8px 0 24px;
+}
+
+.logo {
+  width: 55px;
+  height: 55px;
+  display: grid;
+  place-items: center;
+  border-radius: 17px;
+  font-size: 27px;
+  background: linear-gradient(135deg, #6d28d9, #d946ef);
+  box-shadow: 0 0 25px #a855f7;
+}
+
+.brand {
+  font-size: 17px;
+  font-weight: 900;
+  letter-spacing: .4px;
+}
+
+.subtitle {
+  color: #d58bff;
+  font-size: 11px;
+  margin-top: 5px;
+  letter-spacing: 2px;
+}
+
+.online {
+  margin-left: auto;
+  color: #57f5b0;
+  border: 1px solid #287b5c;
+  background: #103b2c;
+  border-radius: 30px;
+  padding: 7px 10px;
+  font-size: 10px;
+}
+
+.welcome {
+  padding: 21px;
+  border: 1px solid #8c42bd;
+  border-radius: 20px;
+  background: linear-gradient(120deg, #32134e, #21102f);
+  box-shadow: 0 0 24px #8225a633;
+  margin-bottom: 17px;
+}
+
+.welcome h2 {
+  font-size: 22px;
+  margin-bottom: 9px;
+}
+
+.welcome p {
+  color: #d9b9f5;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.connected {
+  color: #64eeb4 !important;
+  font-size: 11px !important;
+  margin-top: 12px;
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.stat {
+  background: #211431;
+  border: 1px solid #59336f;
+  border-radius: 17px;
+  padding: 17px;
+}
+
+.stat-icon {
+  font-size: 23px;
+  margin-bottom: 9px;
+}
+
+.stat strong {
+  display: block;
+  font-size: 25px;
+  margin-bottom: 5px;
+}
+
+.stat span {
+  color: #bda9d0;
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.upload {
+  width: 100%;
+  min-height: 112px;
+  border: 1px solid #d78aff;
+  border-radius: 19px;
+  background: linear-gradient(110deg, #6724a5, #a02bd1, #7028ba);
+  color: white;
+  box-shadow: 0 0 14px #a83cff, 0 0 35px #a83cff55;
+  cursor: pointer;
+  margin: 2px 0 18px;
+  transition: .2s;
+}
+
+.upload:active, .action:active, .cancel:active {
+  transform: scale(.97);
+}
+
+.upload .icon {
+  display: block;
+  font-size: 32px;
+  margin-bottom: 9px;
+}
+
+.upload strong {
+  font-size: 17px;
+  letter-spacing: .6px;
+}
+
+.upload small {
+  display: block;
+  color: #f0d8ff;
+  margin-top: 7px;
+  font-size: 11px;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.action {
+  min-height: 86px;
+  border: 1px solid #7941a8;
+  border-radius: 17px;
+  background: linear-gradient(145deg, #301943, #211431);
+  color: white;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 12px #8d38ad22;
+}
+
+.action .icon {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 9px;
+}
+
+.cancel {
+  width: 100%;
+  margin-top: 17px;
+  padding: 19px 10px;
+  border-radius: 17px;
+  border: 1px solid #e64b70;
+  color: #ff9bb2;
+  background: linear-gradient(110deg, #4b1428, #321222);
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 15px #e64b7033;
+}
+
+.cancel span {
+  display: block;
+  font-size: 22px;
+  margin-bottom: 7px;
+}
+
+.footer {
+  text-align: center;
+  color: #a98bbe;
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin: 23px 0 10px;
+}
+
+.notice {
+  display: none;
+  position: fixed;
+  left: 18px;
+  right: 18px;
+  bottom: 22px;
+  max-width: 440px;
+  margin: auto;
+  padding: 15px;
+  border: 1px solid #a855f7;
+  border-radius: 13px;
+  background: #28163b;
+  color: white;
+  text-align: center;
+  font-size: 13px;
+  box-shadow: 0 0 20px #a855f766;
+  z-index: 5;
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+  <header class="header">
+    <div class="logo">🎬</div>
+    <div>
+      <div class="brand">VIRAL VIDEO HUB</div>
+      <div class="subtitle">UPLOAD BOT · PRO MAX</div>
+    </div>
+    <div class="online">● ONLINE</div>
+  </header>
+
+  <section class="welcome">
+    <h2>WELCOME ADMIN 👑</h2>
+    <p>আপনার Upload Control Panel-এ স্বাগতম।</p>
+    <p class="connected">● Bot Connected · Ready to Upload</p>
+  </section>
+
+  <section class="stats">
+    <div class="stat">
+      <div class="stat-icon">🎥</div>
+      <strong id="uploadCount">--</strong>
+      <span>TOTAL UPLOADS</span>
+    </div>
+
+    <div class="stat">
+      <div class="stat-icon">⚡</div>
+      <strong style="color:#49e6a5">ACTIVE</strong>
+      <span>BOT STATUS</span>
+    </div>
+  </section>
+
+  <button class="upload" onclick="startUpload()">
+    <span class="icon">☁️</span>
+    <strong>UPLOAD NEW VIDEO</strong>
+    <small>ভিডিও আপলোড শুরু করুন</small>
+  </button>
+
+  <section class="actions">
+    <button class="action" onclick="showNotice('ভিডিও ম্যানেজমেন্ট পরবর্তী ধাপে যুক্ত হবে।')">
+      <span class="icon">📁</span>
+      Manage Videos
+    </button>
+
+    <button class="action" onclick="retryPublish()">
+      <span class="icon">🔄</span>
+      Retry Publish
+    </button>
+
+    <button class="action" onclick="showNotice('Statistics সংযোগ পরবর্তী ধাপে যুক্ত হবে।')">
+      <span class="icon">📊</span>
+      Statistics
+    </button>
+
+    <button class="action" onclick="showNotice('Settings সংযোগ পরবর্তী ধাপে যুক্ত হবে।')">
+      <span class="icon">⚙️</span>
+      Settings
+    </button>
+  </section>
+
+  <button class="cancel" onclick="cancelUpload()">
+    <span>✖</span>
+    CANCEL CURRENT UPLOAD
+  </button>
+
+  <footer class="footer">
+    ⚡ VIRAL VIDEO HUB · PRO MAX UPLOAD SYSTEM
+  </footer>
+
+</div>
+
+<div class="notice" id="notice"></div>
+
+<script>
+const tg = window.Telegram?.WebApp;
+
+if (tg) {
+  tg.ready();
+  tg.expand();
+  tg.setHeaderColor("#10091f");
+  tg.setBackgroundColor("#10091f");
+}
+
+function showNotice(message) {
+  const box = document.getElementById("notice");
+  box.textContent = message;
+  box.style.display = "block";
+
+  clearTimeout(window.noticeTimer);
+  window.noticeTimer = setTimeout(() => {
+    box.style.display = "none";
+  }, 2800);
+}
+
+function startUpload() {
+  const url = "https://t.me/ViralVideoHubUploadBot";
+
+  if (tg && tg.openTelegramLink) {
+    tg.openTelegramLink(url);
+  } else {
+    window.open(url, "_blank");
+  }
+}
+
+function retryPublish() {
+  if (tg && tg.openTelegramLink) {
+    tg.openTelegramLink(
+      "https://t.me/ViralVideoHubUploadBot?start=retry"
+    );
+  } else {
+    showNotice("Telegram Bot খুলে /retry পাঠান।");
+  }
+}
+
+function cancelUpload() {
+  if (tg && tg.openTelegramLink) {
+    tg.openTelegramLink(
+      "https://t.me/ViralVideoHubUploadBot?start=cancel"
+    );
+  } else {
+    showNotice("Telegram Bot-এ /cancel পাঠান।");
+  }
+}
+</script>
+</body>
+</html>
