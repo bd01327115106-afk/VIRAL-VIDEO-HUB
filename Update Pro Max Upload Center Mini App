@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -23,6 +23,7 @@ radial-gradient(ellipse at 100% 30%,#a20b5540,transparent 40%),var(--bg)
 }
 button,input,textarea,select{font:inherit}
 button{cursor:pointer;color:white;border:0}
+button:disabled{opacity:.55;cursor:not-allowed}
 .container{max-width:650px;margin:auto}
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
 .brand{display:flex;align-items:center;gap:11px}
@@ -145,9 +146,11 @@ textarea.field{min-height:90px}
  <label class="label">ভিডিও Title *</label>
  <input class="field" id="title" maxlength="180" placeholder="ভিডিওর Title লিখুন">
 
- <label class="label">Custom Thumbnail (ঐচ্ছিক)</label>
- <input class="field" id="thumbnail" type="file" accept="image/jpeg,image/png,image/webp">
- <div class="hint">ছবি না দিলে Telegram-এর ভিডিও Thumbnail ব্যবহার করার চেষ্টা করা হবে।</div>
+ <div id="thumbnailBox">
+  <label class="label">Custom Thumbnail (ঐচ্ছিক)</label>
+  <input class="field" id="thumbnail" type="file" accept="image/jpeg,.jpg,.jpeg">
+  <div class="hint">শুধু JPG/JPEG ছবি, সর্বোচ্চ ২০০ KB। ছবি না দিলে Telegram-এর ভিডিও Thumbnail ব্যবহার হবে।</div>
+ </div>
 
  <label class="label">Category *</label>
  <select class="field" id="category">
@@ -191,155 +194,398 @@ textarea.field{min-height:90px}
 <script>
 (() => {
 "use strict";
+
 const API="https://viral-video-upload-bot.hmh01645819688.workers.dev";
 const tg=window.Telegram?.WebApp;
-if(tg){tg.ready();tg.expand();}
+
+if(tg){
+ tg.ready();
+ tg.expand();
+}
+
 const initData=tg?.initData||"";
 const $=id=>document.getElementById(id);
-let mode="file",busy=false,controller=null;
+
+let mode="file";
+let busy=false;
+let controller=null;
 
 function message(id,text,type=""){
- const el=$(id);el.textContent=text;el.className="message show "+type;
+ const el=$(id);
+ el.textContent=text;
+ el.className="message show "+type;
 }
+
 async function api(path,options={}){
  if(!initData)throw Error("Telegram-এর ভিতর থেকে Mini App খুলুন।");
- const headers={"X-Telegram-Init-Data":initData,...(options.headers||{})};
- if(options.body && !(options.body instanceof FormData))headers["Content-Type"]="application/json";
- const res=await fetch(API+path,{method:options.method||"GET",headers,body:options.body instanceof FormData?options.body:options.body?JSON.stringify(options.body):undefined,signal:options.signal});
- const data=await res.json().catch(()=>({error:"Invalid server response"}));
- if(!res.ok)throw Error(data.error||"Server request failed");
+
+ const headers={
+  "X-Telegram-Init-Data":initData,
+  ...(options.headers||{})
+ };
+
+ const isForm=options.body instanceof FormData;
+
+ if(options.body&&!isForm){
+  headers["Content-Type"]="application/json";
+ }
+
+ const res=await fetch(API+path,{
+  method:options.method||"GET",
+  headers,
+  body:isForm?options.body:
+   options.body?JSON.stringify(options.body):undefined,
+  signal:options.signal
+ });
+
+ const data=await res.json().catch(()=>({
+  error:"Invalid server response"
+ }));
+
+ if(!res.ok){
+  throw Error(data.error||"Server request failed");
+ }
+
  return data;
 }
+
 window.setMode=function(value){
+ if(busy)return;
+
  mode=value;
+
  $("fileMode").classList.toggle("selected",value==="file");
  $("linkMode").classList.toggle("selected",value==="link");
+
  $("fileBox").classList.toggle("hidden",value!=="file");
  $("linkBox").classList.toggle("hidden",value!=="link");
+
+ $("thumbnailBox").classList.toggle("hidden",value!=="file");
+
+ if(value==="link"){
+  $("thumbnail").value="";
+ }
+
  $("uploadMessage").className="message";
+ progress(0,"Ready — 0%");
 };
+
 $("videoFile").addEventListener("change",()=>{
  const f=$("videoFile").files[0];
- if(!f){$("fileInfo").textContent="MP4 / WEBM / MOV";return;}
- $("fileInfo").textContent=f.name+" • "+(f.size/1048576).toFixed(2)+" MB";
+
+ if(!f){
+  $("fileInfo").textContent="MP4 / WEBM / MOV";
+  return;
+ }
+
+ $("fileInfo").textContent=
+  f.name+" • "+(f.size/1048576).toFixed(2)+" MB";
 });
+
 function progress(n,text){
  $("progressBar").style.width=n+"%";
  $("progressText").textContent=text||("Uploading — "+n+"%");
 }
+
+function resetForm(){
+ $("videoFile").value="";
+ $("thumbnail").value="";
+ $("messageLink").value="";
+ $("title").value="";
+ progress(0,"Ready — 0%");
+}
+
 window.publish=async function(){
  if(busy)return;
- const title=$("title").value.trim(),category=$("category").value;
- const file=$("videoFile").files[0],thumb=$("thumbnail").files[0],link=$("messageLink").value.trim();
- if(!title)return message("uploadMessage","ভিডিওর Title লিখুন।","error");
- if(!category)return message("uploadMessage","Category নির্বাচন করুন।","error");
- if(mode==="file"&&!file)return message("uploadMessage","ভিডিও ফাইল নির্বাচন করুন।","error");
- if(mode==="file"&&file.size>50*1024*1024)return message("uploadMessage","ভিডিও সর্বোচ্চ ৫০ MB হতে পারবে।","error");
- if(mode==="link"&&!link)return message("uploadMessage","Telegram Message Link দিন।","error");
- if(thumb&&thumb.size>5*1024*1024)return message("uploadMessage","Thumbnail সর্বোচ্চ ৫ MB হতে পারবে।","error");
 
- busy=true;controller=new AbortController();
+ const title=$("title").value.trim();
+ const category=$("category").value;
+ const file=$("videoFile").files[0];
+ const thumb=$("thumbnail").files[0];
+ const link=$("messageLink").value.trim();
+
+ if(!title){
+  message("uploadMessage","ভিডিওর Title লিখুন।","error");
+  return;
+ }
+
+ if(!category){
+  message("uploadMessage","Category নির্বাচন করুন।","error");
+  return;
+ }
+
+ if(mode==="file"&&!file){
+  message("uploadMessage","ভিডিও ফাইল নির্বাচন করুন।","error");
+  return;
+ }
+
+ if(mode==="file"&&file.size>50*1024*1024){
+  message("uploadMessage","ভিডিও সর্বোচ্চ ৫০ MB হতে পারবে।","error");
+  return;
+ }
+
+ if(mode==="file"&&!["video/mp4","video/webm","video/quicktime"].includes(file.type)){
+  message("uploadMessage","শুধু MP4, WEBM অথবা MOV ভিডিও নির্বাচন করুন।","error");
+  return;
+ }
+
+ if(mode==="link"&&!link){
+  message("uploadMessage","Telegram Message Link দিন।","error");
+  return;
+ }
+
+ if(mode==="link"&&!/^https:\/\/t\.me\/c\/\d+\/\d+/.test(link)){
+  message("uploadMessage","সঠিক Private Channel Message Link দিন।","error");
+  return;
+ }
+
+ if(mode==="file"&&thumb){
+  if(!["image/jpeg"].includes(thumb.type)){
+   message("uploadMessage","Thumbnail অবশ্যই JPG/JPEG হতে হবে।","error");
+   return;
+  }
+
+  if(thumb.size>200*1024){
+   message("uploadMessage","Thumbnail সর্বোচ্চ ২০০ KB হতে পারবে।","error");
+   return;
+  }
+ }
+
+ busy=true;
+ controller=new AbortController();
+
  $("publishBtn").disabled=true;
- message("uploadMessage","⏳ Publish request পাঠানো হচ্ছে...");
+ $("publishBtn").textContent="⏳ PUBLISHING...";
+
+ progress(10,"Request preparing...");
+
  try{
   let result;
+
   if(mode==="file"){
    const form=new FormData();
+
    form.append("file",file);
    form.append("title",title);
    form.append("category",category);
-   if(thumb)form.append("thumbnail",thumb);
-   result=await api("/api/upload",{method:"POST",body:form,signal:controller.signal});
+
+   if(thumb){
+    form.append("thumbnail",thumb);
+   }
+
+   progress(25,"ভিডিও সার্ভারে পাঠানো হচ্ছে...");
+
+   result=await api("/api/upload",{
+    method:"POST",
+    body:form,
+    signal:controller.signal
+   });
+
   }else{
-   result=await api("/api/import-link",{method:"POST",body:{title,category,message_link:link,thumbnail:thumb||null},signal:controller.signal});
+   progress(25,"Telegram Link যাচাই করা হচ্ছে...");
+
+   result=await api("/api/import-link",{
+    method:"POST",
+    body:{
+     title,
+     category,
+     message_link:link
+    },
+    signal:controller.signal
+   });
   }
+
   progress(100,"Complete — 100%");
-  message("uploadMessage",result.message||"✅ ভিডিও Publish হয়েছে।","success");
-  $("videoFile").value="";$("thumbnail").value="";$("messageLink").value="";$("title").value="";
+
+  message(
+   "uploadMessage",
+   result.message||"✅ Publish request সফল হয়েছে।",
+   "success"
+  );
+
+  resetForm();
   await refreshStats(false);
+
  }catch(e){
-  if(e.name==="AbortError")message("uploadMessage","Upload বাতিল করা হয়েছে।","error");
-  else message("uploadMessage","❌ "+e.message,"error");
+  if(e.name==="AbortError"){
+   message("uploadMessage","Upload request বাতিল করা হয়েছে।","error");
+  }else{
+   message("uploadMessage","❌ "+e.message,"error");
+  }
+
  }finally{
-  busy=false;controller=null;$("publishBtn").disabled=false;
+  busy=false;
+  controller=null;
+  $("publishBtn").disabled=false;
+  $("publishBtn").textContent="🚀 PUBLISH VIDEO";
  }
 };
+
 window.cancelUpload=function(){
- if(controller){controller.abort();return;}
- $("videoFile").value="";$("thumbnail").value="";$("messageLink").value="";$("title").value="";
- progress(0,"Ready — 0%");
+ if(controller){
+  controller.abort();
+  return;
+ }
+
+ resetForm();
  message("uploadMessage","ফর্ম পরিষ্কার করা হয়েছে।");
 };
+
 window.closePanels=function(){
  $("videosPanel").classList.remove("active");
  $("settingsPanel").classList.remove("active");
 };
+
 window.refreshStats=async function(showAlert=false){
  try{
   const d=await api("/api/stats");
+
   $("total").textContent=d.total_uploads??"—";
   $("bot").textContent=d.bot_status||"RUNNING";
   $("pending").textContent=d.pending_uploads??0;
   $("latest").textContent=d.latest_upload?.title||"No uploads";
   $("status").textContent="ONLINE";
-  if(showAlert)alert("Statistics refreshed.");
+
+  if(showAlert){
+   alert("Statistics refreshed.");
+  }
+
  }catch(e){
   $("status").textContent="OFFLINE / LOGIN";
-  if(showAlert)alert(e.message);
+
+  if(showAlert){
+   alert(e.message);
+  }
  }
 };
+
 window.openVideos=async function(){
- closePanels();$("videosPanel").classList.add("active");$("videoList").textContent="Loading...";
+ closePanels();
+
+ $("videosPanel").classList.add("active");
+ $("videoList").textContent="Loading...";
+
  try{
   const d=await api("/api/videos");
   const videos=d.videos||[];
-  if(!videos.length){$("videoList").textContent="No videos found.";return;}
+
+  if(!videos.length){
+   $("videoList").textContent="No videos found.";
+   return;
+  }
+
   $("videoList").innerHTML=videos.map(v=>`
    <div class="video-item">
     <strong>${escapeHtml(v.title)}</strong>
-    <small>Category: ${escapeHtml(v.category||"—")}<br>Video ID: ${escapeHtml(v.id)}<br>Message ID: ${escapeHtml(v.telegram_message_id||"—")}</small>
-   </div>`).join("");
- }catch(e){$("videoList").textContent=e.message;}
+    <small>
+     Category: ${escapeHtml(v.category||"—")}<br>
+     Video ID: ${escapeHtml(v.id)}<br>
+     Message ID: ${escapeHtml(v.telegram_message_id||"—")}
+    </small>
+   </div>
+  `).join("");
+
+ }catch(e){
+  $("videoList").textContent=e.message;
+ }
 };
-function escapeHtml(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));}
+
+function escapeHtml(s){
+ return String(s??"").replace(/[&<>"']/g,c=>({
+  "&":"&amp;",
+  "<":"&lt;",
+  ">":"&gt;",
+  '"':"&quot;",
+  "'":"&#039;"
+ }[c]));
+}
+
 window.retryPublish=async function(){
  if(!confirm("Pending upload retry করবেন?"))return;
- try{await api("/api/retry",{method:"POST"});alert("Retry request পাঠানো হয়েছে।");refreshStats();}
- catch(e){alert(e.message);}
+
+ try{
+  await api("/api/retry",{method:"POST"});
+  alert("Retry request পাঠানো হয়েছে।");
+  refreshStats();
+
+ }catch(e){
+  alert(e.message);
+ }
 };
+
 window.openSettings=async function(){
- closePanels();$("settingsPanel").classList.add("active");
+ closePanels();
+
+ $("settingsPanel").classList.add("active");
+ $("settingsMessage").className="message";
+
  try{
   const d=await api("/api/settings");
+
   $("channelId").value=d.private_channel_id||"";
   $("categories").value=(d.categories||[]).join("\n");
- }catch(e){message("settingsMessage",e.message,"error");}
+
+ }catch(e){
+  message("settingsMessage",e.message,"error");
+ }
 };
+
 window.saveSettings=async function(){
- const categories=$("categories").value.split("\n").map(x=>x.trim()).filter(Boolean);
- if(!categories.length)return message("settingsMessage","কমপক্ষে একটি Category দিন।","error");
+ const categories=$("categories").value
+  .split("\n")
+  .map(x=>x.trim())
+  .filter(Boolean);
+
+ if(!categories.length){
+  message("settingsMessage","কমপক্ষে একটি Category দিন।","error");
+  return;
+ }
+
  try{
-  const d=await api("/api/settings",{method:"PATCH",body:{categories}});
+  const d=await api("/api/settings",{
+   method:"PATCH",
+   body:{categories}
+  });
+
   $("categories").value=(d.categories||categories).join("\n");
+
   message("settingsMessage","✅ Settings Save হয়েছে।","success");
+
   loadCategories();
- }catch(e){message("settingsMessage",e.message,"error");}
+
+ }catch(e){
+  message("settingsMessage",e.message,"error");
+ }
 };
+
 async function loadCategories(){
  try{
   const d=await api("/api/settings");
   const list=d.categories||[];
-  $("category").innerHTML='<option value="">Category নির্বাচন করুন</option>'+list.map(x=>`<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`).join("");
- }catch(e){$("category").innerHTML='<option value="">Category load failed</option>';}
+
+  $("category").innerHTML=
+   '<option value="">Category নির্বাচন করুন</option>'+
+   list.map(x=>
+    `<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`
+   ).join("");
+
+ }catch(e){
+  $("category").innerHTML=
+   '<option value="">Category load failed</option>';
+ }
 }
+
 if(!initData){
  $("status").textContent="OPEN IN TELEGRAM";
  $("bot").textContent="WAITING";
  $("latest").textContent="Telegram App";
 }else{
- refreshStats();loadCategories();
+ refreshStats();
+ loadCategories();
 }
+
 })();
 </script>
 </body>
 </html>
+```
