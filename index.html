@@ -1005,22 +1005,35 @@ html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-
 <meta name="twitter:card" content="summary_large_image">
 
 <style id="vvh-shared-with-you-style">
-#sharedVideoPage{padding:22px 14px 105px;min-height:calc(100vh - 120px);}
-.vvh-shared-card{width:min(100%,520px);margin:12px auto;padding:18px;border:1px solid #59316f;border-radius:22px;background:linear-gradient(155deg,#171020,#090811 72%);box-shadow:0 18px 50px #0008;color:#fff;}
-.vvh-shared-label{text-align:center;font-size:14px;letter-spacing:3px;font-weight:950;color:#f4d7ff;margin:3px 0 17px;}
-.vvh-shared-cover{position:relative;overflow:hidden;width:100%;aspect-ratio:16/10;border-radius:16px;background:#17111f;border:1px solid #63377b;}
+#sharedVideoPage{padding:10px 12px 90px;min-height:calc(100vh - 100px);background:#050505;color:#fff;}
+#sharedVideoPage:before{content:"🔔  ভিডিওটি দেখার জন্য নিচে Watch / Download বাটনে ক্লিক করুন";display:flex;align-items:center;min-height:66px;margin:2px auto 12px;padding:10px 14px;border:1px solid #a87500;border-radius:22px;background:linear-gradient(110deg,#241600,#100d06);color:#fff;font-size:14px;font-weight:850;line-height:1.45;max-width:520px;}
+.vvh-shared-card{width:min(100%,520px);margin:0 auto;padding:0 0 14px;border:2px solid #eaa900;border-radius:34px;background:linear-gradient(180deg,#171717,#080808);box-shadow:0 12px 34px #000b;color:#fff;overflow:hidden;}
+.vvh-shared-label{position:relative;display:flex;align-items:center;justify-content:center;min-height:58px;margin:0;padding:0 52px;background:linear-gradient(100deg,#ffae00,#ffc21a);color:#080808;text-align:center;font-size:15px;letter-spacing:4px;font-weight:1000;}
+.vvh-shared-label:before{content:"•";font-size:0;width:17px;height:17px;margin-right:15px;background:currentColor;clip-path:polygon(50% 0,62% 35%,100% 50%,62% 65%,50% 100%,38% 65%,0 50%,38% 35%);}
+.vvh-shared-close{position:absolute;right:13px;top:50%;transform:translateY(-50%);border:0;background:transparent;color:#fff;font-size:34px;line-height:1;cursor:pointer;}
+.vvh-shared-cover{position:relative;overflow:hidden;width:100%;aspect-ratio:1.48/1;border-radius:0;background:#17111f;border:0;border-bottom:1px solid #555;}
 .vvh-shared-cover img{display:block;width:100%;height:100%;object-fit:cover;}
-.vvh-shared-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:#8a28e8e8;color:#fff;font-size:27px;padding-left:4px;box-shadow:0 8px 28px #0008;}
-.vvh-shared-info{text-align:center;padding:17px 3px 2px;}
-.vvh-shared-kicker{font-size:11px;letter-spacing:2px;color:#d5a5ff;font-weight:900;}
-.vvh-shared-info h1{font-size:21px;line-height:1.35;margin:10px 0 7px;color:#fff;overflow-wrap:anywhere;}
-.vvh-shared-info p{font-size:13px;line-height:1.6;color:#c9c0d2;margin:0 0 17px;}
-.vvh-shared-watch,.vvh-shared-home{display:block;width:100%;min-height:52px;border:0;border-radius:13px;font-weight:950;cursor:pointer;}
-.vvh-shared-watch{background:linear-gradient(90deg,#7628ff,#ed2e9b);color:#fff;font-size:16px;box-shadow:0 9px 25px #b42cff30;}
+.vvh-shared-play{display:none;}
+.vvh-shared-info{text-align:left;padding:13px 16px 0;}
+.vvh-shared-kicker,.vvh-shared-info p{display:none;}
+.vvh-shared-info h1{font-size:21px;line-height:1.35;margin:4px 0 17px;color:#fff;overflow-wrap:anywhere;font-weight:950;text-align:left;}
+.vvh-shared-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;margin:12px 0 18px;border:1px solid #454545;border-radius:20px;overflow:hidden;background:#151515;}
+.vvh-shared-stats button{min-width:0;min-height:76px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:8px 4px;border:0;border-right:1px solid #454545;border-radius:0;background:#151515;color:#fff;font-weight:900;cursor:pointer;}
+.vvh-shared-stats button:last-child{border-right:0;}
+.vvh-shared-stats button.like{color:#ff3157;background:#151515;}
+.vvh-shared-stats button.views{color:#10a9ed;background:#151515;}
+.vvh-shared-stats button.share{color:#00d96b;background:#151515;}
+.vvh-shared-stats .stat-icon{width:25px;height:25px;fill:currentColor;stroke:none;}
+.vvh-shared-stats .stat-count{color:#fff;font-size:16px;line-height:1.15;font-weight:950;}
+.vvh-shared-stats small{color:#fff;font-size:13px;font-weight:850;}
+.vvh-shared-watch,.vvh-shared-home{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;min-height:58px;border:0;border-radius:18px;font-weight:950;cursor:pointer;}
+.vvh-shared-watch{background:linear-gradient(95deg,#7b28f5,#ec2a9b);color:#fff;font-size:17px;box-shadow:0 8px 22px #b42cff30;}
+.vvh-shared-watch:before{content:"▶";font-size:17px;}
 .vvh-shared-watch:disabled{opacity:.65;cursor:wait;}
-.vvh-shared-home{margin-top:11px;background:#211a2b;border:1px solid #4b3b5c;color:#fff;font-size:14px;}
+.vvh-shared-home{margin-top:13px;background:#151515;border:2px solid #9c27ff;color:#fff;font-size:16px;}
 .vvh-video-home-button{display:block;width:100%;margin:16px 0 8px;min-height:48px;border:1px solid #5b496d;border-radius:12px;background:#211a2b;color:#fff;font-size:14px;font-weight:900;}
-@media(max-width:380px){.vvh-shared-card{padding:13px}.vvh-shared-label{font-size:12px}.vvh-shared-info h1{font-size:18px}}
+#vvhSharedDuration{position:absolute;right:10px;bottom:10px;z-index:2;padding:5px 10px;border-radius:18px;background:#000d;color:#fff;font-weight:900;}
+@media(max-width:380px){#sharedVideoPage{padding-left:9px;padding-right:9px}.vvh-shared-label{min-height:52px;font-size:13px;letter-spacing:3px}.vvh-shared-info{padding-left:13px;padding-right:13px}.vvh-shared-info h1{font-size:19px}.vvh-shared-stats button{min-height:68px}}
 </style>
 
 </head>
@@ -1080,7 +1093,7 @@ html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-
 
 <main id="sharedVideoPage" class="page" aria-label="Shared video">
   <section class="vvh-shared-card" id="vvhSharedCard">
-    <div class="vvh-shared-label">SHARED WITH YOU</div>
+    <div class="vvh-shared-label">SHARED WITH YOU<button class="vvh-shared-close" type="button" aria-label="বন্ধ করুন" onclick="showHome()">×</button></div>
     <div class="vvh-shared-cover" id="vvhSharedCover">
       <img id="vvhSharedImage" alt="Shared video thumbnail" src="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/Viral%20Link%20Reaction%20Thumbnail.png">
       <span class="vvh-shared-play">▶</span>
@@ -1089,6 +1102,7 @@ html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-
       <div class="vvh-shared-kicker">🔥 VIRAL VIDEO HUB</div>
       <h1 id="vvhSharedTitle">একটি ভিডিও আপনার সঙ্গে শেয়ার করা হয়েছে</h1>
       <p id="vvhSharedDescription">ভিডিওটি দেখতে নিচের বাটনে চাপ দিন।</p>
+      <div id="vvhSharedStats" class="details-meta vvh-shared-stats" aria-label="ভিডিওর Like, Views ও Share"></div>
       <button id="vvhSharedWatchButton" class="vvh-shared-watch" type="button" disabled>WATCH / DOWNLOAD NOW</button>
       <button class="vvh-shared-home" type="button" onclick="showHome()">🏠 হোমে ফিরে যান</button>
     </div>
@@ -1539,11 +1553,13 @@ async function showSharedVideoPage(videoId){
   const title=document.getElementById("vvhSharedTitle");
   const desc=document.getElementById("vvhSharedDescription");
   const img=document.getElementById("vvhSharedImage");
+  const stats=document.getElementById("vvhSharedStats");
   const btn=document.getElementById("vvhSharedWatchButton");
   if(!page||!btn)return;
   page.classList.add("active");
   title.textContent="ভিডিও লোড হচ্ছে...";
   desc.textContent="একটু অপেক্ষা করুন।";
+  if(stats) stats.innerHTML="";
   btn.disabled=true;
   btn.textContent="LOADING VIDEO...";
   window.scrollTo(0,0);
@@ -1551,13 +1567,38 @@ async function showSharedVideoPage(videoId){
     const video=await getPublicVideoById(id);
     if(!video){title.textContent="ভিডিওটি পাওয়া যায়নি";desc.textContent="ভিডিওটি সরানো হয়েছে অথবা লিংকটি মেয়াদোত্তীর্ণ।";btn.textContent="VIDEO NOT AVAILABLE";return;}
     title.textContent=video.title||"Viral Video Hub";
-    desc.textContent=[video.category||"ভিডিও",video.duration||""].filter(Boolean).join(" • ")||"ভিডিওটি দেখতে নিচের বাটনে চাপ দিন।";
-    // Use the same approved preview image for every shared Mini App link.
-    img.src="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/Viral%20Link%20Reaction%20Thumbnail.png";
-    img.onerror=()=>{img.onerror=null;img.alt="VIRAL VIDEO HUB";};
+    desc.textContent=String(video.description||[video.category||"ভিডিও",video.duration||""].filter(Boolean).join(" • ")||"ভিডিওটি দেখতে নিচের বাটনে চাপ দিন。");
+    const fallbackThumb="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/Viral%20Link%20Reaction%20Thumbnail.png";
+    img.src=video.thumbnail_url||video.thumbnail||fallbackThumb;
+    img.alt=(video.title||"VIRAL VIDEO HUB")+" thumbnail";
+    img.onerror=()=>{img.onerror=null;img.src=fallbackThumb;};
+    const cover=document.getElementById("vvhSharedCover");
+    let duration=document.getElementById("vvhSharedDuration");
+    if(!duration&&cover){duration=document.createElement("span");duration.id="vvhSharedDuration";duration.className="thumbnail-duration";cover.appendChild(duration);}
+    if(duration){duration.textContent=video.duration||"";duration.hidden=!video.duration;}
+    if(stats){
+      stats.innerHTML=`
+        <button type="button" class="views" aria-label="Video views">
+          <svg class="stat-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4.5C6.5 4.5 2.2 9.2 1 12c1.2 2.8 5.5 7.5 11 7.5s9.8-4.7 11-7.5c-1.2-2.8-5.5-7.5-11-7.5Zm0 12.2a4.7 4.7 0 1 1 0-9.4 4.7 4.7 0 0 1 0 9.4Zm0-2.3a2.4 2.4 0 1 0 0-4.8 2.4 2.4 0 0 0 0 4.8Z"/></svg>
+          <span class="stat-count" id="detailsViewCount">${Number(video.views||0).toLocaleString()}</span><small>ভিউ</small>
+        </button>
+        <button type="button" id="likeBtn_${Number(id)}" class="like" aria-pressed="false" onclick="toggleLike(${Number(id)})" aria-label="Like video">
+          <svg class="stat-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 4.8a5.5 5.5 0 0 0-7.8 0L12 5.9l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1.1L12 21l7.8-7.3 1.1-1.1a5.5 5.5 0 0 0-.1-7.8Z"/></svg>
+          <span class="stat-count" id="likeCount_${Number(id)}">${Number(video.likes||0).toLocaleString()}</span><small>লাইক</small>
+        </button>
+        <button type="button" class="share" id="shareBtn_${Number(id)}" aria-label="Share video">
+          <svg class="stat-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.7 10.7 15.3 6.3M8.7 13.3l6.6 4.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
+          <span class="stat-count" id="detailsShareCount">${Number(video.shares||0).toLocaleString()}</span><small>শেয়ার</small>
+        </button>
+      `
+      const sharedShareBtn=document.getElementById("shareBtn_"+id);
+      if(sharedShareBtn) sharedShareBtn.addEventListener("click",()=>shareVideo(Number(id),video.title||"VIRAL VIDEO LINK"));
+    }
     btn.disabled=false;
     btn.textContent="WATCH / DOWNLOAD NOW";
     btn.onclick=()=>{page.classList.remove("active");openVideo(Number(id));};
+    registerVideoView(id);
+    refreshEngagementState(id);
   }catch(error){
     console.error("Shared video page error:",error);
     title.textContent="ভিডিও লোড করা যায়নি";
@@ -1568,16 +1609,42 @@ async function showSharedVideoPage(videoId){
   }
 }
 
-function handleMiniAppStartParam(){
+function getVVHStartParam(){
   let startParam="";
-  try{startParam=String(window.Telegram?.WebApp?.initDataUnsafe?.start_param||"");}catch(e){}
+  try{
+    const tg=window.Telegram?.WebApp;
+    if(tg && typeof tg.ready==="function") tg.ready();
+    startParam=String(tg?.initDataUnsafe?.start_param||"").trim();
+  }catch(e){console.warn("Telegram start parameter read failed:",e);}
   if(!startParam){
-    try{startParam=new URLSearchParams(window.location.search).get("tgWebAppStartParam")||"";}catch(e){}
+    try{
+      const params=new URLSearchParams(window.location.search);
+      startParam=String(params.get("tgWebAppStartParam")||params.get("startapp")||"").trim();
+    }catch(e){}
   }
+  return startParam;
+}
+
+function handleMiniAppStartParam(){
+  const startParam=getVVHStartParam();
+  if(!startParam) return false;
+
+  if(startParam.startsWith("ref_")){
+    const referralCode=startParam.slice(4).trim();
+    if(referralCode && referralCode.length<=100){
+      try{localStorage.setItem("vvh_pending_referral_code",referralCode);}catch(e){console.warn("Could not save pending referral:",e);}
+      // The referral is claimed after Telegram/Supabase login is ready.
+      return true;
+    }
+  }
+
   if(startParam.startsWith("video_")){
-    const videoId=startParam.slice(6);
-    showSharedVideoPage(videoId);
-    return true;
+    const videoId=startParam.slice(6).trim();
+    if(/^\d+$/.test(videoId)){
+      showSharedVideoPage(videoId);
+      return true;
+    }
+    console.warn("Invalid shared video start parameter:",startParam);
   }
   return false;
 }
@@ -2802,10 +2869,12 @@ supabaseClient.auth.onAuthStateChange(() => {
   }, 0);
 });
 
-loginWithTelegramMiniApp().then((loggedIn) => {
+loginWithTelegramMiniApp().then(async (loggedIn) => {
   if (loggedIn) {
     updateAuthUI();
     loadReferral().catch(console.error);
+    // Apply a referral start parameter captured before Telegram login completed.
+    await claimPendingReferral().catch(console.error);
   }
 });
 
@@ -2814,10 +2883,14 @@ updateAuthUI();
 loadReferral().catch(()=>{});
 updateProfileAdCount();
 window.vvhConfigReady = window.vvhConfigReady || loadVVHPublicConfig().catch((error)=>{console.warn('Public settings load failed:',error);return null;});
+// Route shared-video launches immediately; do not wait for public settings/config network calls.
+const vvhHasSharedLaunch=handleMiniAppStartParam();
+// If the user already has a session, claim a referral immediately as well.
+supabaseClient.auth.getUser().then(({data:{user}})=>{
+  if(user) claimPendingReferral().catch(console.error);
+}).catch(console.error);
 window.vvhConfigReady.finally(()=>{
   loadVideos().catch(()=>{});
-  // Open a shared-video landing page only when this Mini App was launched with video_<id>.
-  handleMiniAppStartParam();
 });
 
 </script>
