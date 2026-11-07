@@ -29,18 +29,19 @@
 <img class="thumb" src="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/Viral%20Link%20Reaction%20Thumbnail.png" alt="VIRAL VIDEO HUB">
 <div class="title">SHARED WITH YOU</div>
 <p class="desc">আপনার সঙ্গে একটি ভিডিও শেয়ার করা হয়েছে। Telegram Mini App-এ খুলতে নিচের বাটনে চাপ দিন।</p>
-<a class="btn" id="openApp" href="https://t.me/ViralVideoHubBDBot/ViralVideoHubBD">OPEN IN TELEGRAM</a>
+<a class="btn" id="openApp" href="https://t.me/ViralVideoHubBDBot">OPEN IN TELEGRAM</a>
 </main>
 <script>
 (function(){
   const p=new URLSearchParams(location.search);
-  let target="https://t.me/ViralVideoHubBDBot/ViralVideoHubBD";
+  let target="https://t.me/ViralVideoHubBDBot";
   if(p.has("video")) target += "?startapp="+encodeURIComponent("video_"+p.get("video"));
   else if(p.has("ref")) target += "?startapp="+encodeURIComponent("ref_"+p.get("ref"));
   const a=document.getElementById("openApp"); a.href=target;
-  // Social preview crawlers read the static Open Graph tags above. Human visitors
-  // are forwarded into the Telegram Mini App after the preview page has loaded.
-  setTimeout(function(){ location.replace(target); },650);
+  // Keep Open Graph tags for Telegram's link-preview crawler. When a person
+  // opens the preview URL, forward immediately to the Main Mini App deep link.
+  // The preview page itself is not intended to be viewed.
+  location.replace(target);
 })();
 </script>
 </body>
