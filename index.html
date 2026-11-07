@@ -1296,20 +1296,30 @@ function copyReferral(){const x=window.currentReferralUrl || document.getElement
 
 async function shareReferral() {
   const el = document.getElementById("profileReferralLink");
-  const shareUrl = window.currentReferralUrl || (el ? el.innerText.trim() : "");
-  if (!shareUrl || !/t\.me\/ViralVideoHubBDBot\/ViralVideoHubBD\?startapp=ref_/.test(shareUrl)) {
-    alert("রেফারেল লিংক পাওয়া যায়নি!");
-    return;
-  }
+  const rawUrl = window.currentReferralUrl || (el ? el.innerText.trim() : "");
+  let referralCode = "";
   try {
-    if (navigator.share) {
-      await navigator.share({title:"VIRAL VIDEO HUB",text:"আমার রেফারেল লিংক দিয়ে Mini App-এ যোগ দিন:",url:shareUrl});
+    const parsed = new URL(rawUrl);
+    referralCode = parsed.searchParams.get("ref") || (parsed.searchParams.get("startapp") || "").replace(/^ref_/, "");
+  } catch (_) {}
+  if (!referralCode) { alert("রেফারেল লিংক পাওয়া যায়নি!"); return; }
+  const shareUrl = "https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/share.html?ref=" + encodeURIComponent(referralCode);
+  const shareText = "আমার VIRAL VIDEO HUB রেফারেল লিংক দিয়ে Mini App-এ যোগ দিন 🔥";
+  const telegramShareUrl = "https://t.me/share/url?url=" + encodeURIComponent(shareUrl) + "&text=" + encodeURIComponent(shareText);
+  try {
+    if (window.Telegram?.WebApp?.openTelegramLink) {
+      window.Telegram.WebApp.openTelegramLink(telegramShareUrl);
+    } else if (navigator.share) {
+      await navigator.share({title:"VIRAL VIDEO HUB", text:shareText, url:shareUrl});
     } else {
       await navigator.clipboard.writeText(shareUrl);
-      alert("শেয়ার লিংক কপি হয়েছে!");
+      alert("শেয়ার Preview লিংক কপি হয়েছে!");
     }
   } catch (err) {
-    if (err.name !== "AbortError") window.prompt("লিংকটি কপি করুন:", shareUrl);
+    if (err.name !== "AbortError") {
+      try { await navigator.clipboard.writeText(shareUrl); alert("শেয়ার Preview লিংক কপি হয়েছে!"); }
+      catch (_) { window.prompt("লিংকটি কপি করুন:", shareUrl); }
+    }
   }
 }
 
@@ -1776,66 +1786,35 @@ supabaseClient.rpc("register_video_view", { p_video_id: Number(videoId) })
 }
 
 async function shareVideo(videoId,title){
-  const shareUrl = "https://t.me/ViralVideoHubBDBot/ViralVideoHubBD?startapp=video_" + encodeURIComponent(String(videoId));
+  const shareUrl = "https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/share.html?video=" + encodeURIComponent(String(videoId));
+  const shareText = "এই ভিডিওটি দেখুন 🔥 " + (title || "VIRAL VIDEO LINK");
+  const telegramShareUrl = "https://t.me/share/url?url=" + encodeURIComponent(shareUrl) + "&text=" + encodeURIComponent(shareText);
   let shared = false;
-
-  // Desktop: copy first for reliable behavior. Mobile: try native share first.
   try{
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    if(isMobile && typeof navigator.share === "function") {
-      await navigator.share({
-        title: title || "VIRAL VIDEO LINK",
-        text: "এই ভিডিওটি দেখুন 🔥",
-        url: shareUrl
-      });
+    if(window.Telegram?.WebApp?.openTelegramLink){
+      window.Telegram.WebApp.openTelegramLink(telegramShareUrl);
+      shared = true;
+    } else if(navigator.share){
+      await navigator.share({title:title||"VIRAL VIDEO LINK",text:shareText,url:shareUrl});
       shared = true;
     } else {
-      if(navigator.clipboard && window.isSecureContext){
-        await navigator.clipboard.writeText(shareUrl);
-      } else {
-        const ta = document.createElement("textarea");
-        ta.value = shareUrl;
-        ta.style.position = "fixed";
-        ta.style.left = "-9999px";
-        document.body.appendChild(ta);
-        ta.focus();
-        ta.select();
-        const ok = document.execCommand("copy");
-        ta.remove();
-        if(!ok) throw new Error("Copy command failed");
-      }
+      await navigator.clipboard.writeText(shareUrl);
       shared = true;
-      alert("✅ ভিডিও লিংক কপি হয়েছে");
+      alert("✅ Preview ছবিসহ ভিডিও লিংক কপি হয়েছে");
     }
   }catch(err){
-    // Native share can fail/cancel; always try clipboard fallback.
+    if(err.name === "AbortError") return;
     try{
-      if(navigator.clipboard && window.isSecureContext){
-        await navigator.clipboard.writeText(shareUrl);
-      } else {
-        const ta=document.createElement("textarea");
-        ta.value=shareUrl;
-        ta.style.position="fixed";
-        ta.style.left="-9999px";
-        document.body.appendChild(ta);
-        ta.focus();
-        ta.select();
-        const ok=document.execCommand("copy");
-        ta.remove();
-        if(!ok) throw new Error("Fallback copy failed");
-      }
+      await navigator.clipboard.writeText(shareUrl);
       shared = true;
-      alert("✅ ভিডিও লিংক কপি হয়েছে");
+      alert("✅ Preview ছবিসহ ভিডিও লিংক কপি হয়েছে");
     }catch(copyErr){
-      console.error("Share/copy failed:", copyErr);
-      alert("❌ ভিডিও লিংক কপি করা যায়নি। আবার চেষ্টা করুন।");
+      console.error("Share/copy failed:",copyErr);
+      alert("❌ ভিডিও লিংক শেয়ার করা যায়নি। আবার চেষ্টা করুন।");
       return;
     }
   }
-
   if(!shared) return;
-
   const user = await currentUser();
   if(!user){
     openAuth();
@@ -1843,17 +1822,11 @@ async function shareVideo(videoId,title){
     if(m) m.innerText="↗ ভিডিও Share হয়েছে। Share count সংরক্ষণ করতে Login করুন।";
     return;
   }
-
   try{
     const {data,error}=await supabaseClient.rpc("register_video_share",{p_video_id:String(videoId)});
-    if(error){
-      console.warn("register_video_share failed:",error.message);
-      return;
-    }
+    if(error){console.warn("register_video_share failed:",error.message);return;}
     updateVideoCounts(videoId,data);
-  }catch(err){
-    console.warn("registerVideoShare exception:",err);
-  }
+  }catch(err){console.warn("registerVideoShare exception:",err);}
 }
 
 
@@ -2479,7 +2452,7 @@ if (error || !data.session) {
 
     if (error || !data) return;
 
-    const referralUrl = "https://t.me/ViralVideoHubBDBot/ViralVideoHubBD?startapp=ref_" + data.referral_code;
+    const referralUrl = "https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/share.html?ref=" + encodeURIComponent(data.referral_code);
 
     const pr=document.getElementById("profileReferralCode");
     if(pr) pr.innerText=data.referral_code || "Not available";
