@@ -1003,6 +1003,26 @@ html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-
 <meta property="og:url" content="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
+
+<style id="vvh-shared-with-you-style">
+#sharedVideoPage{padding:22px 14px 105px;min-height:calc(100vh - 120px);}
+.vvh-shared-card{width:min(100%,520px);margin:12px auto;padding:18px;border:1px solid #59316f;border-radius:22px;background:linear-gradient(155deg,#171020,#090811 72%);box-shadow:0 18px 50px #0008;color:#fff;}
+.vvh-shared-label{text-align:center;font-size:14px;letter-spacing:3px;font-weight:950;color:#f4d7ff;margin:3px 0 17px;}
+.vvh-shared-cover{position:relative;overflow:hidden;width:100%;aspect-ratio:16/10;border-radius:16px;background:#17111f;border:1px solid #63377b;}
+.vvh-shared-cover img{display:block;width:100%;height:100%;object-fit:cover;}
+.vvh-shared-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);display:grid;place-items:center;width:64px;height:64px;border-radius:50%;background:#8a28e8e8;color:#fff;font-size:27px;padding-left:4px;box-shadow:0 8px 28px #0008;}
+.vvh-shared-info{text-align:center;padding:17px 3px 2px;}
+.vvh-shared-kicker{font-size:11px;letter-spacing:2px;color:#d5a5ff;font-weight:900;}
+.vvh-shared-info h1{font-size:21px;line-height:1.35;margin:10px 0 7px;color:#fff;overflow-wrap:anywhere;}
+.vvh-shared-info p{font-size:13px;line-height:1.6;color:#c9c0d2;margin:0 0 17px;}
+.vvh-shared-watch,.vvh-shared-home{display:block;width:100%;min-height:52px;border:0;border-radius:13px;font-weight:950;cursor:pointer;}
+.vvh-shared-watch{background:linear-gradient(90deg,#7628ff,#ed2e9b);color:#fff;font-size:16px;box-shadow:0 9px 25px #b42cff30;}
+.vvh-shared-watch:disabled{opacity:.65;cursor:wait;}
+.vvh-shared-home{margin-top:11px;background:#211a2b;border:1px solid #4b3b5c;color:#fff;font-size:14px;}
+.vvh-video-home-button{display:block;width:100%;margin:16px 0 8px;min-height:48px;border:1px solid #5b496d;border-radius:12px;background:#211a2b;color:#fff;font-size:14px;font-weight:900;}
+@media(max-width:380px){.vvh-shared-card{padding:13px}.vvh-shared-label{font-size:12px}.vvh-shared-info h1{font-size:18px}}
+</style>
+
 </head>
 <body class="intro-lock">
 <div class="startup-splash" id="startupSplash" aria-label="Loading">
@@ -1056,6 +1076,23 @@ html,body{background:var(--vvh-ui-page-bg,#030304)!important;color:var(--vvh-ui-
   <div class="vvh-shop-copy"><b id="vvhShopPromoTitle">পয়েন্ট প্যাকেজ দেখুন</b><small id="vvhShopPromoText">আপনার পছন্দের প্যাকেজ বেছে নিয়ে ভিডিও আনলক করুন।</small></div>
   <button type="button" onclick="openPurchasePage()">প্যাকেজ দেখুন ↗</button>
 </section>
+</main>
+
+<main id="sharedVideoPage" class="page" aria-label="Shared video">
+  <section class="vvh-shared-card" id="vvhSharedCard">
+    <div class="vvh-shared-label">SHARED WITH YOU</div>
+    <div class="vvh-shared-cover" id="vvhSharedCover">
+      <img id="vvhSharedImage" alt="Shared video thumbnail" src="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/Viral%20Link%20Reaction%20Thumbnail.png">
+      <span class="vvh-shared-play">▶</span>
+    </div>
+    <div class="vvh-shared-info">
+      <div class="vvh-shared-kicker">🔥 VIRAL VIDEO HUB</div>
+      <h1 id="vvhSharedTitle">একটি ভিডিও আপনার সঙ্গে শেয়ার করা হয়েছে</h1>
+      <p id="vvhSharedDescription">ভিডিওটি দেখতে নিচের বাটনে চাপ দিন।</p>
+      <button id="vvhSharedWatchButton" class="vvh-shared-watch" type="button" disabled>WATCH / DOWNLOAD NOW</button>
+      <button class="vvh-shared-home" type="button" onclick="showHome()">🏠 হোমে ফিরে যান</button>
+    </div>
+  </section>
 </main>
 
 <main id="profilePage" class="page">
@@ -1241,8 +1278,8 @@ async function loginWithGoogle(){
 }
 
 
-function hideAllMainPages(){["homePage","profilePage","earnPage","purchasePage"].forEach(id=>document.getElementById(id)?.classList.remove("active"));document.querySelector(".app")?.classList.remove("purchase-open")}
-function showHome(){hideAllMainPages();document.getElementById("homePage").classList.add("active");document.getElementById("homeTab").classList.add("active");document.getElementById("profileTab").classList.remove("active");window.scrollTo(0,0)}
+function hideAllMainPages(){["homePage","sharedVideoPage","profilePage","earnPage","purchasePage"].forEach(id=>document.getElementById(id)?.classList.remove("active"));document.querySelector(".app")?.classList.remove("purchase-open")}
+function showHome(){document.getElementById("videoDetails")?.remove();hideAllMainPages();document.getElementById("homePage").classList.add("active");document.getElementById("homeTab").classList.add("active");document.getElementById("profileTab").classList.remove("active");window.scrollTo(0,0)}
 function showProfile(){hideAllMainPages();document.getElementById("profilePage").classList.add("active");document.getElementById("profileTab").classList.add("active");document.getElementById("homeTab").classList.remove("active");loadReferral();updateProfileAdCount();loadUserPoints();window.scrollTo(0,0)}
 function showEarnPage(){hideAllMainPages();document.getElementById("earnPage")?.classList.add("active");document.getElementById("profileTab")?.classList.add("active");document.getElementById("homeTab")?.classList.remove("active");loadUserPoints();updateProfileAdCount();window.scrollTo(0,0)}
 function closeEarnPage(){showProfile()}
@@ -1259,40 +1296,20 @@ function copyReferral(){const x=window.currentReferralUrl || document.getElement
 
 async function shareReferral() {
   const el = document.getElementById("profileReferralLink");
-  const originalUrl = window.currentReferralUrl ||
-    (el ? el.innerText.trim() : "");
-
-  if (!originalUrl) {
+  const shareUrl = window.currentReferralUrl || (el ? el.innerText.trim() : "");
+  if (!shareUrl || !/t\.me\/ViralVideoHubBDBot\/ViralVideoHubBD\?startapp=ref_/.test(shareUrl)) {
     alert("রেফারেল লিংক পাওয়া যায়নি!");
     return;
   }
-
-  const match = originalUrl.match(/[?&]startapp=ref_([^&]+)/);
-  if (!match) {
-    alert("রেফারেল কোড পাওয়া যায়নি!");
-    return;
-  }
-
-  const code = decodeURIComponent(match[1]);
-  const shareUrl =
-    "https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/share.html?ref=" +
-    encodeURIComponent(code);
-
   try {
     if (navigator.share) {
-      await navigator.share({
-        title: "VIRAL VIDEO LINK",
-        text: "আমার রেফারেল লিংক দিয়ে যোগ দিন:",
-        url: shareUrl
-      });
+      await navigator.share({title:"VIRAL VIDEO HUB",text:"আমার রেফারেল লিংক দিয়ে Mini App-এ যোগ দিন:",url:shareUrl});
     } else {
       await navigator.clipboard.writeText(shareUrl);
       alert("শেয়ার লিংক কপি হয়েছে!");
     }
   } catch (err) {
-    if (err.name !== "AbortError") {
-      window.prompt("লিংকটি কপি করুন:", shareUrl);
-    }
+    if (err.name !== "AbortError") window.prompt("লিংকটি কপি করুন:", shareUrl);
   }
 }
 
@@ -1503,6 +1520,58 @@ async function getCurrentPointsBalance(){
   }catch(e){ return 0; }
 }
 
+async function showSharedVideoPage(videoId){
+  const id=String(videoId||"").trim();
+  if(!/^\d+$/.test(id)){alert("ভিডিও লিংকটি সঠিক নয়।");showHome();return;}
+  document.getElementById("videoDetails")?.remove();
+  hideAllMainPages();
+  const page=document.getElementById("sharedVideoPage");
+  const title=document.getElementById("vvhSharedTitle");
+  const desc=document.getElementById("vvhSharedDescription");
+  const img=document.getElementById("vvhSharedImage");
+  const btn=document.getElementById("vvhSharedWatchButton");
+  if(!page||!btn)return;
+  page.classList.add("active");
+  title.textContent="ভিডিও লোড হচ্ছে...";
+  desc.textContent="একটু অপেক্ষা করুন।";
+  btn.disabled=true;
+  btn.textContent="LOADING VIDEO...";
+  window.scrollTo(0,0);
+  try{
+    const video=await getPublicVideoById(id);
+    if(!video){title.textContent="ভিডিওটি পাওয়া যায়নি";desc.textContent="ভিডিওটি সরানো হয়েছে অথবা লিংকটি মেয়াদোত্তীর্ণ।";btn.textContent="VIDEO NOT AVAILABLE";return;}
+    title.textContent=video.title||"Viral Video Hub";
+    desc.textContent=[video.category||"ভিডিও",video.duration||""].filter(Boolean).join(" • ")||"ভিডিওটি দেখতে নিচের বাটনে চাপ দিন।";
+    // Use the same approved preview image for every shared Mini App link.
+    img.src="https://bd01327115106-afk.github.io/VIRAL-VIDEO-HUB/Viral%20Link%20Reaction%20Thumbnail.png";
+    img.onerror=()=>{img.onerror=null;img.alt="VIRAL VIDEO HUB";};
+    btn.disabled=false;
+    btn.textContent="WATCH / DOWNLOAD NOW";
+    btn.onclick=()=>{page.classList.remove("active");openVideo(Number(id));};
+  }catch(error){
+    console.error("Shared video page error:",error);
+    title.textContent="ভিডিও লোড করা যায়নি";
+    desc.textContent="ইন্টারনেট সংযোগ পরীক্ষা করে আবার চেষ্টা করুন।";
+    btn.textContent="TRY AGAIN";
+    btn.disabled=false;
+    btn.onclick=()=>showSharedVideoPage(id);
+  }
+}
+
+function handleMiniAppStartParam(){
+  let startParam="";
+  try{startParam=String(window.Telegram?.WebApp?.initDataUnsafe?.start_param||"");}catch(e){}
+  if(!startParam){
+    try{startParam=new URLSearchParams(window.location.search).get("tgWebAppStartParam")||"";}catch(e){}
+  }
+  if(startParam.startsWith("video_")){
+    const videoId=startParam.slice(6);
+    showSharedVideoPage(videoId);
+    return true;
+  }
+  return false;
+}
+
 async function getPublicVideoById(videoId){
   const {data,error}=await supabaseClient.rpc('vvh_public_video_catalog',{
     p_video_id:Number(videoId),p_category:null,p_search:null
@@ -1604,6 +1673,7 @@ async function openVideo(videoId){
         <div class="unlock-ornate-line">✦　━━━━━━━━━━━━━━━━　✦</div>
       </div>
       <button class="more-video-btn" onclick="vvhOpenMoreVideos()"><span class="more-video-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="12" height="12" rx="2"/><path d="m15 10 6-3v10l-6-3z"/></svg></span><span>আরো ভিডিও দেখুন</span></button>
+      <button class="vvh-video-home-button" type="button" onclick="showHome()">🏠 হোমে ফিরে যান</button>
     </div>`;
   // Keep the video-unlock page brand in sync with the saved live website name.
   const savedBrand = String(
@@ -1706,7 +1776,7 @@ supabaseClient.rpc("register_video_view", { p_video_id: Number(videoId) })
 }
 
 async function shareVideo(videoId,title){
-  const shareUrl = location.origin + location.pathname + "#video-" + encodeURIComponent(videoId);
+  const shareUrl = "https://t.me/ViralVideoHubBDBot/ViralVideoHubBD?startapp=video_" + encodeURIComponent(String(videoId));
   let shared = false;
 
   // Desktop: copy first for reliable behavior. Mobile: try native share first.
@@ -2771,7 +2841,11 @@ updateAuthUI();
 loadReferral().catch(()=>{});
 updateProfileAdCount();
 window.vvhConfigReady = window.vvhConfigReady || loadVVHPublicConfig().catch((error)=>{console.warn('Public settings load failed:',error);return null;});
-window.vvhConfigReady.finally(()=>loadVideos().catch(()=>{}));
+window.vvhConfigReady.finally(()=>{
+  loadVideos().catch(()=>{});
+  // Open a shared-video landing page only when this Mini App was launched with video_<id>.
+  handleMiniAppStartParam();
+});
 
 </script>
 
